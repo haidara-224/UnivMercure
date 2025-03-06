@@ -17,7 +17,7 @@ class ProfesseurFactory extends Factory
     public function definition(): array
     {
         return [
-            'matricule' => $this->faker->unique()->numerify('MATPROF#####'),
+            'matricule' => $this->faker->unique()->numerify('MATPROF######'),
             'name' => $this->faker->firstName(),
             'prenom' => $this->faker->lastName(),
             'telephone' => $this->faker->unique()->phoneNumber()
