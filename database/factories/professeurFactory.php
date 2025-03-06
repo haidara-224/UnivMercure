@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\professeur>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Professeur>
  */
 class ProfesseurFactory extends Factory
 {
@@ -22,6 +22,5 @@ class ProfesseurFactory extends Factory
             'prenom' => $this->faker->lastName(),
             'telephone' => $this->faker->unique()->phoneNumber()
         ];
-
     }
 }

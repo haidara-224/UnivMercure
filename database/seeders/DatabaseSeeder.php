@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call(facultySeeder::class);
         $this->call(RoleSeeder::class);
-       // Professeur::factory(50)->create();
+        Professeur::factory(50)->create();
         departement::factory(8)->create();
         classes::factory(30)->create();
 etudiant::factory(800)->create();
