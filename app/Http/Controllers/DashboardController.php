@@ -29,8 +29,8 @@ class DashboardController extends Controller
     }
     public function index(){
         $nbEtudiant = Etudiant::count();
-        $maleCount = Etudiant::where('sexe', 'Masculin')->count();
-        $femaleCount = Etudiant::where('sexe', 'Feminin')->count();
+        $maleCount = Etudiant::where('sexe', 'masculin')->count();
+        $femaleCount = Etudiant::where('sexe', 'feminin')->count();
         $nbprofesseur = $this->nombreProfesseur();
         $nbdepartement = $this->nombreDepartement();
         $nbniveau = $this->nombreNiveau();
