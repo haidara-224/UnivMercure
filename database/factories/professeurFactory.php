@@ -23,4 +23,5 @@ class ProfesseurFactory extends Factory
             'telephone' => $this->faker->unique()->phoneNumber()
         ];
     }
+
 }
