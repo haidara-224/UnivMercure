@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('telephone')->nullable();
             $table->string('photo')->nullable();
+            $table->enum('sexe',['masculin','feminin']);
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(departement::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(classes::class)->nullable()->constrained()->cascadeOnDelete();

@@ -1,10 +1,10 @@
-import { NavFooter } from '@/components/nav-footer';
+
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound,BookOpenCheck,BookCheck,Proportions, Star } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -13,8 +13,55 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard',
         icon: LayoutGrid,
     },
-];
+    {
+        title: 'Facultés',
+        url: '/dashboard/faculty',
+        icon: School,
+    },
+    {
+        title: 'Departements',
+        url: '/dashboard/departement',
+        icon: WalletMinimal,
+    },
+    {
+        title: 'Niveau',
+        url: '/dashboard/niveau',
+        icon: Webhook,
+    },
 
+    {
+        title: 'Professeurs',
+        url: '/dashboard/profs',
+        icon: UsersRound,
+    },
+    {
+        title: 'Etudiants',
+        url: '/dashboard/etudiants',
+        icon: User,
+    },
+    {
+        title: 'Emploie de Temps',
+        url: '/dashboard/etudiant',
+        icon: BookOpenCheck,
+    },
+
+    {
+        title: 'Examens',
+        url: '/dashboard/etudiant',
+        icon: BookCheck,
+    },
+    {
+        title: 'Notes',
+        url: '/dashboard/etudiant',
+        icon: Star,
+    },
+    {
+        title: 'Resultats',
+        url: '/dashboard/etudiant',
+        icon: Proportions,
+    },
+];
+/*
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
@@ -27,6 +74,7 @@ const footerNavItems: NavItem[] = [
         icon: BookOpen,
     },
 ];
+*/
 
 export function AppSidebar() {
     return (
@@ -35,7 +83,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -46,11 +94,19 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
+            {
+                /*
 
+                    <NavFooter items={footerNavItems} className="mt-auto" />
+
+                </SidebarFooter>
+                */
+
+            }
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
+
         </Sidebar>
     );
 }
