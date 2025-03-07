@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class departement extends Model
@@ -12,5 +13,10 @@ class departement extends Model
     public function etudiants():HasMany{
         return $this->HasMany(etudiant::class);
     }
-
+    public function professeur():BelongsTo{
+        return $this->belongsTo(professeur::class);
+    }
+    public function faculty():BelongsTo{
+        return $this->belongsTo(faculty::class);
+    }
 }

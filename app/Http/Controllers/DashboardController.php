@@ -11,23 +11,29 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    private function nombreEtudiant(){
-        $etudiant=etudiant::count();
+    private function nombreEtudiant()
+    {
+        $etudiant = etudiant::count();
         return $etudiant;
     }
-    private function nombreProfesseur(){
-        $professeur=Professeur::count();
+    private function nombreProfesseur()
+    {
+        $professeur = Professeur::count();
         return $professeur;
     }
-    private function nombreDepartement(){
-        $departement=departement::count();
+    private function nombreDepartement()
+    {
+        $departement = departement::count();
         return $departement;
     }
-    private function nombreNiveau(){
-        $classes=classes::count();
+    private function nombreNiveau()
+    {
+        $classes = classes::count();
         return $classes;
     }
-    public function index(){
+
+    public function index()
+    {
         $nbEtudiant = Etudiant::count();
         $maleCount = Etudiant::where('sexe', 'masculin')->count();
         $femaleCount = Etudiant::where('sexe', 'feminin')->count();
@@ -36,13 +42,15 @@ class DashboardController extends Controller
         $nbniveau = $this->nombreNiveau();
 
         $etudiantsParDepartement = Departement::withCount('etudiants')
-    ->get()
-    ->map(fn ($dep) => [
-        'id' => $dep->id,
-        'name' => $dep->name,
-        'nombre_etudiant' => $dep->etudiants_count, // Renommage ici
-    ]);
+            ->get()
+            ->map(fn($dep) => [
+                'id' => $dep->id,
+                'name' => $dep->name,
+                'nombre_etudiant' => $dep->etudiants_count, // Renommage ici
+            ]);
 
+
+            $departement=departement::with(['professeur','faculty'])->get();
 
 
         return Inertia::render('dashboard', [
@@ -53,8 +61,7 @@ class DashboardController extends Controller
             'DepartementCount'         => $nbdepartement,
             'niveauCount'              => $nbniveau,
             'etudiantsParDepartement'  => $etudiantsParDepartement,
+            'departements'=>$departement
         ]);
     }
-
-
 }
