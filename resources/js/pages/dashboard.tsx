@@ -54,7 +54,7 @@ export default function Dashboard() {
                                 {stat.icon}
                             </CardHeader>
                             <CardContent className="p-4 text-center">
-                                <h1 className="text-3xl font-bold">{stat.count}</h1>
+                                <h1 className="text-3xl font-bold text-white">{stat.count}</h1>
                             </CardContent>
                         </Card>
                     ))}
