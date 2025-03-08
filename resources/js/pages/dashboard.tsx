@@ -13,9 +13,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 import { PageProps } from '@inertiajs/core';
-import { ChartDonut } from '@/components/ui/dashbord.tsx/chartCount';
-import EtudiantsParDepartement from '@/components/ui/dashbord.tsx/etudiantwithdepartementCount';
-import DepartementDataTable from '@/components/ui/dashbord.tsx/DepartementDataTable';
+import { ChartDonut } from '@/components/ui/dashbord/chartCount';
+import EtudiantsParDepartement from '@/components/ui/dashbord/etudiantwithdepartementCount';
+import DepartementDataTable from '@/components/ui/dashbord/DepartementDataTable';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 interface DepartementData {
     id: number;

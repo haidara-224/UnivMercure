@@ -5,9 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useEffect, useState } from "react";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EditDialogueFaculty } from "@/components/ui/dashbord.tsx/EditFaculty";
+import { EditDialogueFaculty } from "@/components/ui/dashbord/EditFaculty";
 import { toast } from "sonner";
-import AddFacultie from "@/components/ui/dashbord.tsx/AddFaculty";
+import AddFacultie from "@/components/ui/dashbord/AddFaculty";
 import { Input } from "@/components/ui/input";
 
 
@@ -37,7 +37,7 @@ export default function Page({ flash }: messageFlash) {
     const [selectedFaculty, setSelectedFaculty] = useState<faculty | null>(null)
     const [filteredFaculty, setFilteredFaculty] = useState(faculty);
     const [search, setSeach] = useState('')
-    const { delete: destroy, reset, } = useForm({});
+    const { delete: destroy,  } = useForm({});
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -61,7 +61,7 @@ export default function Page({ flash }: messageFlash) {
     }
     const onDelete = (faculty: faculty) => {
 
-        const confirm = window.confirm(`Etes sure de vouloir ${faculty.name} ? `)
+        const confirm = window.confirm(`Etes sure de vouloir Supprimé ${faculty.name} ? `)
         if (confirm) {
             destroy(route('dashboard.faculty.delete', faculty.id), {
                 preserveScroll: true,
