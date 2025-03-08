@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\facultyAddRequestValidated;
+use App\Http\Requests\facultyRequestValidated;
 use App\Models\faculty;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class FacultyController extends Controller
 {
@@ -12,47 +15,31 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        //
+        $faculty=faculty::orderByDesc('created_at')->get();
+        return Inertia::render('dashboard/faculty/index',[
+            'faculty'=>$faculty
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(facultyAddRequestValidated $request)
     {
-        //
+        $faculty=new faculty();
+        $faculty->create($request->validated());
+        return redirect()->back()->with('success','Faculté créer avec success');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(faculty $faculty)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(faculty $faculty)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, faculty $faculty)
+
+
+    public function update(facultyRequestValidated $request, faculty $faculty)
     {
-        //
+        $faculty->update($request->validated());
+        return redirect()->back()->with('success','Faculté modifié avec success');
     }
 
     /**
@@ -60,6 +47,8 @@ class FacultyController extends Controller
      */
     public function destroy(faculty $faculty)
     {
-        //
+        $faculty->delete();
+        return redirect()->back()->with('success','Faculté supprimé avec success');
     }
+
 }
