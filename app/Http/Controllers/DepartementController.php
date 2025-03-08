@@ -7,7 +7,7 @@ use App\Http\Requests\DepartementRequestValidated;
 use App\Http\Requests\facultyRequestValidated;
 use App\Models\departement;
 use App\Models\faculty;
-use App\Models\Professeur;
+use App\Models\professeur;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,7 +19,7 @@ class DepartementController extends Controller
     public function index()
     {
         $departement=departement::with(['professeur','faculty'])->get();
-        $chefDep=Professeur::orderByDesc('created_at')->get();
+        $chefDep=professeur::orderByDesc('created_at')->get();
         $faculty=faculty::orderByDesc('created_at')->get();
 
         return Inertia::render('dashboard/departement/index',[
