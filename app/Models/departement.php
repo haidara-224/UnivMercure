@@ -15,7 +15,7 @@ class departement extends Model
         return $this->HasMany(etudiant::class);
     }
     public function professeur():BelongsTo{
-        return $this->belongsTo(professeur::class);
+        return $this->belongsTo(Professeur::class);
     }
     public function faculty():BelongsTo{
         return $this->belongsTo(faculty::class);
