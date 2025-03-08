@@ -19,13 +19,14 @@ import InputError from "@/components/input-error";
 interface ProposDialogue {
     openAddDialogue: boolean;
     onOpenAddChange: (open: boolean) => void;
+    refresh: () => void
 
 }
 interface formAdd {
     name: string;
     [key: string]: unknown;
 }
-export default function AddFacultie({ openAddDialogue, onOpenAddChange,
+export default function AddFacultie({ openAddDialogue, onOpenAddChange, refresh
 }: ProposDialogue) {
     const { data, setData, post, processing, errors, reset } = useForm<formAdd>({
         name: '',
@@ -37,7 +38,7 @@ export default function AddFacultie({ openAddDialogue, onOpenAddChange,
             onFinish: () => reset('name'),
             onSuccess: () => {
 
-
+                refresh()
                 onOpenAddChange(false);
             },
 
@@ -78,7 +79,7 @@ export default function AddFacultie({ openAddDialogue, onOpenAddChange,
                             disabled={processing}
                             className="bg-green-500 hover:bg-green-600"
                         >
-                            {processing ? "Enregistrement..." : "Sauvegarder les modifications"}
+                            {processing ? "Enregistrement..." : "Sauvegarder"}
                         </Button>
                     </DialogFooter>
                 </form>

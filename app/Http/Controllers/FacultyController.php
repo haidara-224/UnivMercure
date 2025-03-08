@@ -17,7 +17,7 @@ class FacultyController extends Controller
     {
         $faculty=faculty::orderByDesc('created_at')->get();
         return Inertia::render('dashboard/faculty/index',[
-            'faculty'=>$faculty
+            'faculty'=>fn()=>$faculty
         ]);
     }
 

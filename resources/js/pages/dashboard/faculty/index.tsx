@@ -1,5 +1,5 @@
 import AppLayout from "@/layouts/app-layout";
-import { Head, useForm, usePage } from "@inertiajs/react"
+import { Head, router, useForm, usePage } from "@inertiajs/react"
 import { faculty, type BreadcrumbItem } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useState } from "react";
@@ -65,7 +65,7 @@ export default function Page({ flash }: messageFlash) {
         if (confirm) {
             destroy(route('dashboard.faculty.delete', faculty.id), {
                 preserveScroll: true,
-                onFinish: () => reset(),
+                onFinish: () => refreshFaculty(),
             });
         }
     }
@@ -76,6 +76,10 @@ export default function Page({ flash }: messageFlash) {
         );
 
         setFilteredFaculty(filtered);
+    };
+    const refreshFaculty = () => {
+        router.visit('/dashboard/faculty',{only:["faculty"]})
+
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -114,8 +118,8 @@ export default function Page({ flash }: messageFlash) {
                             ))}
                         </TableBody>
                     </Table>
-                    <EditDialogueFaculty open={openDialogue} onOpenChange={onOpenDialogue} faculty={selectedFaculty} />
-                    <AddFacultie openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue} />
+                    <EditDialogueFaculty open={openDialogue} onOpenChange={onOpenDialogue} faculty={selectedFaculty} refresh={refreshFaculty} />
+                    <AddFacultie openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue} refresh={refreshFaculty} />
                 </div>
             </div>
         </AppLayout>

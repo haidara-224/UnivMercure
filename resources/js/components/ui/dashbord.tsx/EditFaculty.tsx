@@ -17,12 +17,14 @@ interface ProposDialogue {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   faculty: faculty | null;
+  refresh:()=>void
 }
 
 export function EditDialogueFaculty({
   open,
   onOpenChange,
   faculty,
+  refresh
 }: ProposDialogue) {
   const { data, setData, errors, put, processing } =
     useForm({
@@ -40,11 +42,12 @@ export function EditDialogueFaculty({
     put(`/dashboard/faculty/${faculty?.id}`, {
       onSuccess: () => {
 
-
+        refresh()
         onOpenChange(false);
       },
     });
   };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
