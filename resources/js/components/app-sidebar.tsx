@@ -25,18 +25,18 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Niveau',
-        url: '/dashboard/niveau',
+        url: '/dashboard',
         icon: Webhook,
     },
 
     {
         title: 'Professeurs',
-        url: '/dashboard/profs',
+        url: '/dashboard',
         icon: UsersRound,
     },
     {
         title: 'Etudiants',
-        url: '/dashboard/etudiants',
+        url: '/dashboard',
         icon: User,
     },
     {
@@ -47,17 +47,17 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Examens',
-        url: '/dashboard/etudiant',
+        url: '/dashboard',
         icon: BookCheck,
     },
     {
         title: 'Notes',
-        url: '/dashboard/etudiant',
+        url: '/dashboard',
         icon: Star,
     },
     {
         title: 'Resultats',
-        url: '/dashboard/etudiant',
+        url: '/dashboard',
         icon: Proportions,
     },
 ];

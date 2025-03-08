@@ -45,7 +45,7 @@ export default function AddDepartement({ openAddDialogue, onOpenAddChange, refre
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('dashboard.departement.create'), {
-            onFinish: () => reset(), // Réinitialisation complète
+            onFinish: () => reset(),
             onSuccess: () => {
                 refresh();
                 onOpenAddChange(false);
