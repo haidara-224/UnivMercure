@@ -61,7 +61,7 @@ export default function Page({ flash }: messageFlash) {
     }
     const onDelete = (faculty: faculty) => {
 
-        const confirm = window.confirm(`Etes sure de vouloir Supprimé ${faculty.name} ? `)
+        const confirm = window.confirm(`Etes vous sure de vouloir Supprimé la faculté ${faculty.name} ? `)
         if (confirm) {
             destroy(route('dashboard.faculty.delete', faculty.id), {
                 preserveScroll: true,
@@ -81,6 +81,7 @@ export default function Page({ flash }: messageFlash) {
         router.visit('/dashboard/faculty',{only:["faculty"]})
 
     };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Faculty" />

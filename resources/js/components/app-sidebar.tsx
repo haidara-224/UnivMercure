@@ -25,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Niveau',
-        url: '/dashboard',
+        url: '/dashboard/niveau',
         icon: Webhook,
     },
 

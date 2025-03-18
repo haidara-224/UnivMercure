@@ -42,8 +42,8 @@ export function EditDialogueDepartement({
     useEffect(() => {
         if (departement) {
             setData("name", departement.name);
-            setData("chef", departement.professeur.id); // ID of chef
-            setData("faculty", departement.faculty.id); // ID of faculty
+            setData("chef", departement.professeur.id);
+            setData("faculty", departement.faculty.id);
         }
     }, [departement, setData]);
 

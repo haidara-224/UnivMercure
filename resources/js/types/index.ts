@@ -66,3 +66,11 @@ export interface Departement{
     created_at:Date;
     updated_at:Date;
 }
+export interface Niveaux{
+    id:number;
+    niveau:string;
+    departement_id:number;
+    departement:Departement;
+    created_at:Date;
+    updated_at:Date;
+}

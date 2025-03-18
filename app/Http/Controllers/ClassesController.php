@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\classes;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClassesController extends Controller
 {
@@ -12,7 +13,10 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        //
+        $niveaux=classes::with('departement')->orderByDesc('created_at')->get();
+        return Inertia::render('dashboard/niveau/index',[
+            'niveau'=>$niveaux
+        ]);
     }
 
     /**

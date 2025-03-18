@@ -63,7 +63,7 @@ export default function Page({ flash }: messageFlash) {
     }
     const onDelete = (departement: Departement) => {
 
-        const confirm = window.confirm(`Etes sure de vouloir Supprimé ${departement.name} ? `)
+        const confirm = window.confirm(`Etes vous sure de vouloir Supprimé le departement ${departement.name} ? `)
         if (confirm) {
             destroy(route('dashboard.departement.delete', departement.id), {
                 preserveScroll: true,
@@ -106,7 +106,7 @@ export default function Page({ flash }: messageFlash) {
 
                 <div className="overflow-x-auto w-full">
 
-                    <Table className="w-full min-w-max border border-gray-300 dark:border-gray-700 rounded-lg shadow-md divide-y divide-gray-200 dark:divide-gray-700">
+                    <Table className="w-full border border-gray-300 dark:border-gray-700 rounded-lg shadow-md divide-y divide-gray-200 dark:divide-gray-700">
                         <TableHeader>
                             <TableRow className="bg-gray-100 dark:bg-gray-800">
                                 <TableHead>Departement Name</TableHead>
@@ -122,7 +122,7 @@ export default function Page({ flash }: messageFlash) {
                                     <TableCell className="hidden xl:table-cell">{dpt.professeur.name}</TableCell>
                                     <TableCell className="hidden xl:table-cell">{dpt.faculty.name}</TableCell>
 
-                                    <TableCell className=" space-x-2">
+                                    <TableCell className="space-x-2">
                                         <Button className="bg-green-500 hover:bg-green-600" onClick={() => HanddleEdit(dpt)}><Edit /></Button>
                                         <Button className="bg-red-500 hover:bg-red-600" onClick={() => onDelete(dpt)}><Trash2 /></Button>
                                     </TableCell>
