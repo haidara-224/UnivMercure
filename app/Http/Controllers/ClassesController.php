@@ -39,21 +39,7 @@ class ClassesController extends Controller
         return redirect()->back()->with('success','Niveau creer avec success');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(classes $classes)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -76,6 +62,7 @@ class ClassesController extends Controller
      */
     public function destroy(classes $classes)
     {
-        //
+        $classes->delete();
+        return redirect()->back()->with('success','Niveau Supprimé avec success');
     }
 }
