@@ -90,7 +90,7 @@ export default function Page({ flash }: messageFlash) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Departement" />
             <div className="w-full overflow-x-auto px-[5%] lg:px-[2%] max-[460px]:px-[1%] ">
-                <h1 className="text-4xl font-bold mb-4 py-9 dark:text-white text-slate-800 font-stretch-ultra-condensed">Liste des Departements</h1>
+                <h1 className="text-2xl font-bold mb-4 py-9 dark:text-white text-slate-800 font-stretch-ultra-condensed">Liste des Departements</h1>
 
                      <Button className="mb-2" size='lg' onClick={HanddleOpenAddDialogue}><Plus /></Button>
                     <Input

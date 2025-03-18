@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\niveauAddRequest;
 use App\Models\classes;
+use App\Models\departement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,17 +16,27 @@ class ClassesController extends Controller
     public function index()
     {
         $niveaux=classes::with('departement')->orderByDesc('created_at')->get();
+
+        $dpt=departement::select(['id','name'])->get();
         return Inertia::render('dashboard/niveau/index',[
-            'niveau'=>$niveaux
+            'niveau'=>$niveaux,
+
+            'dpt'=>$dpt
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(niveauAddRequest $request)
     {
-        //
+        $data = $request->validated();
+        $niveaux=new classes();
+        $niveaux->create([
+            'niveau' => $data['niveau'],
+            'departement_id' => $data['departement'],
+        ]);
+        return redirect()->back()->with('success','Niveau creer avec success');
     }
 
     /**
