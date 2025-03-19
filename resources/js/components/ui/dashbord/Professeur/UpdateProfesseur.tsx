@@ -22,6 +22,7 @@ export function UpdateProfesseur({ openDialogue, onOpenChange, refresh, professe
     const [telephone, setTelephone] = useState<string>(professeur?.telephone || "");
     const [photo, setPhoto] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [processing,setIsProcessing]=useState(false)
     const { errors } = usePage().props;
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,21 +35,25 @@ export function UpdateProfesseur({ openDialogue, onOpenChange, refresh, professe
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
-    router.post(route("dashboard.prof.update", professeur?.id), {
-        _method: "put",
-        matricule,
-        name,
-        prenom,
-        telephone,
-        photo,
-    }, {
-        onSuccess: () => refresh()
-    });
-
-
-
-
+        setIsProcessing(true);
+        router.post(route("dashboard.prof.update", professeur?.id), {
+            _method: "put",
+            matricule,
+            name,
+            prenom,
+            telephone,
+            photo,
+        }, {
+            onSuccess: () => {
+                refresh();
+                setIsProcessing(false);
+            },
+            onError: () => {
+                setIsProcessing(false);
+            }
+        });
     };
+
 
     useEffect(() => {
         if (professeur) {
@@ -101,8 +106,8 @@ export function UpdateProfesseur({ openDialogue, onOpenChange, refresh, professe
                     </div>
 
                     <DialogFooter>
-                        <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">
-                            Sauvegarder
+                        <Button type="submit" className="w-full bg-green-500 hover:bg-green-600" disabled={processing}>
+                            {processing ? 'En Cours de sauvagarde' :'Sauvegarder'}
                         </Button>
                     </DialogFooter>
                 </form>

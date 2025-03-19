@@ -100,7 +100,6 @@ export default function Page({ flash }: messageFlash) {
                     <Table className="w-full min-w-max border border-gray-300 dark:border-gray-700 rounded-lg shadow-md divide-y divide-gray-200 dark:divide-gray-700">
                         <TableHeader>
                             <TableRow className="bg-gray-100 dark:bg-gray-800">
-                                <TableHead>ID</TableHead>
                                 <TableHead>Matricule</TableHead>
                                 <TableHead>Prenom</TableHead>
                                 <TableHead>Nom</TableHead>
@@ -113,7 +112,6 @@ export default function Page({ flash }: messageFlash) {
                         <TableBody>
                             {filter.map((pr) => (
                                 <TableRow key={pr.id} className="hover:bg-gray-100 dark:hover:bg-gray-800">
-                                    <TableCell>{pr.id}</TableCell>
                                     <TableCell>{pr.matricule}</TableCell>
                                     <TableCell>{pr.name}</TableCell>
                                     <TableCell>{pr.prenom}</TableCell>
