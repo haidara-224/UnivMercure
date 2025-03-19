@@ -35,13 +35,26 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $nbEtudiant = Etudiant::count();
-        $maleCount = Etudiant::where('sexe', 'masculin')->count();
-        $femaleCount = Etudiant::where('sexe', 'feminin')->count();
+        $derniereAnneeScolaire = anneesScolaire::latest()->first();
+        $nbEtudiant = Etudiant::whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
+            $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+        })->count();
+
+        $maleCount = Etudiant::where('sexe', 'masculin')
+    ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
+        $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+    })
+    ->count();
+
+$femaleCount = Etudiant::where('sexe', 'feminin')
+    ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
+        $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+    })
+    ->count();
         $nbprofesseur = $this->nombreProfesseur();
         $nbdepartement = $this->nombreDepartement();
         $nbniveau = $this->nombreNiveau();
-        $derniereAnneeScolaire = anneesScolaire::latest()->first();
+
 
         $etudiantsParDepartement = Departement::withCount(['parcours' => function ($query) use ($derniereAnneeScolaire) {
 
