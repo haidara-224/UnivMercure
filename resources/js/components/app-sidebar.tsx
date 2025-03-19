@@ -31,7 +31,7 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Professeurs',
-        url: '/dashboard',
+        url: '/dashboard/professeurs',
         icon: UsersRound,
     },
     {

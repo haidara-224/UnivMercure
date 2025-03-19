@@ -4,6 +4,7 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\ProfesseurController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,21 +15,26 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     /**Faculties Route */
-    Route::get('/faculty', [FacultyController::class,'index'])->name('faculty.index');
-    Route::put('/faculty/{faculty}', [FacultyController::class,'update'])->name('faculty.update');
-    Route::post('/faculty', [FacultyController::class,'create'])->name('faculty.create');
-    Route::delete('/faculty/{faculty}', [FacultyController::class,'destroy'])->name('faculty.delete');
+    Route::get('/faculty', [FacultyController::class, 'index'])->name('faculty.index');
+    Route::put('/faculty/{faculty}', [FacultyController::class, 'update'])->name('faculty.update');
+    Route::post('/faculty', [FacultyController::class, 'create'])->name('faculty.create');
+    Route::delete('/faculty/{faculty}', [FacultyController::class, 'destroy'])->name('faculty.delete');
     /**Departement Route */
-    Route::get('/departement',[DepartementController::class,'index'])->name('departement.index');
-    Route::put('/departement/{departement}', [DepartementController::class,'update'])->name('departement.update');
-    Route::post('/departement', [DepartementController::class,'create'])->name('departement.create');
-    Route::delete('/departement/{departement}', [DepartementController::class,'destroy'])->name('departement.delete');
-      /**Niveau Route */
-      Route::get('/niveau',[ClassesController::class,'index'])->name('niveau.index');
-      Route::put('/niveau/{classes}', [ClassesController::class,'update'])->name('niveau.update');
-      Route::post('/niveau', [ClassesController::class,'create'])->name('niveau.create');
-      Route::delete('/niveau/{classes}', [ClassesController::class,'destroy'])->name('niveau.delete');
+    Route::get('/departement', [DepartementController::class, 'index'])->name('departement.index');
+    Route::put('/departement/{departement}', [DepartementController::class, 'update'])->name('departement.update');
+    Route::post('/departement', [DepartementController::class, 'create'])->name('departement.create');
+    Route::delete('/departement/{departement}', [DepartementController::class, 'destroy'])->name('departement.delete');
+    /**Niveau Route */
+    Route::get('/niveau', [ClassesController::class, 'index'])->name('niveau.index');
+    Route::put('/niveau/{classes}', [ClassesController::class, 'update'])->name('niveau.update');
+    Route::post('/niveau', [ClassesController::class, 'create'])->name('niveau.create');
+    Route::delete('/niveau/{classes}', [ClassesController::class, 'destroy'])->name('niveau.delete');
+    /**Professeur Route */
+    Route::get('/professeurs', [ProfesseurController::class, 'index'])->name('prof.index');
+    Route::put('/professeurs/{professeur}', [ProfesseurController::class, 'update'])->name('prof.update');
+    Route::post('/professeurs', [ProfesseurController::class, 'create'])->name('prof.create');
+    Route::delete('/professeurs/{professeur}', [ProfesseurController::class, 'destroy'])->name('prof.delete');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

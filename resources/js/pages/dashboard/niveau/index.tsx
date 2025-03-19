@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "@/components/ui/table";
-import {  Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AddNiveau } from "@/components/ui/dashbord/Niveau/Add";
@@ -20,8 +20,8 @@ interface PageProps {
 }
 interface CustomPageProps extends PageProps {
     niveau: Niveaux[];
-    nv:Niveaux[];
-    dpt:Departement[]
+    nv: Niveaux[];
+    dpt: Departement[]
 
 }
 interface messageFlash {
@@ -32,42 +32,42 @@ interface messageFlash {
 export default function Page({ flash }: messageFlash) {
     //const [openDialogue, setOpenDialogue] = useState(false)
     const [openAddDialogue, setOpenAddDialogue] = useState(false)
-    const { niveau,dpt } = usePage<CustomPageProps>().props;
-        const [search, setSeach] = useState('')
-        const [filteredNiveau, setFilteredNiveau] = useState(niveau);
-        const { delete: destroy,  } = useForm({});
-        useEffect(() => {
-            if (flash?.success) {
-                toast.success(flash.success);
-            }
-        }, [flash]);
-          const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-                setSeach(e.target.value);
-                const filtered = niveau.filter((fc) =>
-                    fc.niveau.toLowerCase().includes(e.target.value.toLowerCase()) ||
-                fc.departement.name.toLowerCase().includes(e.target.value.toLowerCase())
+    const { niveau, dpt } = usePage<CustomPageProps>().props;
+    const [search, setSeach] = useState('')
+    const [filteredNiveau, setFilteredNiveau] = useState(niveau);
+    const { delete: destroy, } = useForm({});
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+    }, [flash]);
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSeach(e.target.value);
+        const filtered = niveau.filter((fc) =>
+            fc.niveau.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            fc.departement.name.toLowerCase().includes(e.target.value.toLowerCase())
 
-                );
+        );
 
-                setFilteredNiveau(filtered);
-            };
-            const refreshFaculty = () => {
-                router.visit('/dashboard/niveau',{only:["niveau"]})
+        setFilteredNiveau(filtered);
+    };
+    const refreshFaculty = () => {
+        router.visit('/dashboard/niveau', { only: ["niveau"] })
 
-            };
-           const HanddleOpenAddDialogue=()=>{
-            setOpenAddDialogue((prev) => !prev)
-           }
-            const onDelete = (niveau: Niveaux) => {
+    };
+    const HanddleOpenAddDialogue = () => {
+        setOpenAddDialogue((prev) => !prev)
+    }
+    const onDelete = (niveau: Niveaux) => {
 
-                const confirm = window.confirm(`Etes vous sure de vouloir Supprimé le niveau ${niveau.niveau} ? `)
-                if (confirm) {
-                    destroy(route('dashboard.niveau.delete', niveau.id), {
-                        preserveScroll: true,
-                        onFinish: () => refreshFaculty(),
-                    });
-                }
-            }
+        const confirm = window.confirm(`Etes vous sure de vouloir Supprimé le niveau ${niveau.niveau} ? `)
+        if (confirm) {
+            destroy(route('dashboard.niveau.delete', niveau.id), {
+                preserveScroll: true,
+                onFinish: () => refreshFaculty(),
+            });
+        }
+    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -122,10 +122,10 @@ export default function Page({ flash }: messageFlash) {
                      </div>
                         */
                     }
-                     <AddNiveau openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue}  departement={dpt} refresh={refreshFaculty} />
+                    <AddNiveau openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue} departement={dpt} refresh={refreshFaculty} />
 
                 </div>
-                </div>
+            </div>
         </AppLayout>
     )
 }

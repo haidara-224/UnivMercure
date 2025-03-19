@@ -46,6 +46,7 @@ export interface professeur{
     telephone:string;
     photo?:string | null;
     user_id?:number | null;
+    user:User
     created_at:Date;
     updated_at:Date;
 
