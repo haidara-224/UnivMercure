@@ -26,7 +26,8 @@ interface CustomPageProps extends PageProps {
 }
 interface messageFlash {
     flash: {
-        success: string
+        success: string,
+        error:string
     }
 }
 export default function Page({ flash }: messageFlash) {
@@ -39,6 +40,10 @@ export default function Page({ flash }: messageFlash) {
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
+        }
+        if (flash?.error) {
+            alert(flash.error)
+            setOpenAddDialogue(false)
         }
     }, [flash]);
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

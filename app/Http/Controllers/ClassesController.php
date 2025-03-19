@@ -31,7 +31,13 @@ class ClassesController extends Controller
     public function create(niveauAddRequest $request)
     {
         $data = $request->validated();
+        $existingRecord = classes::where('niveau', $request->niveau)
+        ->where('departement_id', $request->departement)
+        ->exists();
         $niveaux=new classes();
+        if($existingRecord){
+            return redirect()->back()->with('error','Erreur de la creation ce niveau a deja été creer');
+        }
         $niveaux->create([
             'niveau' => $data['niveau'],
             'departement_id' => $data['departement'],

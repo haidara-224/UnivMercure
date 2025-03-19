@@ -24,7 +24,8 @@ class niveauAddRequest extends FormRequest
     {
         return [
             'niveau' => ['required', Rule::in(['Licence 1', 'Licence 2', 'Licence 3', 'Licence 4', 'Licence 5', 'Master 1', 'Master 2'])],
-            'departement' => ['required', 'exists:departements,id']
+            'departement' => ['required', 'exists:departements,id'],
+
         ];
     }
 }
