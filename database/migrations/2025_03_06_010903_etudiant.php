@@ -1,7 +1,4 @@
 <?php
-
-use App\Models\classes;
-use App\Models\departement;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,8 +20,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->enum('sexe',['masculin','feminin']);
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(departement::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(classes::class)->nullable()->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

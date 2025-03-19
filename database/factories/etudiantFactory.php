@@ -24,8 +24,6 @@ class etudiantFactory extends Factory
             'prenom' => $this->faker->lastName(),
             'telephone' => $this->faker->unique()->phoneNumber(),
             'sexe' => $this->faker->randomElement(['masculin', 'feminin']),
-            'departement_id' => departement::inRandomOrder()->first()->id ?? departement::factory(),
-            'classes_id' => classes::inRandomOrder()->first()->id ?? classes::factory(),
 
         ];
 
