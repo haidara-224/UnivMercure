@@ -13,7 +13,7 @@ class departement extends Model
     protected $fillable=['name','professeur_id','faculty_id'];
     public function parcours():HasMany
     {
-        return $this->hasMany(Parcour::class);
+        return $this->hasMany(parcour::class);
     }
     public function professeur():BelongsTo{
         return $this->belongsTo(Professeur::class);
