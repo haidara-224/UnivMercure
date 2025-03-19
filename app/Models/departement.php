@@ -11,8 +11,9 @@ class departement extends Model
 {
     use HasFactory;
     protected $fillable=['name','professeur_id','faculty_id'];
-    public function etudiants():HasMany{
-        return $this->HasMany(etudiant::class);
+    public function parcours():HasMany
+    {
+        return $this->hasMany(Parcour::class);
     }
     public function professeur():BelongsTo{
         return $this->belongsTo(Professeur::class);

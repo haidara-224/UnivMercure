@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
@@ -40,15 +41,18 @@ class DashboardController extends Controller
         $nbprofesseur = $this->nombreProfesseur();
         $nbdepartement = $this->nombreDepartement();
         $nbniveau = $this->nombreNiveau();
+        $derniereAnneeScolaire = anneesScolaire::latest()->first();
 
-        $etudiantsParDepartement = Departement::withCount('etudiants')
-            ->get()
-            ->map(fn($dep) => [
-                'id' => $dep->id,
-                'name' => $dep->name,
-                'nombre_etudiant' => $dep->etudiants_count, // Renommage ici
-            ]);
+        $etudiantsParDepartement = Departement::withCount(['parcours' => function ($query) use ($derniereAnneeScolaire) {
 
+            $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+        }])
+        ->get()
+        ->map(fn($dep) => [
+            'id' => $dep->id,
+            'name' => $dep->name,
+            'nombre_etudiant' => $dep->parcours_count,
+        ]);
 
             $departement=departement::with(['professeur','faculty'])->get();
 
@@ -61,7 +65,8 @@ class DashboardController extends Controller
             'DepartementCount'         => $nbdepartement,
             'niveauCount'              => $nbniveau,
             'etudiantsParDepartement'  => $etudiantsParDepartement,
-            'departements'=>$departement
+            'departements'=>$departement,
+            'last_annees_scolaire'=>$derniereAnneeScolaire
         ]);
     }
 }

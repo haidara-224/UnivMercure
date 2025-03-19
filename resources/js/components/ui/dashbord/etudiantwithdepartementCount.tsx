@@ -6,18 +6,20 @@ interface DepartementData {
   id: number;
   name: string;
   nombre_etudiant: number;
+
 }
 
 interface Props {
   data: DepartementData[];
+  last_annees_scolaire:string
 
 }
 
-const EtudiantsParDepartement: React.FC<Props> = ({ data }) => {
+const EtudiantsParDepartement: React.FC<Props> = ({ data,last_annees_scolaire }) => {
   return (
     <Card className="w-full lg:w-[65%] bg-white p-6 rounded-xl shadow-lg mt-5 lg:mt-0 border">
       <CardHeader>
-        <CardTitle className="text-lg font-bold dark:text-slate-800">Nombre d'étudiants par département</CardTitle>
+        <CardTitle className="text-lg font-bold dark:text-slate-800">Nombre d'étudiants par département {last_annees_scolaire}</CardTitle>
       </CardHeader>
       <CardContent className="h-96 w-full">
         <ResponsiveContainer width="100%" height="100%">

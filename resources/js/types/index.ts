@@ -75,3 +75,12 @@ export interface Niveaux{
     created_at:Date;
     updated_at:Date;
 }
+export interface AnnessScolaire{
+    id:number;
+    annee_scolaire:string;
+    date_debut:Date;
+    date_fin:Date;
+    created_at:Date;
+    updated_at:Date;
+}
+

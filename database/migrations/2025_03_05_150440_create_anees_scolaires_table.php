@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anees_scolaires', function (Blueprint $table) {
+        Schema::create('annees_scolaires', function (Blueprint $table) {
             $table->id();
-            $table->string('annees_scolaire');
+            $table->string('annee_scolaire');
+            $table->date('date_debut');
+            $table->date('date_fin');
             $table->timestamps();
         });
     }

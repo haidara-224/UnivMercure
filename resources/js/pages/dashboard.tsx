@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { AnnessScolaire, type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { GraduationCap, HousePlus, UserSearch, UsersRound } from 'lucide-react';
 
@@ -28,10 +28,11 @@ interface NombreEtudiant extends PageProps {
     DepartementCount: number;
     niveauCount: number;
     etudiantsParDepartement: DepartementData[];
+    last_annees_scolaire:AnnessScolaire
 }
 
 export default function Dashboard() {
-    const { etudiantsCount, maleCount, femaleCount, professeursCount, DepartementCount, niveauCount, etudiantsParDepartement } =
+    const { etudiantsCount, maleCount, femaleCount, professeursCount, DepartementCount, niveauCount, etudiantsParDepartement,last_annees_scolaire } =
         usePage<NombreEtudiant>().props;
     const stats = [
         { title: "Étudiants", count: etudiantsCount, icon: <UserSearch size={40} />, color: "bg-cyan-700" },
@@ -59,7 +60,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 lg:space-x-4">
                     <ChartDonut maleCount={maleCount} femaleCount={femaleCount} />
-                    <EtudiantsParDepartement data={etudiantsParDepartement} />
+                    <EtudiantsParDepartement data={etudiantsParDepartement} last_annees_scolaire={last_annees_scolaire.annee_scolaire} />
                 </div>
 
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl">
