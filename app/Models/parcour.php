@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class parcour extends Model
+class Parcour extends Model
 {
     use HasFactory;
+
 }

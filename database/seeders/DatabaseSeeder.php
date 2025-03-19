@@ -6,7 +6,8 @@ use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
-use App\Models\parcour;
+
+use App\Models\Parcour;
 use App\Models\Professeur;
 use App\Models\User;
 
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
         anneesScolaire::factory(10)->create();
         classes::factory(30)->create();
         etudiant::factory(800)->create();
-        parcour::factory(100)->create();
+        Parcour::factory(100)->create();
        $user= User::factory()->create([
             'name' => 'haidara',
             'email' => 'sidymohamedcherifhaidara02@gmail.com',
