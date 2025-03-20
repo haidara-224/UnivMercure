@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound,BookOpenCheck,BookCheck,Proportions, Star } from 'lucide-react';
+import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound,BookOpenCheck,BookCheck,Proportions, Star, Heater } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -12,6 +12,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         url: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Années Scolaire',
+        url: '/dashboard/annees-scolaire',
+        icon: Heater,
     },
     {
         title: 'Facultés',
