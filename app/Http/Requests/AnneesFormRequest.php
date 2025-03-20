@@ -22,7 +22,7 @@ class AnneesFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'annees_scolaire' => ['required','unique:annees_scolaires,annees_scolaire', 'regex:/^\d{4}-\d{4}$/'],
+            'annees_scolaire' => ['required','unique:annees_scolaires,annee_scolaire', 'regex:/^\d{4}-\d{4}$/'],
             'Date_debut'=>['required','date'],
             'Date_fin'=>['required','date']
         ];
