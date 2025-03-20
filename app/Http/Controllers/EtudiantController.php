@@ -13,13 +13,26 @@ class EtudiantController extends Controller
     public function index()
     {
         $derniereAnneeScolaire = anneesScolaire::latest()->first();
+
+        // Vérifier si aucune année scolaire n'existe
+        if (!$derniereAnneeScolaire) {
+            return Inertia::render('dashboard/etudiants/index', [
+                'groupedEtudiants' => []
+            ]);
+        }
+
         $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
-        return Inertia::render('dashboard/etudiants/index',[
-            'etudiants'=>$parcours
+
+
+
+        return Inertia::render('dashboard/etudiants/index', [
+            'groupedEtudiants' => $parcours
         ]);
     }
+
+
 
 
     /**
@@ -27,7 +40,7 @@ class EtudiantController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('dashboard/etudiants/new');
     }
 
     /**
@@ -43,7 +56,9 @@ class EtudiantController extends Controller
      */
     public function show(etudiant $etudiant)
     {
-        //
+
+
+
     }
 
     /**
@@ -59,7 +74,7 @@ class EtudiantController extends Controller
      */
     public function update(Request $request, etudiant $etudiant)
     {
-        //
+
     }
 
     /**

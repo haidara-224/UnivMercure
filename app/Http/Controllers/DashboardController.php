@@ -36,39 +36,51 @@ class DashboardController extends Controller
     public function index()
     {
         $derniereAnneeScolaire = anneesScolaire::latest()->first();
+
+        // Vérifier si aucune année scolaire n'existe
+        if (!$derniereAnneeScolaire) {
+            return Inertia::render('dashboard', [
+                'etudiantsCount'           => 0,
+                'maleCount'                => 0,
+                'femaleCount'              => 0,
+                'professeursCount'         => $this->nombreProfesseur(),
+                'DepartementCount'         => $this->nombreDepartement(),
+                'niveauCount'              => $this->nombreNiveau(),
+                'etudiantsParDepartement'  => [],
+                'departements'             => Departement::with(['professeur', 'faculty'])->get(),
+                'last_annees_scolaire'     => null
+            ]);
+        }
+
         $nbEtudiant = Etudiant::whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
             $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
         })->count();
 
         $maleCount = Etudiant::where('sexe', 'masculin')
-    ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
-        $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
-    })
-    ->count();
+            ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
+                $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+            })
+            ->count();
 
-$femaleCount = Etudiant::where('sexe', 'feminin')
-    ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
-        $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
-    })
-    ->count();
+        $femaleCount = Etudiant::where('sexe', 'feminin')
+            ->whereHas('parcours', function ($query) use ($derniereAnneeScolaire) {
+                $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
+            })
+            ->count();
+
         $nbprofesseur = $this->nombreProfesseur();
         $nbdepartement = $this->nombreDepartement();
         $nbniveau = $this->nombreNiveau();
 
-
         $etudiantsParDepartement = Departement::withCount(['parcours' => function ($query) use ($derniereAnneeScolaire) {
-
             $query->where('annees_scolaire_id', $derniereAnneeScolaire->id);
-        }])
-        ->get()
-        ->map(fn($dep) => [
+        }])->get()->map(fn($dep) => [
             'id' => $dep->id,
             'name' => $dep->name,
             'nombre_etudiant' => $dep->parcours_count,
         ]);
 
-            $departement=departement::with(['professeur','faculty'])->get();
-
+        $departement = Departement::with(['professeur', 'faculty'])->get();
 
         return Inertia::render('dashboard', [
             'etudiantsCount'           => $nbEtudiant,
@@ -78,8 +90,9 @@ $femaleCount = Etudiant::where('sexe', 'feminin')
             'DepartementCount'         => $nbdepartement,
             'niveauCount'              => $nbniveau,
             'etudiantsParDepartement'  => $etudiantsParDepartement,
-            'departements'=>$departement,
-            'last_annees_scolaire'=>$derniereAnneeScolaire
+            'departements'             => $departement,
+            'last_annees_scolaire'     => $derniereAnneeScolaire
         ]);
     }
+
 }

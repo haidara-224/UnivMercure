@@ -45,7 +45,8 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <h1 className='text-center font-bold text-3xl'>Années Scolaire {last_annees_scolaire.annee_scolaire}</h1>
+            <h2 className="text-3xl text-center font-bold">Année Scolaire: {last_annees_scolaire?.annee_scolaire || 'Aucune année scolaire enregistrée'}</h2>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {stats.map((stat, index) => (
                         <Card key={index} className={`hover:shadow-lg hover:animate-pulse transition-all cursor-pointer ${stat.color}`}>

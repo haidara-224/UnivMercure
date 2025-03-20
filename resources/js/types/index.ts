@@ -81,4 +81,22 @@ export interface AnnessScolaire{
     created_at:Date;
     updated_at:Date;
 }
+export interface Etudiants{
+    id:string;
+    matricule:string;
+    name:string;
+    prenom:string;
+    telephone:string;
+    photo ?:string | null;
+    sexe:string;
+    user?:User | null;
+}
+export interface Parcours{
+    id:string;
+    classes:Niveaux;
+    departement:Departement;
+    etudiant:Etudiants;
+    created_at:Date;
+    updated_at:Date;
+}
 

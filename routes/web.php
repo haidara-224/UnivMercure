@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::put('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'update'])->name('ann_scolaire.update');
     Route::delete('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'destroy'])->name('ann_scolaire.destroy');
     Route::post('/annees-scolaire', [anneesScolaireController::class, 'create'])->name('ann_scolaire.create');
-   /**Faculties Route */
+    /**Faculties Route */
     Route::put('/faculty/{faculty}', [FacultyController::class, 'update'])->name('faculty.update');
     Route::post('/faculty', [FacultyController::class, 'create'])->name('faculty.create');
     Route::delete('/faculty/{faculty}', [FacultyController::class, 'destroy'])->name('faculty.delete');
@@ -47,8 +47,10 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::delete('/professeurs/{professeur}', [ProfesseurController::class, 'destroy'])->name('prof.delete');
     /**Etudiants Route */
     Route::get('/etudiants', [EtudiantController::class, 'index'])->name('etud.index');
-    Route::put('/etudiants/{etudiants}', [EtudiantController::class, 'update'])->name('etud.update');
-    Route::post('/etudiants', [EtudiantController::class, 'create'])->name('etud.create');
+   // Route::get('/etudiants/{etudiant}', [EtudiantController::class, 'show'])->name('etud.show');
+   // Route::put('/etudiants/{etudiant}', [EtudiantController::class, 'update'])->name('etud.update');
+    Route::get('/etudiants/new', [EtudiantController::class, 'create'])->name('etud.create');
+    Route::post('/etudiants', [EtudiantController::class, 'store'])->name('etud.store');
     Route::delete('/etudiants/{etudiants}', [EtudiantController::class, 'destroy'])->name('etud.delete');
 });
 
