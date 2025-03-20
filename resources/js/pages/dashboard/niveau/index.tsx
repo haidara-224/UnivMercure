@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
-import { Departement, Niveaux, type BreadcrumbItem } from '@/types';
+import {  Niveaux, type BreadcrumbItem } from '@/types';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -20,8 +20,7 @@ interface PageProps {
 }
 interface CustomPageProps extends PageProps {
     niveau: Niveaux[];
-    nv: Niveaux[];
-    dpt: Departement[]
+
 
 }
 interface messageFlash {
@@ -33,7 +32,7 @@ interface messageFlash {
 export default function Page({ flash }: messageFlash) {
     //const [openDialogue, setOpenDialogue] = useState(false)
     const [openAddDialogue, setOpenAddDialogue] = useState(false)
-    const { niveau, dpt } = usePage<CustomPageProps>().props;
+    const { niveau } = usePage<CustomPageProps>().props;
     const [search, setSeach] = useState('')
     const [filteredNiveau, setFilteredNiveau] = useState(niveau);
     const { delete: destroy, } = useForm({});
@@ -49,8 +48,8 @@ export default function Page({ flash }: messageFlash) {
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSeach(e.target.value);
         const filtered = niveau.filter((fc) =>
-            fc.niveau.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            fc.departement.name.toLowerCase().includes(e.target.value.toLowerCase())
+            fc.niveau.toLowerCase().includes(e.target.value.toLowerCase())
+
 
         );
 
@@ -78,7 +77,7 @@ export default function Page({ flash }: messageFlash) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Faculty" />
             <div className="w-full overflow-x-auto px-[5%] lg:px-[2%] max-[460px]:px-[1%] ">
-                <h1 className="text-2xl font-bold mb-4 py-9 dark:text-white text-slate-800 font-stretch-ultra-condensed">Liste des Niveaux et Leur Departement</h1>
+                <h1 className="text-2xl font-bold mb-4 py-9 dark:text-white text-slate-800 font-stretch-ultra-condensed">Liste des Niveaux</h1>
 
                 <Button className="mb-2" size='lg' onClick={HanddleOpenAddDialogue}><Plus /></Button>
 
@@ -98,7 +97,6 @@ export default function Page({ flash }: messageFlash) {
                         <TableHeader>
                             <TableRow className="bg-gray-100 dark:bg-gray-800">
                                 <TableHead>Niveau</TableHead>
-                                <TableHead>Departement</TableHead>
                                 <TableHead>Action</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -106,7 +104,7 @@ export default function Page({ flash }: messageFlash) {
                             {filteredNiveau.map((nv) => (
                                 <TableRow key={nv.id} className="hover:bg-gray-100 dark:hover:bg-gray-800">
                                     <TableCell>{nv.niveau}</TableCell>
-                                    <TableCell>{nv.departement.name}</TableCell>
+
                                     <TableCell className=" space-x-2">
                                         {
                                             /*
@@ -127,7 +125,7 @@ export default function Page({ flash }: messageFlash) {
                      </div>
                         */
                     }
-                    <AddNiveau openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue} departement={dpt} refresh={refreshFaculty} />
+                    <AddNiveau openAddDialogue={openAddDialogue} onOpenAddChange={HanddleOpenAddDialogue} refresh={refreshFaculty} />
 
                 </div>
             </div>

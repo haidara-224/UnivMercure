@@ -41,7 +41,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Etudiants',
-        url: '/dashboard',
+        url: '/dashboard/etudiants',
         icon: User,
     },
     {

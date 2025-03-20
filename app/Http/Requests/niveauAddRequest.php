@@ -23,8 +23,9 @@ class niveauAddRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'niveau' => ['required', Rule::in(['Licence 1', 'Licence 2', 'Licence 3', 'Licence 4', 'Licence 5', 'Master 1', 'Master 2'])],
-            'departement' => ['required', 'exists:departements,id'],
+            //'niveau' => ['required', Rule::in(['Licence 1', 'Licence 2', 'Licence 3', 'Licence 4', 'Licence 5', 'Master 1', 'Master 2'])],
+            'niveau' => ['required', 'unique:classes,niveau'],
+
 
         ];
     }

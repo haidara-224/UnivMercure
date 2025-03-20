@@ -14,8 +14,7 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->enum('niveau',['Licence 1','Licence 2','Licence 3', 'Licence 4','Licence 5','Master 1','Master 2']);
-            $table->foreignIdFor(departement::class)->constrained()->cascadeOnDelete();
+            $table->string('niveau');
             $table->timestamps();
         });
     }

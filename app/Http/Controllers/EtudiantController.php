@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\anneesScolaire;
 use App\Models\etudiant;
+use App\Models\parcour;
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
 class EtudiantController extends Controller
 {
     /**
@@ -12,8 +12,15 @@ class EtudiantController extends Controller
      */
     public function index()
     {
-        //
+        $derniereAnneeScolaire = anneesScolaire::latest()->first();
+        $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
+            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->get();
+        return Inertia::render('dashboard/etudiants/index',[
+            'etudiants'=>$parcours
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

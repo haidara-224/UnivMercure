@@ -19,7 +19,7 @@ class classesFactory extends Factory
     {
         return [
             'niveau' => $this->faker->randomElement(['Licence 1', 'Licence 2', 'Licence 3', 'Licence 4', 'Licence 5', 'Master 1', 'Master 2']),
-            'departement_id' => departement::inRandomOrder()->first()->id ?? departement::factory(), // Prend un département existant ou en crée un nouveau
+            //'departement_id' => departement::inRandomOrder()->first()->id ?? departement::factory(), // Prend un département existant ou en crée un nouveau
         ];
     }
 }

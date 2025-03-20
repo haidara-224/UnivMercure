@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
         Professeur::factory(50)->create();
         departement::factory(8)->create();
         anneesScolaire::factory(10)->create();
-        classes::factory(30)->create();
+       // classes::factory(30)->create();
+       $this->call(NiveauSeeder::class);
         etudiant::factory(800)->create();
         Parcour::factory(100)->create();
        $user= User::factory()->create([
