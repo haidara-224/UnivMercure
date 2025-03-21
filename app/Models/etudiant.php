@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class etudiant extends Model
 {
     use HasFactory;
+    protected $fillable=['matricule','name','prenom','telephone','photo','sexe','user_id'];
     public function departement():BelongsTo{
         return $this->belongsTo(departement::class);
     }

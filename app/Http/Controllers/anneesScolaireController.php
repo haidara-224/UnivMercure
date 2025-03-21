@@ -12,7 +12,7 @@ class anneesScolaireController extends Controller
 {
     public function index()
     {
-        $annees_scolaire=anneesScolaire::orderByDesc('created_at')->get();
+        $annees_scolaire=anneesScolaire::orderByDesc('annee_scolaire')->get();
         return Inertia::render('dashboard/annees-scolaire/index',[
             'annees'=>$annees_scolaire
         ]);

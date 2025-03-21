@@ -18,9 +18,14 @@ interface CustomPageProps extends PageProps {
     groupedEtudiants: Parcours[];
     flash: { success?: string };
 }
+interface messageFlash {
+    flash: {
+        success: string,
 
-export default function Page() {
-    const { groupedEtudiants, flash } = usePage<CustomPageProps>().props;
+    }
+}
+export default function Page({ flash }: messageFlash) {
+    const { groupedEtudiants } = usePage<CustomPageProps>().props;
 
     useEffect(() => {
         if (flash?.success) toast.success(flash.success);
@@ -55,11 +60,12 @@ export default function Page() {
                         <TableHeader>
                             <TableRow className="bg-gray-100 dark:bg-gray-800">
                                 <TableHead>Matricule</TableHead>
-                                <TableHead className="hidden xl:table-cell">Nom</TableHead>
-                                <TableHead className="hidden lg:table-cell">Prénom</TableHead>
-                                <TableHead className="hidden lg:table-cell">Genre</TableHead>
-                                <TableHead className="hidden lg:table-cell">Niveau</TableHead>
-                                <TableHead className="hidden lg:table-cell">Département</TableHead>
+                                <TableHead >Nom</TableHead>
+                                <TableHead >Prénom</TableHead>
+                                <TableHead >Genre</TableHead>
+                                <TableHead >Niveau</TableHead>
+                                <TableHead >Département</TableHead>
+                                <TableHead >Photo</TableHead>
                                 <TableHead>Action</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -68,11 +74,22 @@ export default function Page() {
                                 groupedEtudiants.map((etud) => (
                                     <TableRow key={etud.id} className="hover:bg-gray-100 dark:hover:bg-gray-800">
                                         <TableCell>{etud.etudiant?.matricule || 'N/A'}</TableCell>
-                                        <TableCell className="hidden xl:table-cell">{etud.etudiant?.name || 'N/A'}</TableCell>
-                                        <TableCell className="hidden xl:table-cell">{etud.etudiant?.prenom || 'N/A'}</TableCell>
-                                        <TableCell className="hidden xl:table-cell">{etud.etudiant?.sexe || 'N/A'}</TableCell>
-                                        <TableCell className="hidden xl:table-cell">{etud.classes?.niveau || 'N/A'}</TableCell>
-                                        <TableCell className="hidden xl:table-cell">{etud.departement?.name || 'N/A'}</TableCell>
+                                        <TableCell >{etud.etudiant?.name || 'N/A'}</TableCell>
+                                        <TableCell >{etud.etudiant?.prenom || 'N/A'}</TableCell>
+                                        <TableCell >{etud.etudiant?.sexe || 'N/A'}</TableCell>
+                                        <TableCell >{etud.classes?.niveau || 'N/A'}</TableCell>
+                                        <TableCell >{etud.departement?.name || 'N/A'}</TableCell>
+                                        <TableCell>
+                                        {etud.etudiant.photo ? (
+                                            <img
+                                                src={`/storage/${etud.etudiant.photo}`}
+                                                alt="Photo du professeur"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            <span className="text-gray-500">Pas de photo</span>
+                                        )}
+                                        </TableCell>
                                         <TableCell className="space-x-2">
                                             <Button className="bg-green-500 hover:bg-green-600"><Edit /></Button>
                                             <Button className="bg-red-500 hover:bg-red-600"><Trash2 /></Button>

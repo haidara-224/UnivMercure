@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $derniereAnneeScolaire = anneesScolaire::latest()->first();
+        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
 
         // Vérifier si aucune année scolaire n'existe
         if (!$derniereAnneeScolaire) {

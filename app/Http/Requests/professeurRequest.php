@@ -26,7 +26,7 @@ class professeurRequest extends FormRequest
             'name' => ['required', 'string'],
             'prenom' => ['required', 'string'],
             'telephone' => ['required', 'string'],
-            'photo' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:2042'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:2042'],
 
         ];
     }
