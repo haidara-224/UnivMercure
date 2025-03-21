@@ -41,7 +41,7 @@ export default function Page({ flash }: messageFlash) {
                 </h1>
 
                 <Link href="/dashboard/etudiants/new">
-                    <Button className="bg-primary mb-5 p-5 rounded-2xl text-white cursor-pointer">
+                    <Button className="bg-primary mb-5 p-5 rounded-2xl text-white cursor-pointer dark:text-slate-800">
                         <Plus />
                     </Button>
                 </Link>

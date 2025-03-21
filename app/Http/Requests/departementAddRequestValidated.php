@@ -28,7 +28,7 @@ class departementAddRequestValidated extends FormRequest
                 'string',
                 Rule::unique('departements', 'name'),
             ],
-            'chef'=>['required','exists:professeurs,id',Rule::unique('departements', 'professeur_id'),],
+            'chef'=>['required','exists:professeurs,id'],
             'faculty'=>['required','exists:faculties,id'],
         ];
     }
