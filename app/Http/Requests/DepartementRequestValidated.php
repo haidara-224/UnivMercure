@@ -33,7 +33,7 @@ class DepartementRequestValidated extends FormRequest
 
             'exists:professeurs,id',
 
-            Rule::unique('departements', 'professeur_id')->ignore($this->route('departement')->id),
+           // Rule::unique('departements', 'professeur_id')->ignore($this->route('departement')->id),
         ],
         'faculty' => [
             'required',

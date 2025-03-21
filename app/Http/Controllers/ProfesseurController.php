@@ -52,17 +52,15 @@ class ProfesseurController extends Controller
 {
     $data = $request->validated();
 
-    // Gestion de l'image
+
     if ($request->hasFile('photo')) {
-        // Supprimer l'ancienne image si elle existe
+
         if (!empty($professeur->photo) && Storage::disk('public')->exists($professeur->photo)) {
             Storage::disk('public')->delete($professeur->photo);
         }
-        // Stocker la nouvelle image et enregistrer le chemin
-        $data['photo'] = $request->file('photo')->store('images/professeurs', 'public');
+        // Stocker la nouvelle image et enregistrer le $data['photo'] = $request->file('photo')->store('images/professeurs', 'public');
     }
 
-    // Mise à jour des données
     $professeur->update($data);
 
     return redirect()->back()->with('success', 'Professeur mis à jour avec succès');
