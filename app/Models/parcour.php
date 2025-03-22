@@ -13,7 +13,9 @@ class parcour extends Model
     {
         return $this->belongsTo(classes::class);
     }
-
+    public function anneesScolaire(){
+        return $this->belongsTo(anneesScolaire::class);
+    }
     public function departement()
     {
         return $this->belongsTo(departement::class);

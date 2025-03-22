@@ -96,6 +96,7 @@ export interface Parcours{
     classes:Niveaux;
     departement:Departement;
     etudiant:Etudiants;
+    annees_scolaire:AnnessScolaire
     created_at:Date;
     updated_at:Date;
 }

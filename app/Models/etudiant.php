@@ -18,4 +18,5 @@ class etudiant extends Model
     {
         return $this->hasMany(parcour::class);
     }
+
 }

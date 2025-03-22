@@ -12,8 +12,8 @@ import { router, useForm, usePage } from "@inertiajs/react";
 import InputError from "./input-error";
 
 const steps = [
-    { title: "Information", description: "Information de l'étudiant" },
-    { title: "Inscription/Reinscription", description: "Information sur l'inscription" },
+    { title: "Information", description: "" },
+    { title: "I/R", description: "" },
 ];
 
 interface PageProps {
@@ -63,9 +63,12 @@ export function MultiformStep() {
         e.preventDefault();
         post(route("dashboard.etud.store"), {
             onFinish: () =>{
+                //setStep(1)
+            } ,
+            onSuccess:()=>{
                 reset();
                 router.visit('/dashboard/etudiants');
-            } ,
+            },
             onError:()=>router.reload()
         });
     };
@@ -73,7 +76,7 @@ export function MultiformStep() {
     return (
         <>
             <ProgresseBars curentstep={step} steps={steps} />
-            <form className="p-6 space-y-6 w-7xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-2xl" onSubmit={handleSubmit}>
+            <form className="p-6 space-y-6 max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-2xl" onSubmit={handleSubmit}>
                 <motion.div
                     key={step}
                     initial={{ opacity: 0, y: 10 }}
@@ -82,7 +85,7 @@ export function MultiformStep() {
                     className="space-y-6"
                 >
                     {step === 1 && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <Label htmlFor="matricule" className="text-gray-700 dark:text-gray-300">Matricule</Label>
                                 <Input

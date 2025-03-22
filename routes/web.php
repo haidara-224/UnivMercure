@@ -47,11 +47,14 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::delete('/professeurs/{professeur}', [ProfesseurController::class, 'destroy'])->name('prof.delete');
     /**Etudiants Route */
     Route::get('/etudiants', [EtudiantController::class, 'index'])->name('etud.index');
-   // Route::get('/etudiants/{etudiant}', [EtudiantController::class, 'show'])->name('etud.show');
-   // Route::put('/etudiants/{etudiant}', [EtudiantController::class, 'update'])->name('etud.update');
+    // Route::get('/etudiants/{etudiant}', [EtudiantController::class, 'show'])->name('etud.show');
     Route::get('/etudiants/new', [EtudiantController::class, 'create'])->name('etud.create');
     Route::post('/etudiants', [EtudiantController::class, 'store'])->name('etud.store');
-    Route::delete('/etudiants/{etudiants}', [EtudiantController::class, 'destroy'])->name('etud.delete');
+
+    Route::get('/etudiants/{parcours}/edit', [EtudiantController::class, 'edit'])->name('etud.edit');
+    Route::put('/etudiants/{parcours}', [EtudiantController::class, 'update'])->name('etud.update');
+    Route::delete('/etudiants/{parcours}', [EtudiantController::class, 'destroy'])->name('etud.delete');
+
 });
 
 require __DIR__ . '/settings.php';

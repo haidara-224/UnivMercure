@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\studentFormAddRequest;
+use App\Http\Requests\studentFormUpdateRequest;
 use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
@@ -23,23 +24,38 @@ class EtudiantController extends Controller
     {
         $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
 
-        // Vérifier si aucune année scolaire n'existe
+
         if (!$derniereAnneeScolaire) {
             return Inertia::render('dashboard/etudiants/index', [
                 'groupedEtudiants' => []
             ]);
         }
 
-        $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
-            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+        $parcours = Parcour::select(
+            'parcours.*',
+            'classes.niveau',
+            'departements.name as departement_name',
+             'etudiants.matricule as etudiant_matricule',
+             'etudiants.name as etudiant_name',
+             'etudiants.prenom as etudiant_prenom',
+             'etudiants.sexe as etudiant_sexe',
+             'etudiants.photo as etudiant_photo',
+             )
+            ->join('classes', 'parcours.classes_id', '=', 'classes.id')
+            ->join('departements', 'parcours.departement_id', '=', 'departements.id')
+            ->join('etudiants', 'parcours.etudiant_id', '=', 'etudiants.id')
+            ->where('parcours.annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->orderByDesc('classes.niveau')
+            ->orderByDesc('departements.name')
+            ->orderByDesc('etudiants.name')
             ->get();
-
-
-
+        //dd($parcours);
         return Inertia::render('dashboard/etudiants/index', [
             'groupedEtudiants' => $parcours
         ]);
     }
+
+
 
 
 
@@ -113,24 +129,75 @@ class EtudiantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(etudiant $etudiant)
+    public function edit(parcour $parcours)
     {
-        //
+        $niveau=classes::select(['id','niveau'])->get();
+        $annesscolaire=anneesScolaire::select(['id','annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $departement=departement::select(['id','name'])->get();
+        $parcour = Parcour::with(['classes', 'anneesScolaire', 'departement', 'etudiant'])->findOrFail($parcours->id);
+
+        return Inertia::render('dashboard/etudiants/edit',[
+            'parcours'=>$parcour,
+            'classe'=>$parcours->classes,
+            'nv'=>$niveau,
+            'annees'=>$annesscolaire,
+            'dpt'=>$departement,
+
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, etudiant $etudiant)
+    public function update(studentFormUpdateRequest $request, parcour $parcours)
     {
+        $data = $request->validated();
 
+        if ($request->hasFile('photo')) {
+            // Supprimer l'ancienne photo si elle existe
+            if ($parcours->etudiant->photo) {
+                Storage::disk('public')->delete($parcours->etudiant->photo);
+            }
+
+            // Stocker la nouvelle photo
+            $photoPath = $request->file('photo')->store('images/etudiant', 'public');
+            $data['photo'] = $photoPath;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $parcours->etudiant->update([
+                'matricule' => $data['matricule'],
+                'name' => $data['nom'],
+                'prenom' => $data['prenom'],
+                'sexe' => $data['genre'],
+                'telephone' => $data['telephone'],
+                'photo' => $data['photo'] ?? $parcours->etudiant->photo,
+            ]);
+
+            $parcours->update([
+                'annees_scolaire_id' => $data['annees_scolaire'],
+                'classes_id' => $data['niveaux'],
+                'departement_id' => $data['departement']
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with("success", "Étudiant mis à jour avec succès");
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with("error", "Erreur lors de la mise à jour de l'étudiant : " . $e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(etudiant $etudiant)
+    public function destroy(parcour $parcours)
     {
-        //
+        $parcours->delete();
+        return redirect()->back()->with("success", "Étudiant mis Supprimer avec succès");
     }
 }
