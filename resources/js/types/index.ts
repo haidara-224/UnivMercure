@@ -100,4 +100,31 @@ export interface Parcours{
     created_at:Date;
     updated_at:Date;
 }
-
+export interface Salle{
+    id:number;
+    salle:string;
+    capacite:number;
+    created_at:Date;
+    updated_at:Date;
+}
+export interface EmploieTemps{
+    id:number;
+    date:Date;
+    heure_debut:Date;
+    heure_fin:Date;
+    salle:Salle;
+    departement:Departement;
+    professeur:professeur;
+    niveau:Niveaux;
+    annee_scolaire:AnnessScolaire;
+    created_at:Date;
+    updated_at:Date;
+}
+export interface Note{
+    id:number;
+    note:string;
+    etudiant:Etudiants;
+    emploie_temps:EmploieTemps;
+    created_at:Date;
+    updated_at:Date;
+}

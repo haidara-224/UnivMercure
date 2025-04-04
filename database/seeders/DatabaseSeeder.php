@@ -9,6 +9,7 @@ use App\Models\etudiant;
 
 use App\Models\parcour;
 use App\Models\Professeur;
+use App\Models\salle;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
        $this->call(NiveauSeeder::class);
         etudiant::factory(800)->create();
         parcour::factory(100)->create();
+
        $user= User::factory()->create([
             'name' => 'haidara',
             'email' => 'sidymohamedcherifhaidara02@gmail.com',

@@ -49,7 +49,7 @@ class EtudiantController extends Controller
             ->orderByDesc('departements.name')
             ->orderByDesc('etudiants.name')
             ->get();
-        //dd($parcours);
+
         return Inertia::render('dashboard/etudiants/index', [
             'groupedEtudiants' => $parcours
         ]);

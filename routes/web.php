@@ -4,9 +4,12 @@ use App\Http\Controllers\anneesScolaireController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfesseurController;
+use App\Http\Controllers\SalleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -54,6 +57,21 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::get('/etudiants/{parcours}/edit', [EtudiantController::class, 'edit'])->name('etud.edit');
     Route::put('/etudiants/{parcours}', [EtudiantController::class, 'update'])->name('etud.update');
     Route::delete('/etudiants/{parcours}', [EtudiantController::class, 'destroy'])->name('etud.delete');
+    /**Matiere Route */
+    Route::get('/matieres', [MatiereController::class, 'index'])->name('matiere.index');
+    Route::post('/matieres', [MatiereController::class, 'create'])->name('matiere.create');
+    Route::delete('/matieres/{matiere}', [MatiereController::class, 'destroy'])->name('matiere.delete');
+    Route::get('/matieres/{matiere}/edit', [MatiereController::class, 'edit'])->name('matiere.edit');
+    Route::put('/matieres/{matiere}', [MatiereController::class, 'update'])->name('matiere.update');
+    /**Salle Route */
+    Route::get('/salles', [SalleController::class, 'index'])->name('salle.index');
+    Route::post('/salles', [SalleController::class, 'create'])->name('salle.create');
+    Route::delete('/salles/{salle}', [SalleController::class, 'destroy'])->name('salle.delete');
+    Route::get('/salles/{salle}/edit', [SalleController::class, 'edit'])->name('salle.edit');
+    Route::put('/salles/{salle}', [SalleController::class, 'update'])->name('salle.update');
+    //Emploie du Temps Route
+    Route::get('/emploie-du-temps', [EmploieController::class, 'index'])->name('emploi.index');
+
 
 });
 

@@ -45,8 +45,14 @@ const mainNavItems: NavItem[] = [
         icon: User,
     },
     {
+        title: 'Salles de Classe',
+        url: '/dashboard/salles',
+        icon: LayoutGrid,
+
+    },
+    {
         title: 'Emploie de Temps',
-        url: '/dashboard/etudiant',
+        url: '/dashboard/emploie-temps',
         icon: BookOpenCheck,
     },
 
