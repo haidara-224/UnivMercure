@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/use-pagination";
 import { PaginationState } from "@tanstack/react-table";
-import {  Matiere } from "@/types";
-import { usePage } from "@inertiajs/react";
+import { Matiere } from "@/types";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import { Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AddMatiere } from "./AddMatiere";
@@ -27,16 +27,17 @@ interface PageProps {
 }
 interface CustomPageProps extends PageProps {
     matiere: Matiere[];
-    departement:{id:number; name:string}[];
+    departement: { id: number; name: string }[];
 }
 
 type SortColumn = keyof Matiere;
 
 function Matieres() {
-    const { matiere,departement } = usePage<CustomPageProps>().props;
+    const { matiere, departement } = usePage<CustomPageProps>().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [sortColumn, setSortColumn] = useState<SortColumn>("nom");
     const [sortDirection, setSortDirection] = useState("asc");
+    const { delete: destroy } = useForm({});
     const pageSize = 7;
 
     // Pagination state (pageIndex starts at 0)
@@ -44,7 +45,14 @@ function Matieres() {
         pageIndex: 0,
         pageSize: pageSize,
     });
-
+ const handleDelete = (matiere: Matiere) => {
+        const confirmDelete = window.confirm(`Êtes-vous sûr de vouloir supprimer ${matiere.nom} ?`);
+        if (confirmDelete) {
+            destroy(route('dashboard.matiere.delete', matiere.id), {
+                preserveScroll: true,
+            });
+        }
+    };
     // Filtrage des données
     const filteredMatiere = useMemo(() => {
         return matiere.filter((m) =>
@@ -88,13 +96,13 @@ function Matieres() {
         paginationItemsToDisplay: 5,
     });
 
+
     return (
         <div className="mx-auto my-6 w-full max-w-6xl rounded border p-4">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
-            <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                     <AddMatiere departements={departement} />
-
-
+                    <Link href="">voir la Table des Matieres</Link>
                 </div>
                 <h1 className="text-xl font-bold">Matière</h1>
                 <Input
@@ -121,6 +129,17 @@ function Matieres() {
                                 </span>
                             )}
                         </TableHead>
+                        <TableHead
+                            className="cursor-pointer"
+                            onClick={() => handleSort("departements")}
+                        >
+                            départements{" "}
+                            {sortColumn === "departements" && (
+                                <span className="ml-1">
+                                    {sortDirection === "asc" ? "\u2191" : "\u2193"}
+                                </span>
+                            )}
+                        </TableHead>
 
                         <TableHead
                             className="cursor-pointer"
@@ -141,6 +160,18 @@ function Matieres() {
                         paginatedMatiere.map((mt) => (
                             <TableRow key={mt.id}>
                                 <TableCell className="font-medium">{mt.nom}</TableCell>
+                                <TableCell className="font-medium">
+                                    {mt.departements?.length > 0 ? (
+                                        mt.departements.map((dpt) => (
+                                            <span key={dpt.id} className="block text-sm text-muted-foreground">
+                                                {dpt.name}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-sm text-muted-foreground italic">Aucun département</span>
+                                    )}
+                                </TableCell>
+
 
                                 <TableCell>
                                     {new Date(mt.created_at).toLocaleDateString("fr-FR", {
@@ -153,7 +184,7 @@ function Matieres() {
                                     <Button variant="ghost" size="icon">
                                         <Pencil className="size-4" />
                                     </Button>
-                                    <Button variant="ghost" size="icon">
+                                    <Button variant="ghost" size="icon" onClick={() => {handleDelete(mt)}}>
                                         <Trash2 className="size-4" />
                                     </Button>
                                 </TableCell>
@@ -250,15 +281,15 @@ function Matieres() {
             </div>
             <p className="mt-4 text-center text-sm text-muted-foreground">
 
-<a
-    className="underline hover:text-foreground"
-    href="#"
-    target="_blank"
-    rel="noopener noreferrer"
->
-    Mercure University
-</a>
-</p>
+                <a
+                    className="underline hover:text-foreground"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Mercure University
+                </a>
+            </p>
         </div>
     );
 }

@@ -11,7 +11,7 @@ class MatiereController extends Controller
 {
     public function index()
     {
-        $matieres = matiere::orderByDesc('created_at')->get();
+        $matieres = matiere::with('departements')->orderByDesc('created_at')->get();
         $departement=departement::select('id','name')->get();
         return inertia('dashboard/matieres/index', [
             'matiere' => $matieres,
@@ -38,18 +38,6 @@ class MatiereController extends Controller
 
 
 
-    public function store(Request $request)
-    {
-        // Handle the request to store a new matiere
-        // Validate and save the data
-        // Redirect or return a response
-    }
-
-    public function edit($id)
-    {
-        return inertia('Matiere/Edit', ['id' => $id]);
-    }
-
     public function update(Request $request, $id)
     {
         // Handle the request to update an existing matiere
@@ -57,9 +45,11 @@ class MatiereController extends Controller
         // Redirect or return a response
     }
 
-    public function destroy($id)
+    public function destroy(matiere $matiere)
     {
-        // Handle the request to delete a matiere
-        // Redirect or return a response
+        $matiere->departements()->detach();
+        $matiere->delete();
+        return redirect()->back()->with('success', 'Matière supprimée avec succès');
     }
+
 }

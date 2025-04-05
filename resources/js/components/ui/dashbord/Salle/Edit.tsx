@@ -34,6 +34,7 @@ function EditSalle({ openDialogue, onOpenChange, salle }: ProposDialogue) {
              onSuccess: () => {
 
                  setIsProcessing(false);
+
              },
              onError: () => {
                  setIsProcessing(false);

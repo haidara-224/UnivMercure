@@ -131,7 +131,7 @@ export interface Note{
 export interface Matiere{
     id:number;
     nom:string;
-    departement:Departement;
+    departements:Departement[];
     created_at:Date;
     updated_at:Date;
 }

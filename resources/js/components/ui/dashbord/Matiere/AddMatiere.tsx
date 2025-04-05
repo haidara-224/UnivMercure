@@ -13,7 +13,7 @@ import {
   import { Plus } from "lucide-react";
   import { Input } from "../../input";
   import { Label } from "../../label";
-  import { FormEventHandler } from "react";
+  import { FormEventHandler, useState } from "react";
   import { useForm } from "@inertiajs/react";
   import InputError from "@/components/input-error";
   import { Checkbox } from "@/components/ui/checkbox";
@@ -34,6 +34,7 @@ import {
   }
 
   function AddMatiere({ departements }: AddMatiereProps) {
+    const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm<Form>({
       nom: "",
       departement_id: [],
@@ -42,12 +43,15 @@ import {
     const handleSubmit: FormEventHandler = (e) => {
       e.preventDefault();
       post(route("dashboard.matiere.create"), {
-        onFinish: () => reset(),
+        onFinish: () => {
+            reset();
+            setOpen(false);
+          },
       });
     };
 
     return (
-      <AlertDialog>
+      <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger asChild>
           <Button variant="outline">
             <Plus />

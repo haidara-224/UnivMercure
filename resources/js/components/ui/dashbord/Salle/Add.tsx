@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Input } from "../../input";
 import { Label } from "../../label";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import InputError from "@/components/input-error";
 
@@ -24,6 +24,7 @@ interface form {
     [key: string]: string | number
 }
 function AddSalle() {
+    const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm<form>({
       salle: '',
       capacite: 1,
@@ -32,13 +33,16 @@ function AddSalle() {
     const handleSubmit: FormEventHandler = (e) => {
       e.preventDefault();
       post(route("dashboard.salle.create"), {
-        onFinish: () => reset(),
+        onFinish: () => {
+            reset();
+            setOpen(false);
+          },
       });
     };
 
     return (
 
-        <AlertDialog>
+        <AlertDialog open={open} onOpenChange={setOpen}>
           <AlertDialogTrigger asChild>
             <Button variant="outline"><Plus /></Button>
           </AlertDialogTrigger>
