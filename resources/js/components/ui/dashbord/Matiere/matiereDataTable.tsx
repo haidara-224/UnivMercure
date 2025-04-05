@@ -17,10 +17,11 @@ import {
 import { usePagination } from "@/hooks/use-pagination";
 import { PaginationState } from "@tanstack/react-table";
 import { Matiere } from "@/types";
-import { Link, useForm, usePage } from "@inertiajs/react";
-import { Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { useForm, usePage } from "@inertiajs/react";
+import { Trash2, ChevronLeft, ChevronRight, Pencil } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AddMatiere } from "./AddMatiere";
+import { EditMatiere } from "./EditMatiere";
 
 interface PageProps {
     [key: string]: unknown;
@@ -37,6 +38,8 @@ function Matieres() {
     const [searchTerm, setSearchTerm] = useState("");
     const [sortColumn, setSortColumn] = useState<SortColumn>("nom");
     const [sortDirection, setSortDirection] = useState("asc");
+    const [selectedMatiere, setSelectedMatiere] = useState<Matiere | null>(null);
+    const [open, setOpen] = useState(false);
     const { delete: destroy } = useForm({});
     const pageSize = 7;
 
@@ -45,7 +48,11 @@ function Matieres() {
         pageIndex: 0,
         pageSize: pageSize,
     });
- const handleDelete = (matiere: Matiere) => {
+    const handleEdit = (matiere: Matiere) => {
+        setSelectedMatiere(matiere);
+        setOpen((prev) => !prev);
+    };
+    const handleDelete = (matiere: Matiere) => {
         const confirmDelete = window.confirm(`Êtes-vous sûr de vouloir supprimer ${matiere.nom} ?`);
         if (confirmDelete) {
             destroy(route('dashboard.matiere.delete', matiere.id), {
@@ -102,7 +109,8 @@ function Matieres() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
                 <div className="flex items-center gap-2">
                     <AddMatiere departements={departement} />
-                    <Link href="">voir la Table des Matieres</Link>
+                    <EditMatiere open={open} onOpenChange={setOpen} matiere={selectedMatiere} departement={departement} />
+
                 </div>
                 <h1 className="text-xl font-bold">Matière</h1>
                 <Input
@@ -181,12 +189,14 @@ function Matieres() {
                                     })}
                                 </TableCell>
                                 <TableCell className="flex gap-1">
-                                    <Button variant="ghost" size="icon">
+                                <Button variant="secondary" onClick={() => handleEdit(mt)}>
                                         <Pencil className="size-4" />
                                     </Button>
-                                    <Button variant="ghost" size="icon" onClick={() => {handleDelete(mt)}}>
+                                    <Button variant="destructive" size="icon" onClick={() => { handleDelete(mt) }}>
+
                                         <Trash2 className="size-4" />
                                     </Button>
+
                                 </TableCell>
                             </TableRow>
                         ))

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\formEditMatiereRequest;
 use App\Http\Requests\MatiereFormRequest;
 use App\Models\departement;
 use App\Models\matiere;
@@ -38,12 +39,23 @@ class MatiereController extends Controller
 
 
 
-    public function update(Request $request, $id)
+    public function update(formEditMatiereRequest $request, matiere $matiere)
     {
-        // Handle the request to update an existing matiere
-        // Validate and save the data
-        // Redirect or return a response
+        $validated = $request->validated();
+        if (!$validated) {
+            return redirect()->back()->with('error', 'Erreur de validation');
+        } else {
+            $matiere->update([
+                'nom' => $validated['nom']
+            ]);
+
+            $matiere->departements()->sync($validated['departement_id']);
+
+            return redirect()->back()->with('success', 'Matière modifiée avec succès');
+        }
     }
+
+
 
     public function destroy(matiere $matiere)
     {
