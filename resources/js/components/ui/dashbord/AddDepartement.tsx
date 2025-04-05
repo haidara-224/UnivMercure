@@ -31,7 +31,7 @@ interface formAdd {
     name: string;
     chef: number;
     faculty: number;
-    [key: string]: unknown;
+    [key: string]: string | number;
 }
 export default function AddDepartement({ openAddDialogue, onOpenAddChange, refresh, chefdpt, faculty
 }: ProposDialogue) {

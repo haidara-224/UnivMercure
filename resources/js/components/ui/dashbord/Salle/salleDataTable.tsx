@@ -28,13 +28,14 @@ import {
 } from "@/components/ui/pagination";
 
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Pencil, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Salle } from "@/types";
 import { useForm, usePage } from "@inertiajs/react";
 import { Button } from "../../button";
 import { usePagination } from "@/hooks/use-pagination";
 import { AddSalle } from "./Add";
 import { EditSalle } from "./Edit";
+import { Input } from "../../input";
 
 
 interface PageProps {
@@ -82,7 +83,7 @@ export function SalleData() {
                         <Button
                             variant="outline"
                             size="icon"
-                        onClick={() => handleEdit(salle)}
+                            onClick={() => handleEdit(salle)}
                         >
                             <Pencil className="size-4" />
                         </Button>
@@ -100,6 +101,7 @@ export function SalleData() {
 
     ];
     const { salles } = usePage<CustomPageProps>().props
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [data, setData] = useState<Salle[]>([])
 
     const pageSize = 10;
@@ -124,7 +126,7 @@ export function SalleData() {
 
     const { delete: destroy } = useForm({});
     const [openDialogue, setOpenDialogue] = useState(false)
-     const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null)
+    const [selectedSalle, setSelectedSalle] = useState<Salle | null>(null)
 
     const handleDelete = (salle: Salle) => {
         const confirmDelete = window.confirm(`Êtes-vous sûr de vouloir supprimer ${salle.salle} ?`);
@@ -138,14 +140,21 @@ export function SalleData() {
         setOpenDialogue((prev) => !prev)
     }
 
-    const handleEdit=(salle:Salle)=>{
-setOpenDialogue((prev) => !prev)
-setSelectedSalle(salle)
+    const handleEdit = (salle: Salle) => {
+        setOpenDialogue((prev) => !prev)
+        setSelectedSalle(salle)
 
-setOpenDialogue(true)
+        setOpenDialogue(true)
     }
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const filteredSalles = useMemo(() => {
+        return salles.filter((salle) =>
+            salle.salle.toLowerCase().includes(searchTerm.toLowerCase()),
+        )
+    }, [salles, searchTerm])
     const table = useReactTable({
-        data,
+        data: filteredSalles,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -174,6 +183,12 @@ setOpenDialogue(true)
                     <EditSalle openDialogue={openDialogue} onOpenChange={HanddleOpenDialogue} salle={selectedSalle} />
 
                 </div>
+                <Input
+                    placeholder="Search Salles..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="md:w-96"
+                />
             </div>
             <div className="overflow-hidden rounded-lg border border-border bg-background">
                 <Table className="table-fixed">
@@ -324,14 +339,14 @@ setOpenDialogue(true)
 
             </div>
             <p className="mt-4 text-center text-sm text-muted-foreground">
-                Salle Tables
+
                 <a
                     className="underline hover:text-foreground"
                     href="#"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    Mercure Université
+                    Mercure University
                 </a>
             </p>
         </div>

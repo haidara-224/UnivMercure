@@ -128,3 +128,10 @@ export interface Note{
     created_at:Date;
     updated_at:Date;
 }
+export interface Matiere{
+    id:number;
+    nom:string;
+    departement:Departement;
+    created_at:Date;
+    updated_at:Date;
+}

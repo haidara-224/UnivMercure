@@ -37,7 +37,7 @@ function AddSalle() {
     };
 
     return (
-      <form onSubmit={handleSubmit}>
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline"><Plus /></Button>
@@ -47,7 +47,6 @@ function AddSalle() {
               <AlertDialogTitle>Ajouter Une Salle de Classe</AlertDialogTitle>
             </AlertDialogHeader>
         <AlertDialogDescription>Salle de Classes</AlertDialogDescription>
-            {/* Formulaire déplacé ici */}
             <div className="grid gap-4 py-4">
               <div>
                 <Label htmlFor="salle" className="mb-2">Nom de la Salle</Label>
@@ -79,14 +78,14 @@ function AddSalle() {
             </div>
 
             <AlertDialogFooter>
-              <AlertDialogCancel>Annuler</AlertDialogCancel>
+              <AlertDialogCancel>Fermer</AlertDialogCancel>
               <AlertDialogAction onClick={handleSubmit} disabled={processing} className="bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 rounded-md">
                             {processing ? "Enregistrement..." : "Sauvegarder"}
                         </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </form>
+
     );
   }
 

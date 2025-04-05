@@ -21,4 +21,8 @@ class departement extends Model
     public function faculty():BelongsTo{
         return $this->belongsTo(faculty::class);
     }
+    public function matieres()
+    {
+        return $this->belongsToMany(matiere::class);
+    }
 }
