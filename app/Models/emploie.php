@@ -35,7 +35,7 @@ class emploie extends Model
     }
     public function professeur()
     {
-        return $this->belongsTo(professeur::class);
+        return $this->belongsTo(Professeur::class);
     }
     public function salle()
     {
