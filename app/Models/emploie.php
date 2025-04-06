@@ -33,7 +33,7 @@ class emploie extends Model
     {
         return $this->belongsTo(matiere::class);
     }
-    public function professeur()
+    public function Professeur()
     {
         return $this->belongsTo(Professeur::class);
     }
