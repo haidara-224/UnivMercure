@@ -1,213 +1,215 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePage } from "@inertiajs/react";
 import { AnnessScolaire } from "@/types";
+import { BookOpen, Home, Users } from "lucide-react";
 
-interface PageProps {
-    [key: string]: unknown;
+interface PageProps { [key: string]: unknown }
+
+interface EventRaw {
+  jour: string;
+  heure_debut: string;
+  heure_fin: string;
+  title: string;
+  professeur: string;
+  salle: string;
+  departement: string;
+  classe: string;
+}
+
+interface Event extends EventRaw {
+  startHour: number;
+  endHour: number;
 }
 
 interface CustomPageProps extends PageProps {
-    eventsByDay: {
-        [key: string]: Array<{
-            start: { year: number; month: number; day: number; hour: number; minute: number; second: number };
-            end: { year: number; month: number; day: number; hour: number; minute: number; second: number };
-            title: string;
-            module: string;
-            professeur: string;
-            heure_debut: string;
-            heure_fin: string;
-            departement: string;
-            classe: string;
-            salle: string;
-        }>;
-    };
-    lastAnneesScolaire: AnnessScolaire;
-
+  eventsByDay: Record<string, EventRaw[]>;
+  lastAnneesScolaire: AnnessScolaire;
+  dpt: { id: number; name: string }[];
+  salles: { id: number; salle: string }[];
+  classe: { id: number; niveau: string }[];
 }
 
-function CalendarEmploie() {
-    const { eventsByDay,lastAnneesScolaire } = usePage<CustomPageProps>().props;
+const HOURS = Array.from({ length: 11 }, (_, i) => 8 + i); // 8h–18h
+const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
-    const [filters, setFilters] = useState({
-        departement: "",
-        salle: "",
-        classe: "",
-    });
+export default function CalendarEmploie() {
+  const { eventsByDay, lastAnneesScolaire, dpt, salles, classe } =
+    usePage<CustomPageProps>().props;
 
-    const handleFilterChange = (filterType: string, value: string) => {
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [filterType]: value,
-        }));
-    };
+  const [filters, setFilters] = useState({
+    departement: "",
+    salle: "",
+    classe: "",
+  });
 
-    const filteredData = Object.keys(eventsByDay).map((day) => {
-        const events = eventsByDay[day].filter((event) => {
-            const departement = event.departement || "";
-            const salle = event.salle || "";
-            const classe = event.classe || "";
-
-            return (
-                (filters.departement === "" || departement === filters.departement) &&
-                (filters.salle === "" || salle === filters.salle) &&
-                (filters.classe === "" || classe === filters.classe)
-            );
-        });
-
-        return { day, events };
-    });
-
-    const uniqueDepartements = Array.from(new Set(
-        Object.values(eventsByDay).flat().map(e => e.departement || "").filter(Boolean)
-    ));
-    const uniqueSalles = Array.from(new Set(
-        Object.values(eventsByDay).flat().map(e => e.salle || "").filter(Boolean)
-    ));
-    const uniqueClasses = Array.from(new Set(
-        Object.values(eventsByDay).flat().map(e => e.classe || "").filter(Boolean)
-    ));
-
-    const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-
-    return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            {/* En-tête et Filtres */}
-            <div className="mb-8 max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-6">Emploi du temps {lastAnneesScolaire.annee_scolaire}</h1>
-
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Filtres</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Département</label>
-                            <select
-                                value={filters.departement}
-                                onChange={(e) => handleFilterChange("departement", e.target.value)}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="">Tous les départements</option>
-                                {uniqueDepartements.map((departement) => (
-                                    <option key={departement} value={departement}>
-                                        {departement}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Salle</label>
-                            <select
-                                value={filters.salle}
-                                onChange={(e) => handleFilterChange("salle", e.target.value)}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="">Toutes les salles</option>
-                                {uniqueSalles.map((salle) => (
-                                    <option key={salle} value={salle}>
-                                        {salle}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-600 mb-2">Classe</label>
-                            <select
-                                value={filters.classe}
-                                onChange={(e) => handleFilterChange("classe", e.target.value)}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="">Toutes les classes</option>
-                                {uniqueClasses.map((classe) => (
-                                    <option key={classe} value={classe}>
-                                        {classe}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Calendrier */}
-            <div className="max-w-7xl mx-auto mb-8">
-                {/* Affichage des jours de la semaine */}
-                <div className="lg:flex space-x-4 mb-6 justify-center hidden">
-                    {daysOfWeek.map((day) => (
-                        <div
-                            key={day}
-                            className="text-center py-3 px-6 bg-blue-100 rounded-lg shadow-md text-blue-800 font-semibold"
-                        >
-                            {day}
-                        </div>
-                    ))}
-                </div>
-
-                {filteredData.length === 0 ? (
-                    <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200">
-                        <p className="text-gray-500">Aucun événement trouvé avec ces filtres</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 ">
-                        {filteredData.map(({ day, events }, index) => (
-                            <div
-                                key={index}
-                                className="bg-white rounded-xl shadow-lg border border-gray-300 overflow-hidden w-full"
-                            >
-                                <div className="bg-blue-50 p-4 border-b border-blue-200">
-                                    <h4 className="text-md font-semibold text-blue-800 text-center">{day}</h4>
-                                </div>
-
-                                <div className="p-4 space-y-4 min-h-[180px]  w-full flex flex-col justify-center items-center">
-                                    {events.length > 0 ? (
-                                        events.map((event, eventIndex) => (
-                                            <div
-                                                key={eventIndex}
-                                                className="p-4 bg-gray-50 rounded-lg border border-gray-800 hover:bg-blue-50 transition-colors"
-                                            >
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex flex-col">
-                                                        <h5 className="text-sm font-medium text-gray-900">{event.title}</h5>
-
-                                                    </div>
-                                                    <span className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
-                                                        {event.salle}
-                                                    </span>
-                                                </div>
-                                            <div>
-                                            <p className="text-xs text-gray-500 mt-1">
-                                                            {event.heure_debut} - {event.heure_fin}
-                                                        </p>
-                                            </div>
-                                                <div className="mt-3 space-y-1">
-                                                    <div className="flex items-center text-xs text-gray-600">
-
-                                                        Prof: {event.professeur}
-                                                    </div>
-                                                    <div className="flex items-center text-xs text-gray-600">
-
-                                                        Dpt: {event.departement}
-                                                    </div>
-                                                    <div className="flex items-center text-xs text-gray-600">
-                                                        Niveau:  {event.classe}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div className="p-3 text-center text-gray-400 text-sm">
-                                            Aucun cours
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                )}
-            </div>
-        </div>
+  // Aplatit, convertit et filtre les événements
+  const allEvents = useMemo<Event[]>(() => {
+    return Object.entries(eventsByDay).flatMap(([day, evs]) =>
+      evs
+        .filter((e) =>
+          (!filters.departement || e.departement === filters.departement) &&
+          (!filters.salle || e.salle === filters.salle) &&
+          (!filters.classe || e.classe === filters.classe)
+        )
+        .map((e) => ({
+          ...e,
+          jour: day,
+          startHour: +e.heure_debut.split(":")[0],
+          endHour: +e.heure_fin.split(":")[0],
+        }))
     );
-}
+  }, [eventsByDay, filters]);
 
-export default CalendarEmploie;
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      {/* En-tête + Filtres */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <h1 className="text-3xl font-bold mb-4">
+          Emploi du temps – {lastAnneesScolaire.annee_scolaire}
+        </h1>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Filtres</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Département */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Département
+              </label>
+              <select
+                value={filters.departement}
+                onChange={(e) =>
+                  setFilters((f) => ({
+                    ...f,
+                    departement: e.target.value,
+                  }))
+                }
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Tous les départements</option>
+                {dpt.map((d) => (
+                  <option key={d.id} value={d.name}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Salle */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Salle
+              </label>
+              <select
+                value={filters.salle}
+                onChange={(e) =>
+                  setFilters((f) => ({ ...f, salle: e.target.value }))
+                }
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Toutes les salles</option>
+                {salles.map((s) => (
+                  <option key={s.id} value={s.salle}>
+                    {s.salle}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Classe */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Classe
+              </label>
+              <select
+                value={filters.classe}
+                onChange={(e) =>
+                  setFilters((f) => ({ ...f, classe: e.target.value }))
+                }
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Toutes les classes</option>
+                {classe.map((c) => (
+                  <option key={c.id} value={c.niveau}>
+                    {c.niveau}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tableau horaire responsive */}
+      <div className="max-w-7xl mx-auto overflow-x-auto border rounded-lg shadow-lg bg-white">
+        <table className="min-w-full table-fixed border-collapse">
+          <thead className="bg-blue-600 text-white">
+            <tr>
+              <th className="hidden md:table-cell w-16 py-2 md:py-3 border-r">
+                Heure
+              </th>
+              {DAYS.map((d) => (
+                <th
+                  key={d}
+                  className={`py-2 md:py-3 border-r ${
+                    d === "Samedi" ? "hidden lg:table-cell" : ""
+                  }`}
+                >
+                  {d}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {HOURS.map((hour) => (
+              <tr key={hour} className="even:bg-gray-100">
+                <td className="hidden md:table-cell text-center font-medium py-2 border-r">
+                  {hour}h
+                </td>
+                {DAYS.map((day) => {
+                  const evs = allEvents.filter(
+                    (ev) => ev.jour === day && ev.startHour === hour
+                  );
+                  return (
+                    <td
+                      key={day}
+                      className={`border-r h-32 p-1 align-top ${
+                        day === "Samedi" ? "hidden lg:table-cell" : ""
+                      }`}
+                    >
+                      {evs.length > 0 && (
+                        <div className="flex flex-col space-y-1 h-full overflow-y-auto pr-1">
+                          {evs.map((ev, i) => (
+                            <div
+                              key={i}
+                              className="bg-blue-50 p-2 rounded-lg shadow-inner text-xs"
+                            >
+                              <h4 className="font-semibold text-blue-800 leading-tight">
+                                {ev.title}- {ev.heure_debut} - {ev.heure_fin}
+                              </h4>
+                              <p className="flex items-center text-gray-600 truncate text-xl">
+
+                                {ev.professeur}
+                              </p>
+                              <p className="flex items-center text-gray-600 truncate">
+
+                                {ev.salle}
+                              </p>
+                              <p className="flex items-center text-gray-500 text-[10px]">
+
+                                {ev.departement} • {ev.classe}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

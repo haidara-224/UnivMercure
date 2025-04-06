@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\anneesScolaire;
+use App\Models\classes;
+use App\Models\departement;
 use App\Models\emploie;
+use App\Models\salle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,6 +29,9 @@ class EmploieController extends Controller
     {
 
         $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+        $departement=departement::select('id','name')->get();
+        $salle=salle::select('id','salle')->get();
+        $classes=classes::select('id','niveau')->get();
 
         $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
@@ -68,6 +74,9 @@ class EmploieController extends Controller
         return Inertia::render('dashboard/emploie-du-temps/index', [
             'eventsByDay' => $eventsByDay,
             'lastAnneesScolaire' => $derniereAnneeScolaire,
+            'dpt' => $departement,
+            'salles' => $salle,
+            'classe' => $classes,
         ]);
     }
 }
