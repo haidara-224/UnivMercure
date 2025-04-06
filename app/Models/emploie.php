@@ -23,23 +23,23 @@ class emploie extends Model
     ];
     public function classes()
     {
-        return $this->belongsTo(Classes::class);
+        return $this->belongsTo(classes::class);
     }
     public function departement()
     {
-        return $this->belongsTo(Departement::class);
+        return $this->belongsTo(departement::class);
     }
     public function matiere()
     {
-        return $this->belongsTo(Matiere::class);
+        return $this->belongsTo(matiere::class);
     }
     public function professeur()
     {
-        return $this->belongsTo(Professeur::class);
+        return $this->belongsTo(professeur::class);
     }
     public function salle()
     {
-        return $this->belongsTo(Salle::class);
+        return $this->belongsTo(salle::class);
     }
     public function anneesScolaire()
     {
