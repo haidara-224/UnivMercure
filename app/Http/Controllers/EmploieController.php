@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\anneesScolaire;
-use App\Models\Emploie;
+use App\Models\emploie;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,7 +27,7 @@ class EmploieController extends Controller
 
         $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
 
-        $emplois = Emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
+        $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
 
