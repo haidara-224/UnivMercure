@@ -58,7 +58,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Emploie de Temps',
-        url: '/dashboard/emploie-temps',
+        url: '/dashboard/emploie-du-temps',
         icon: BookOpenCheck,
     },
 

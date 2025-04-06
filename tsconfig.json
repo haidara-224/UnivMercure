@@ -114,5 +114,5 @@
         },
         "jsx": "react-jsx"
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/components/ui/dashbord"]
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/components/ui/dashbord", "resources/js/pages/dashboard/emploie-du-temps", "resources/js/hooks/use-media-query.jsx"]
 }

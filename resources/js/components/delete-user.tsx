@@ -77,7 +77,7 @@ export default function DeleteUser() {
                                 </DialogClose>
 
                                 <Button variant="destructive" disabled={processing} asChild>
-                                    <button type="submit">Delete account</button>
+                                    <button type="submit" className='text-white'>Delete account</button>
                                 </Button>
                             </DialogFooter>
                         </form>

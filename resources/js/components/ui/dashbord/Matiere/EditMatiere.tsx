@@ -78,7 +78,6 @@ export function EditMatiere({
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4">
                     <div className="grid gap-6 py-4">
-                        {/* Champ nom */}
                         <div className="grid gap-2">
                             <Label htmlFor="name" className="text-sm font-medium text-gray-700">
                                 Nom de la matière
@@ -145,11 +144,7 @@ export function EditMatiere({
                             message={errors.departement_id as string}
                             className="mt-2"
                         />
-
                     </div>
-
-
-
                 <DialogFooter>
                     <Button
                         disabled={processing}

@@ -71,6 +71,11 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::put('/salles/{salle}', [SalleController::class, 'update'])->name('salle.update');
     //Emploie du Temps Route
     Route::get('/emploie-du-temps', [EmploieController::class, 'index'])->name('emploi.index');
+    Route::get('/emploie-du-temps/new', [EmploieController::class, 'create'])->name('emploi.create');
+    Route::post('/emploie-du-temps', [EmploieController::class, 'store'])->name('emploi.store');
+    Route::delete('/emploie-du-temps/{emploi}', [EmploieController::class, 'destroy'])->name('emploi.delete');
+    Route::get('/emploie-du-temps/{emploi}/edit', [EmploieController::class, 'edit'])->name('emploi.edit');
+    Route::put('/emploie-du-temps/{emploi}', [EmploieController::class, 'update'])->name('emploi.update');
 
 
 });
