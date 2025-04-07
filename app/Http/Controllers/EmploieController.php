@@ -6,6 +6,8 @@ use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\emploie;
+use App\Models\matiere;
+use App\Models\Professeur;
 use App\Models\salle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -48,6 +50,7 @@ class EmploieController extends Controller
             $endDate = $startDate->copy()->setTimeFromTimeString($emploi->heure_fin);
 
             $eventsByDay[$emploi->jour][] = [
+                'id' => $emploi->id,
                 'title' => $emploi->matiere->nom,
                 'module' => $emploi->module,
                 'professeur' => $emploi->professeur->name,
@@ -69,4 +72,64 @@ class EmploieController extends Controller
             'classe' => $classes,
         ]);
     }
+    public function create(Request $request)
+    {
+
+        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $classes = classes::select(['id', 'niveau'])->get();
+        $departement = departement::select(['id', 'name'])->get();
+        $professeur = Professeur::select(['id', 'name', 'prenom', 'matricule'])->get();
+        $salle = salle::select(['id', 'salle', 'capacite'])->get();
+        $matiere = matiere::select(['id', 'nom'])->get();
+
+
+
+        return Inertia::render('dashboard/emploie-du-temps/new', [
+            'annees' => $anneesScolaire,
+            'classes' => $classes,
+            'departement' =>  $departement,
+            'professeur' => $professeur,
+            'salle' => $salle,
+            'matiere' => $matiere
+        ]);
+    }
+    public function store()
+    {
+        $data = request()->validate([
+            'annee_scolaire' => 'required|exists:annees_scolaires,id',
+            'niveau' => 'required|exists:classes,id',
+            'departement' => 'required|exists:departements,id',
+            'salle' => 'required|exists:salles,id',
+            'professeur' => 'required|exists:professeurs,id',
+            'matiere' => 'required|exists:matieres,id',
+            'module' => 'required|string|max:255',
+            'jours' => 'required|string|max:255',
+            'heure_debut' => 'required|string|max:255',
+            'heure_fin' => 'required|string|max:255',
+        ]);
+
+        Emploie::create([
+            'annees_scolaire_id' => $data['annee_scolaire'],
+            'classes_id' => $data['niveau'],
+            'departement_id' => $data['departement'],
+            'salle_id' => $data['salle'],
+            'professeur_id' => $data['professeur'],
+            'matiere_id' => $data['matiere'],
+            'module' => $data['module'],
+            'jour' => $data['jours'],
+            'heure_debut' => $data['heure_debut'],
+            'heure_fin' => $data['heure_fin'],
+        ]);
+
+        return redirect()->back()->with('success', "Emploi du temps ajouté avec succès");
+    }
+    public function destroy(emploie $emploi)
+    {
+        $emploi->delete();
+
+        return redirect()->back()->with('success', "Emploi du temps supprimé avec succès");
+    }
+
+
+
 }

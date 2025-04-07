@@ -1,13 +1,15 @@
 import { useState, useMemo } from "react";
-import { usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import { AnnessScolaire } from "@/types";
 import * as XLSX from "xlsx";
-import { Sheet } from "lucide-react";
+import { Edit, PlusCircleIcon, Sheet, Trash } from "lucide-react";
+import { Button } from "../../button";
 
 
 interface PageProps { [key: string]: unknown }
 
 interface EventRaw {
+    id: number;
     jour: string;
     heure_debut: string;
     heure_fin: string;
@@ -41,8 +43,9 @@ export default function CalendarEmploie() {
         salle: "",
         classe: "",
     });
-
+    const { delete: destroy, } = useForm({});
     const [selectedModule, setSelectedModule] = useState('Premier Module');
+    const [isDeleted, setIsDeleted] = useState(false);
 
     const allEvents = useMemo(() => {
         return Object.entries(eventsByDay).flatMap(([day, evs]) =>
@@ -90,7 +93,22 @@ export default function CalendarEmploie() {
 
         XLSX.writeFile(workbook, `emploi_du_temps_${selectedModule.replace(' ', '_')}.xlsx`);
     };
+    const HandleDelete = (emploi: EventRaw) => {
 
+        setIsDeleted(true);
+        const confirm = window.confirm(`Etes vous sure de vouloir Supprimé ? `)
+        if (confirm) {
+            destroy(route('dashboard.emploi.delete', emploi.id), {
+                preserveScroll: true,
+                onFinish: () => {
+                    setIsDeleted(false);
+                }
+
+            });
+
+        }
+
+    }
 
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
@@ -156,7 +174,12 @@ export default function CalendarEmploie() {
                             </select>
                         </div>
                     </div>
-
+                    <button
+                        onClick={exportToExcel}
+                        className="px-4 py-2 m-5 bg-green-600 text-white rounded-lg hover:bg-green-700 float-end cursor-pointer"
+                    >
+                        <Sheet className="inline mr-2" />
+                    </button>
                     <div className="mt-4">
                         <h4 className="text-sm font-medium text-gray-600 mb-2">Module</h4>
                         <div className="flex gap-4">
@@ -170,18 +193,17 @@ export default function CalendarEmploie() {
 
                     </div>
 
+
                 </div>
 
             </div>
 
 
             <div className="max-w-7xl mx-auto overflow-x-auto border rounded-lg shadow-lg bg-white">
-                <button
-                    onClick={exportToExcel}
-                    className="px-4 py-2 m-5 bg-green-600 text-white rounded-lg hover:bg-green-700 float-end cursor-pointer"
-                >
-                    <Sheet className="inline mr-2" />
-                </button>
+                <div className="px-4 py-2 m-5">
+                    <Link href="/dashboard/emploie-du-temps/new"><PlusCircleIcon /></Link>
+                </div>
+
                 <table className="min-w-full table-fixed border-collapse">
                     <thead className="bg-blue-600 text-white">
                         <tr>
@@ -218,6 +240,19 @@ export default function CalendarEmploie() {
                                                             key={i}
                                                             className="bg-blue-50 p-2 rounded-lg shadow-inner text-xs"
                                                         >
+                                                            <div className="flex justify-end">
+                                                                <Button variant={'ghost'} className="text-red-500 cursor-pointer" onClick={() => HandleDelete(ev)}>
+                                                                    {isDeleted ? (
+                                                                        <span className="w-4 h-4 border-2 border-t-transparent border-black dark:border-white rounded-full animate-spin inline-block"></span>
+                                                                    ) : (
+                                                                        <Trash />
+                                                                    )}
+
+                                                                </Button>
+                                                                <Link href="/">
+                                                                    <Button variant={'ghost'} className="text-green-800 cursor-pointer"><Edit /></Button>
+                                                                </Link>
+                                                            </div>
                                                             <h4 className="font-semibold text-blue-800 leading-tight">
                                                                 {ev.title} - {ev.heure_debut} - {ev.heure_fin}
                                                             </h4>
