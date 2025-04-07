@@ -27,34 +27,25 @@ class EmploieController extends Controller
 
     public function index(Request $request)
     {
-
         $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
-        $departement=departement::select('id','name')->get();
-        $salle=salle::select('id','salle')->get();
-        $classes=classes::select('id','niveau')->get();
+        $departement = departement::select('id', 'name')->get();
+        $salle = salle::select('id', 'salle')->get();
+        $classes = classes::select('id', 'niveau')->get();
 
         $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
 
-
         $eventsByDay = [
-            'Lundi' => [],
-            'Mardi' => [],
-            'Mercredi' => [],
-            'Jeudi' => [],
-            'Vendredi' => [],
-            'Samedi' => []
+            'Lundi' => [], 'Mardi' => [], 'Mercredi' => [],
+            'Jeudi' => [], 'Vendredi' => [], 'Samedi' => []
         ];
 
-
-        $emplois->map(function ($emploi) use (&$eventsByDay) {
+        foreach ($emplois as $emploi) {
             $startOfWeek = now()->startOfWeek();
-            $startDate = $startOfWeek->addDays($this->jourToNumber($emploi->jour) - 1)
+            $startDate = $startOfWeek->copy()->addDays($this->jourToNumber($emploi->jour) - 1)
                 ->setTimeFromTimeString($emploi->heure_debut);
-
             $endDate = $startDate->copy()->setTimeFromTimeString($emploi->heure_fin);
-
 
             $eventsByDay[$emploi->jour][] = [
                 'title' => $emploi->matiere->nom,
@@ -68,8 +59,7 @@ class EmploieController extends Controller
                 'start' => $startDate->toArray(),
                 'end' => $endDate->toArray(),
             ];
-        });
-
+        }
 
         return Inertia::render('dashboard/emploie-du-temps/index', [
             'eventsByDay' => $eventsByDay,

@@ -18,6 +18,8 @@ class emploie extends Model
         'salle_id',
         'jour',
         'module',
+        'isFirstmodule',
+        'isSecondmodule',
         'heure_debut',
         'heure_fin',
     ];
