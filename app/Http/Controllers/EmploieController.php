@@ -123,6 +123,56 @@ class EmploieController extends Controller
 
         return redirect()->back()->with('success', "Emploi du temps ajouté avec succès");
     }
+    public function edit(emploie $emploi)
+    {
+        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $classes = classes::select(['id', 'niveau'])->get();
+        $departement = departement::select(['id', 'name'])->get();
+        $professeur = Professeur::select(['id', 'name', 'prenom', 'matricule'])->get();
+        $salle = salle::select(['id', 'salle', 'capacite'])->get();
+        $matiere = matiere::select(['id', 'nom'])->get();
+
+        return Inertia::render('dashboard/emploie-du-temps/edit', [
+            'emploi' => $emploi,
+            'annees' => $anneesScolaire,
+            'classe' => $classes,
+            'departement' =>  $departement,
+            'professeur' => $professeur,
+            'salle' => $salle,
+            'matiere' => $matiere
+        ]);
+    }
+    public function update(emploie $emploi)
+    {
+        $data = request()->validate([
+            'annee_scolaire' => 'required|exists:annees_scolaires,id',
+            'niveau' => 'required|exists:classes,id',
+            'departements' => 'required|exists:departements,id',
+            'salles' => 'required|exists:salles,id',
+            'professeurs' => 'required|exists:professeurs,id',
+            'matieres' => 'required|exists:matieres,id',
+            'module' => 'required|string|max:255',
+            'jours' => 'required|string|max:255',
+            'heure_debut' => 'required|string|max:255',
+            'heure_fin' => 'required|string|max:255',
+        ]);
+
+
+        $emploi->update([
+            'annees_scolaire_id' => $data['annee_scolaire'],
+            'classes_id' => $data['niveau'],
+            'departement_id' => $data['departements'],
+            'salle_id' => $data['salles'],
+            'professeur_id' => $data['professeurs'],
+            'matiere_id' => $data['matieres'],
+            'module' => $data['module'],
+            'jour' => $data['jours'],
+            'heure_debut' => $data['heure_debut'],
+            'heure_fin' => $data['heure_fin'],
+        ]);
+
+        return redirect()->back()->with('success', "Emploi du temps modifié avec succès");
+    }
     public function destroy(emploie $emploi)
     {
         $emploi->delete();

@@ -107,19 +107,7 @@ export interface Salle{
     created_at:Date;
     updated_at:Date;
 }
-export interface EmploieTemps{
-    id:number;
-    date:Date;
-    heure_debut:Date;
-    heure_fin:Date;
-    salle:Salle;
-    departement:Departement;
-    professeur:professeur;
-    niveau:Niveaux;
-    annee_scolaire:AnnessScolaire;
-    created_at:Date;
-    updated_at:Date;
-}
+
 export interface Note{
     id:number;
     note:string;
@@ -132,6 +120,29 @@ export interface Matiere{
     id:number;
     nom:string;
     departements:Departement[];
+    created_at:Date;
+    updated_at:Date;
+}
+export interface EmploieTemps{
+    id:number;
+    jour:string;
+    heure_debut:Date;
+    module:string;
+    heure_fin:Date;
+    salle:Salle;
+    departement:Departement;
+    Professeur:professeur;
+    classe:Niveaux;
+    annee_scolaire:AnnessScolaire;
+    annees_scolaire_id:number;
+    departement_id:number;
+    professeur_id:number;
+    classe_id:number;
+    salle_id:number;
+    matiere_id:number;
+    classes_id:number;
+
+    matiere:Matiere;
     created_at:Date;
     updated_at:Date;
 }

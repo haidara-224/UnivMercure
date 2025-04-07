@@ -249,7 +249,7 @@ export default function CalendarEmploie() {
                                                                     )}
 
                                                                 </Button>
-                                                                <Link href="/">
+                                                                <Link href={`/dashboard/emploie-du-temps/${ev.id}/edit`} className="ml-2">
                                                                     <Button variant={'ghost'} className="text-green-800 cursor-pointer"><Edit /></Button>
                                                                 </Link>
                                                             </div>
