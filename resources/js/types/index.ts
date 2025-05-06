@@ -3,7 +3,10 @@ import { LucideIcon } from 'lucide-react';
 export interface Auth {
     user: User;
 }
-
+export interface Roles{
+    id:string,
+    name:string
+}
 export interface BreadcrumbItem {
     title: string;
     href: string;
@@ -25,6 +28,10 @@ export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    authUsers?:{
+        id:string,
+        name:string
+    }[]
     [key: string]: unknown;
 }
 
@@ -34,6 +41,7 @@ export interface User {
     email: string;
     avatar?: string;
     email_verified_at: string | null;
+    role:Roles[]
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
@@ -94,9 +102,14 @@ export interface Etudiants{
 export interface Parcours{
     id:string;
     classes:Niveaux;
+    departement_id:string;
+
     departement:Departement;
     etudiant:Etudiants;
-    annees_scolaire:AnnessScolaire
+    annees_scolaire:AnnessScolaire;
+    classes_id:string;
+    etudiant_id:string;
+    annees_scolaire_id:string;
     created_at:Date;
     updated_at:Date;
 }
@@ -132,8 +145,8 @@ export interface EmploieTemps{
     salle:Salle;
     departement:Departement;
     Professeur:professeur;
-    classe:Niveaux;
-    annee_scolaire:AnnessScolaire;
+    classes:Niveaux;
+    annees_scolaire:AnnessScolaire;
     annees_scolaire_id:number;
     departement_id:number;
     professeur_id:number;
@@ -146,3 +159,6 @@ export interface EmploieTemps{
     created_at:Date;
     updated_at:Date;
 }
+
+
+

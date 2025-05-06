@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\etudiant;
+use App\Models\Professeur;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +22,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('auth/register');
+        return Inertia::render('auth/register',[
+            'matricule'=>session('matricule')
+        ]);
     }
 
     /**
@@ -34,7 +38,10 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'matriculeUser'=>['required']
         ]);
+        $etudiant=etudiant::where('matricule',$request->matriculeUser)->first();
+        $Prof=Professeur::where('matricule',$request->matriculeUser)->first();
 
         $user = User::create([
             'name' => $request->name,
@@ -42,10 +49,22 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if($etudiant)
+        {
+            $etudiant->update(['user_id'=>$user->id]);
+            $user->assignRole('etudiant');
+
+        }
+        if($Prof)
+        {
+            $Prof->update(['user_id'=>$user->id]);
+            $user->assignRole('personnel');
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return to_route('dashboard.index');
+        return to_route('home');
     }
 }

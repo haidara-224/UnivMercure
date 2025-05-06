@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,8 +33,21 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $userAuth=$request->user();
+        if($userAuth->hasRole('admin')|| $userAuth->hasRole('super admin'))
+        {
 
-        return redirect()->intended(route('dashboard.index', absolute: false));
+            return redirect()->intended(route('dashboard.index', absolute: true));
+        }else if($userAuth->hasRole('etudiant')){
+            return redirect()->intended(route('etudiant.index',absolute:true));
+        }else if($userAuth->hasRole('personnel'))
+        {
+            return redirect()->intended(route('prof.index',absolute:true));
+        }else{
+            return redirect()->intended(route('home',absolute:false));
+        }
+
+
     }
 
     /**

@@ -14,7 +14,7 @@ use Inertia\Inertia;
 
 class EmploieController extends Controller
 {
-    public function jourToNumber($jour)
+    private function jourToNumber($jour)
     {
         return match ($jour) {
             'Lundi' => 1,

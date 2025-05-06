@@ -3,21 +3,24 @@
 use App\Http\Controllers\anneesScolaireController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardEtudiantController;
+use App\Http\Controllers\DashboardProfesseurController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
+use App\Http\Controllers\VerifcationMatriculeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/',[HomeController::class,'index'])->name('home');
+route::get('/verification-matricule',[VerifcationMatriculeController::class,'verification'])->name('verifcation.verif');
+route::post('/verification-matricule',[VerifcationMatriculeController::class,'verificationStore'])->name('verifcation.store');
 
-Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')->group(function () {
+Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     /**Annees Scolaire Route */
     Route::get('/annees-scolaire', [anneesScolaireController::class, 'index'])->name('ann_scolaire.index');
@@ -78,6 +81,15 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::put('/emploie-du-temps/{emploi}', [EmploieController::class, 'update'])->name('emploi.update');
 
 
+});
+Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
+    Route::get('/', [DashboardEtudiantController::class, 'index'])->name('index');
+
+});
+Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {
+    Route::get('/', [DashboardProfesseurController::class, 'index'])->name('index');
+    Route::get('/classe-departement', [DashboardProfesseurController::class, 'classe_dpt'])->name('classe_dpt');
+    Route::get('/notes', [DashboardProfesseurController::class, 'recupererEtudiantsDuProfesseur'])->name('notes');
 });
 
 require __DIR__ . '/settings.php';

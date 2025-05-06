@@ -1,6 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -14,17 +14,37 @@ interface RegisterForm {
     email: string;
     password: string;
     password_confirmation: string;
+    matriculeUser: string
+}
+interface PageProps {
+    [key: string]: unknown;
 }
 
+interface CustomPageProps extends PageProps {
+    matricule: string;
+}
 export default function Register() {
+    const { matricule } = usePage<CustomPageProps>().props;
+    const [mat, setMat] = useState(matricule || '')
     const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        matriculeUser: localStorage.getItem('matricule')
     });
 
+    useEffect(() => {
+        if (matricule) {
+            localStorage.setItem('matricule', matricule)
+            setMat(matricule)
+        } else {
+            const matLocal = localStorage.getItem('matricule')
+            if (matLocal) setMat(matLocal)
+        }
+    }, [matricule])
     const submit: FormEventHandler = (e) => {
+        console.log(data)
         e.preventDefault();
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
@@ -34,21 +54,39 @@ export default function Register() {
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
             <Head title="Register" />
+
             <form className="flex flex-col gap-6" onSubmit={submit}>
+                {mat}
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="matriculeUser">Matricule</Label>
+                        <Input
+                            id="matriculeUser"
+                            type="text"
+                            required
+                            autoFocus
+                            tabIndex={1}
+                            autoComplete="matriculeUser"
+                            value={data.matriculeUser}
+                            onChange={(e) => setData('matriculeUser', e.target.value)}
+                            disabled
+                            placeholder="Matricule"
+                        />
+                        <InputError message={errors.matriculeUser} className="mt-2" />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Pseudo</Label>
                         <Input
                             id="name"
                             type="text"
                             required
                             autoFocus
-                            tabIndex={1}
+                            tabIndex={2}
                             autoComplete="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
                             disabled={processing}
-                            placeholder="Full name"
+                            placeholder="Pseudo"
                         />
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -59,7 +97,7 @@ export default function Register() {
                             id="email"
                             type="email"
                             required
-                            tabIndex={2}
+                            tabIndex={3}
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
@@ -75,7 +113,7 @@ export default function Register() {
                             id="password"
                             type="password"
                             required
-                            tabIndex={3}
+                            tabIndex={4}
                             autoComplete="new-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
@@ -91,7 +129,7 @@ export default function Register() {
                             id="password_confirmation"
                             type="password"
                             required
-                            tabIndex={4}
+                            tabIndex={5}
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}

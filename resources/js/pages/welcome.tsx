@@ -1,38 +1,82 @@
+import { Button } from '@/components/ui/button';
 import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { FormEventHandler} from 'react';
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, authUsers } = usePage<SharedData>().props;
+
+    const { post } = useForm({});
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(route('logout'))
+    };
 
     return (
         <>
-            <Head title="Welcome">
+            <Head title="Université Mercure Internationnal">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="flex items-center justify-end gap-4">
+
                         {auth.user ? (
-                            <Link
-                                href={route('dashboard.index')}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                Dashboard
-                            </Link>
+
+                            <>
+                            {auth.user.email}
+                            {
+                                authUsers?.map((r)=>(
+                                    r.name=='super admin' && <Link key={r.id}
+                                    href={route('dashboard.index')}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Dashboard
+                                </Link>
+                                ))
+
+                            }
+                             {
+                                authUsers?.map((r)=>(
+                                    r.name=='etudiant' && <Link key={r.id}
+                                    href={route('etudiant.index')}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Mon Espace Etudiant
+                                </Link>
+                                ))
+
+                            }
+                              {
+                                authUsers?.map((r)=>(
+                                    r.name=='personnel' && <Link key={r.id}
+
+                                    href={route('prof.index')}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Mon Espaces Prof
+                                </Link>
+                                ))
+
+                            }
+
+                                <Button type='submit' onClick={submit}>logout</Button>
+                            </>
                         ) : (
                             <>
                                 <Link
                                     href={route('login')}
                                     className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
                                 >
-                                    Log in
+                                    Se connecter
                                 </Link>
                                 <Link
-                                    href={route('register')}
+                                    href={route('verifcation.verif')}
                                     className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                                 >
-                                    Register
+                                    Creer Mon Compte
                                 </Link>
                             </>
                         )}
@@ -788,3 +832,5 @@ export default function Welcome() {
         </>
     );
 }
+
+
