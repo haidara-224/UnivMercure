@@ -159,6 +159,15 @@ export interface EmploieTemps{
     created_at:Date;
     updated_at:Date;
 }
+export interface Notes {
+    note1:number;
+    note2:number;
+    note3:number;
+    moyenne:null;
+    moyenne_literaire:null
+
+
+}
 
 
 

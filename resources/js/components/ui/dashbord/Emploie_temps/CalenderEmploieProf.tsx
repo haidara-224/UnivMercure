@@ -29,7 +29,7 @@ interface CustomPageProps extends PageProps {
 
 }
 
-const HOURS = Array.from({ length: 11 }, (_, i) => 8 + i);
+const HOURS = Array.from({ length:  15 }, (_, i) => 8 + i);
 const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
 export default function CalendarEmploieProf() {

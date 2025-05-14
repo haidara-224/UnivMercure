@@ -14,7 +14,7 @@ export default function Page() {
     return (<>
         <AppSidebarLayoutProf breadcrumbs={breadcrumbs}>
             <Head title="classes et departements" />
-            <h1>classes et de partement</h1>
+
             <SalleData/>
         </AppSidebarLayoutProf>
     </>)

@@ -6,6 +6,8 @@ use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\emploie;
+use App\Models\matiere;
+use App\Models\notes;
 use App\Models\parcour;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
@@ -110,23 +112,40 @@ class DashboardProfesseurController extends Controller
 
         $infosProf = emploie::where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
-            ->select('departement_id', 'classes_id')
+            ->select('departement_id', 'classes_id', 'matiere_id')
             ->distinct()
             ->get();
 
         $departements = $infosProf->pluck('departement_id');
         $classes = $infosProf->pluck('classes_id');
+        $notes = notes::with('etudiant')
+        ->whereIn('departement_id', $departements)
+        ->whereIn('classes_id', $classes)
+        ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+        ->whereIn('matiere_id', $infosProf->pluck('matiere_id'))
+        ->get();
+
 
         $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
             ->whereIn('departement_id', $departements)
             ->whereIn('classes_id', $classes)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
-        //dd($parcours);
+
+            $enseignements = emploie::with('matiere')
+            ->where('professeur_id', $prof->id)
+            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->select('departement_id', 'classes_id', 'matiere_id')
+            ->get();
+
         return Inertia::render('prof/notes', [
             'parcours' => $parcours,
             'departements' => departement::whereIn('id', $departements)->get(),
             'classes' => classes::whereIn('id', $classes)->get(),
+         'enseignements' => $enseignements,
+         'annees_scolaire' => $derniereAnneeScolaire,
+         'notes' => $notes->groupBy('etudiant_id'),
+
         ]);
     }
 

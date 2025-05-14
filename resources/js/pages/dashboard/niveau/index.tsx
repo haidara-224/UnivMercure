@@ -38,7 +38,7 @@ export default function Page({ flash }: messageFlash) {
     const { delete: destroy, } = useForm({});
     useEffect(() => {
         if (flash?.success) {
-            toast.success(flash.success);
+            toast(flash.success);
         }
         if (flash?.error) {
             alert(flash.error)

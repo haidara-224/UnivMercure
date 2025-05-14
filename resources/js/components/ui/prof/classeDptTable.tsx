@@ -92,7 +92,7 @@ function SalleData() {
     return (
         <div className="mx-auto my-6 w-full max-w-6xl rounded border p-4">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
-                <h1 className="text-xl font-bold">Années Scolaire</h1>
+                <h1 className="text-xl font-bold">Departements-Classes</h1>
                 <Input
                     placeholder="Search Annees Scolaire..."
                     value={searchTerm}
