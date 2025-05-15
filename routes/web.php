@@ -14,6 +14,7 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
+use App\Http\Controllers\TutoController;
 use App\Http\Controllers\VerifcationMatriculeController;
 use Illuminate\Support\Facades\Route;
 
@@ -93,6 +94,8 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::get('/notes', [DashboardProfesseurController::class, 'recupererEtudiantsDuProfesseur'])->name('notes');
     Route::post('/notes', [NotesController::class, 'calculeNotes'])->name('notes.store');
     //Route::post('/notes', [NotesController::class, 'generationPdf'])->name('notes.generatedPdf');
+    Route::get('/cours',[TutoController::class,'cours'])->name('cours');
+    Route::post('/cours',[TutoController::class,'create'])->name('cours.create');
 });
 
 require __DIR__ . '/settings.php';

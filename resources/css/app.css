@@ -76,6 +76,13 @@
         border-color: var(--color-gray-200, currentColor);
     }
 }
+.tiptap {
+    min-height: 200px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 12px;
+    background-color: white;
+  }
 
 :root {
     --background: oklch(1 0 0);
