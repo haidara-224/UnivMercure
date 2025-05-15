@@ -23,6 +23,7 @@ class formEditMatiereRequest extends FormRequest
     {
         return [
             'nom' => 'required|string|max:255|unique:matieres,nom,'.$this->route('matiere')->id,
+            'credits' => 'required',
             'departement_id' => 'required|array',
             'departement_id.*' => 'exists:departements,id',
         ];

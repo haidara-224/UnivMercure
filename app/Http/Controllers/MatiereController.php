@@ -27,7 +27,8 @@ class MatiereController extends Controller
             return redirect()->back()->with('error', 'Erreur de validation');
         }else{
             $matiere = Matiere::create([
-                'nom' => $validated['nom']
+                'nom' => $validated['nom'],
+                'credits' => $validated['credits']
             ]);
 
             $matiere->departements()->attach($validated['departement_id']);
@@ -46,7 +47,8 @@ class MatiereController extends Controller
             return redirect()->back()->with('error', 'Erreur de validation');
         } else {
             $matiere->update([
-                'nom' => $validated['nom']
+                'nom' => $validated['nom'],
+                'credits' => $validated['credits']
             ]);
 
             $matiere->departements()->sync($validated['departement_id']);

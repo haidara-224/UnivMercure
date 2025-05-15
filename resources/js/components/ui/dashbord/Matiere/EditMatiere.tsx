@@ -33,6 +33,7 @@ export function EditMatiere({
 }: EditMatiereProps) {
     const [data, setData] = useState({
         nom: "",
+        credits: 0,
         departement_id: [] as number[],
     });
     const { errors } = usePage().props;
@@ -41,6 +42,7 @@ export function EditMatiere({
         if (matiere) {
             setData({
                 nom: matiere.nom,
+                credits: matiere.credits,
                 departement_id: matiere.departements.map((dept) => dept.id),
             });
         }
@@ -51,6 +53,7 @@ export function EditMatiere({
         router.post(route("dashboard.matiere.update", matiere?.id), {
             _method: "put",
             nom: data?.nom,
+            credits: data?.credits,
             departement_id: data?.departement_id,
 
         }, {
@@ -85,6 +88,7 @@ export function EditMatiere({
                             <Input
                                 id="name"
                                 value={data.nom}
+
                                 onChange={(e) =>
                                     setData((prev) => ({ ...prev, nom: e.target.value }))
                                 }
@@ -93,7 +97,25 @@ export function EditMatiere({
                             />
                         </div>
                         <InputError message={errors.nom as string} className="mt-2" />
+                        <div className="grid gap-2">
+                            <Label htmlFor="credit" className="text-sm font-medium text-gray-700">
+                                Credit
+                            </Label>
+                            <Input
+                                id="credit"
+                                type="number"
+                                min={1}
+                                max={4}
+                                value={data.credits}
 
+                                onChange={(e) =>
+                                    setData((prev) => ({ ...prev, credits: Number(e.target.value) }))
+                                }
+                                className="rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none"
+                                placeholder="credits"
+                            />
+                        </div>
+                        <InputError message={errors.nom as string} className="mt-2" />
 
                         <div className="grid gap-2">
                             <Label
@@ -145,15 +167,15 @@ export function EditMatiere({
                             className="mt-2"
                         />
                     </div>
-                <DialogFooter>
-                    <Button
-                        disabled={processing}
-                        type="submit"
-                        className="w-full sm:w-auto rounded-xl bg-primary text-white hover:bg-primary/90 transition"
-                    >
-                        {processing ? "En Cours d'édition" : 'Sauvegarder'}
-                    </Button>
-                </DialogFooter>
+                    <DialogFooter>
+                        <Button
+                            disabled={processing}
+                            type="submit"
+                            className="w-full sm:w-auto rounded-xl bg-primary text-white hover:bg-primary/90 transition"
+                        >
+                            {processing ? "En Cours d'édition" : 'Sauvegarder'}
+                        </Button>
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>

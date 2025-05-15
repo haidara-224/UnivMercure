@@ -13,6 +13,7 @@ import AppSidebarLayoutProf from '@/layouts/app/app-sidebarProf-layout';
 import { toast } from 'sonner';
 
 
+
 interface PageProps {
     [key: string]: unknown;
 }
@@ -61,7 +62,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
     const [filteredData, setFilteredData] = useState<Parcours[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [hasFiltered, setHasFiltered] = useState(false);
-
+    const [isGenerate, setIsGenerate] = useState(false)
     const matiereCorrespondante = enseignements.find(
         (e) => e.departement_id === Number(selectedDepartement) && e.classes_id === Number(selectedClasse)
     )?.matiere;
@@ -88,7 +89,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
 
             const initialNotes: Record<number, FormData> = {};
             result.forEach(p => {
-                const existingNote = notes[Number(p.etudiant.id)]?.[0]; // si groupBy, sinon juste notes.find(...)
+                const existingNote = notes[Number(p.etudiant.id)]?.[0];
 
                 initialNotes[Number(p.etudiant.id)] = {
                     note1: existingNote?.note1 ?? 0,
@@ -113,11 +114,10 @@ export default function EtudiantsPage({ flash }: messageFlash) {
     };
     const generatePdf = () => {
         const doc = new jsPDF({
-            orientation: 'landscape' // Passage en mode paysage pour plus d'espace
+            orientation: 'landscape'
         });
 
-        // Styles constants
-
+        setIsGenerate(true)
 
         const headerColor = '#2c3e50';
         const evenRowColor = '#f8f9fa';
@@ -129,7 +129,6 @@ export default function EtudiantsPage({ flash }: messageFlash) {
         const title1 = "Université Mercure International";
         const title2 = `Fiche de Notes - Année ${annees_scolaire.annee_scolaire}`;
 
-        // Calcule la position X pour centrer
         const centerText = (text: string) => (pageWidth - doc.getTextWidth(text)) / 2;
 
         doc.setFontSize(16);
@@ -138,28 +137,24 @@ export default function EtudiantsPage({ flash }: messageFlash) {
 
         doc.text(title1, centerText(title1), 10);
         doc.text(title2, centerText(title2), 20);
-
-
-
-        // Configuration du tableau avec autoTable
         autoTable(doc, {
             startY: 25,
             margin: { left: 50, right: 50 },
-            tableWidth: 'auto', // Ajustement automatique de la largeur
+            tableWidth: 'auto',
             showHead: 'everyPage',
             pageBreak: 'auto',
             headStyles: {
                 fillColor: headerColor,
                 textColor: '#ffffff',
                 fontStyle: 'bold',
-                fontSize: 8, // Taille réduite pour plus d'espace
+                fontSize: 8,
                 cellPadding: 2
             },
             bodyStyles: {
                 textColor: textColor,
-                fontSize: 7, // Taille réduite
+                fontSize: 7,
                 cellPadding: 2,
-                overflow: 'linebreak' // Gestion du texte trop long
+                overflow: 'linebreak'
             },
             alternateRowStyles: {
                 fillColor: evenRowColor
@@ -172,20 +167,20 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                 valign: 'middle'
             },
             columnStyles: {
-                0: { cellWidth: 20, halign: 'left' },  // Matricule
-                1: { cellWidth: 25, halign: 'left' },  // Nom
-                2: { cellWidth: 25, halign: 'left' },   // Prénom
-                3: { cellWidth: 15 },  // Classe
-                4: { cellWidth: 25 },  // Département
-                5: { cellWidth: 25 },  // Matière
-                6: { cellWidth: 12 }, // Note 1
-                7: { cellWidth: 12 }, // Note 2
-                8: { cellWidth: 12 }, // Note 3
-                9: { cellWidth: 15 }, // Moyenne
-                10: { cellWidth: 15 }  // Littéraire
+                0: { cellWidth: 20, halign: 'left' },
+                1: { cellWidth: 25, halign: 'left' },
+                2: { cellWidth: 25, halign: 'left' },
+                3: { cellWidth: 15 },
+                4: { cellWidth: 25 },
+                5: { cellWidth: 25 },
+                6: { cellWidth: 12 },
+                7: { cellWidth: 12 },
+                8: { cellWidth: 12 },
+                9: { cellWidth: 15 },
+                10: { cellWidth: 15 }
             },
-            didDrawPage: function(data) {
-                // Pied de page
+            didDrawPage: function (data) {
+
                 doc.setFontSize(8);
                 doc.setTextColor(100);
                 const pageSize = doc.internal.pageSize;
@@ -205,7 +200,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
 
                 return [
                     etudiant.etudiant.matricule,
-                    etudiant.etudiant.name.substring(0, 15), // Limite la longueur
+                    etudiant.etudiant.name.substring(0, 15),
                     etudiant.etudiant.prenom.substring(0, 15),
                     etudiant.classes.niveau,
                     etudiant.departement.name.substring(0, 15),
@@ -218,8 +213,11 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                 ];
             }) ?? []
         });
+        setTimeout(() => {
+            setIsGenerate(false);
+            doc.save("fiche-notes.pdf");
+        }, 3000); // ou même 0 ms si c'est juste pour attendre
 
-        doc.save("fiche-notes.pdf");
     };
 
 
@@ -354,9 +352,21 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                         </Button>
                     </div>
                 </div>
-                {hasFiltered&& filteredData?.length!==0 && <Button onClick={generatePdf}>Generer un Pdf</Button>}
+                {hasFiltered && filteredData?.length !== 0 && (
+                    <Button disabled={isGenerate} onClick={generatePdf} className="flex items-center gap-2">
+                        {isGenerate ? (
+                            <>
+                                <Loader2 className="animate-spin w-4 h-4" />
+                                Génération en cours...
+                            </>
+                        ) : (
+                            'Générer un PDF'
+                        )}
+                    </Button>
+                )}
 
-                {hasFiltered  && (
+
+                {hasFiltered && (
                     <div className="mx-auto my-6 w-full max-w-6xl rounded border p-4 bg-white">
                         <Table>
                             <TableHeader>
@@ -368,12 +378,13 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                                     <TableHead>Classe</TableHead>
                                     <TableHead>Département</TableHead>
                                     <TableHead>Matière</TableHead>
-
+                                    <TableHead>credits</TableHead>
                                     <TableHead>Note 1</TableHead>
                                     <TableHead>Note 2</TableHead>
                                     <TableHead>Note 3</TableHead>
                                     <TableHead>Moyenne</TableHead>
                                     <TableHead>Moyenne Littéraire</TableHead>
+
                                     <TableHead>Action</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -412,6 +423,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                                                 <TableCell>{p.classes.niveau}</TableCell>
                                                 <TableCell>{p.departement.name}</TableCell>
                                                 <TableCell>{matiereCorrespondante?.nom || '-'}</TableCell>
+                                                <TableCell>{matiereCorrespondante?.credits || '-'}</TableCell>
 
                                                 <TableCell>
                                                     <input

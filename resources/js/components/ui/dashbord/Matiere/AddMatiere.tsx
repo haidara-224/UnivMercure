@@ -20,6 +20,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 interface Form {
     nom: string;
+    credits:number
     departement_id: number[];
     [key: string]: string | number | number[];
 }
@@ -27,6 +28,7 @@ interface Form {
 interface Departement {
     id: number;
     name: string;
+
 }
 
 interface AddMatiereProps {
@@ -37,6 +39,7 @@ function AddMatiere({ departements }: AddMatiereProps) {
     const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm<Form>({
         nom: "",
+        credits:0,
         departement_id: [],
     });
 
@@ -79,6 +82,23 @@ function AddMatiere({ departements }: AddMatiereProps) {
                             className="w-full"
                         />
                         <InputError message={errors.nom as string} className="mt-2" />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="nom" className="mb-2">
+                            Credit
+                        </Label>
+                        <Input
+                            id="number"
+                            value={data.credits}
+                            onChange={(e) => setData("credits", Number(e.target.value))}
+                            type="number"
+                            min={1}
+                            max={4}
+                            placeholder="Credits"
+                            className="w-full"
+                        />
+                        <InputError message={errors.credits as string} className="mt-2" />
                     </div>
 
                     <div>

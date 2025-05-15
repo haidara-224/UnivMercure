@@ -10,6 +10,7 @@ class matiere extends Model
     use HasFactory;
     protected $fillable = [
         'nom',
+        'credits'
     ];
 
     public function departements()

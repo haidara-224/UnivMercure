@@ -43,7 +43,7 @@ function Matieres() {
     const { delete: destroy } = useForm({});
     const pageSize = 7;
 
-    // Pagination state (pageIndex starts at 0)
+
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: pageSize,
@@ -60,14 +60,12 @@ function Matieres() {
             });
         }
     };
-    // Filtrage des données
+
     const filteredMatiere = useMemo(() => {
         return matiere.filter((m) =>
             m.nom.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [matiere, searchTerm]);
-
-    // Tri des données filtrées
     const sortedMatiere = useMemo(() => {
         return [...filteredMatiere].sort((a, b) => {
             if (a[sortColumn] < b[sortColumn]) return sortDirection === "asc" ? -1 : 1;
@@ -75,14 +73,11 @@ function Matieres() {
             return 0;
         });
     }, [filteredMatiere, sortColumn, sortDirection]);
-
-    // Calcul de la donnée paginée
     const paginatedMatiere = useMemo(() => {
         const start = pagination.pageIndex * pageSize;
         return sortedMatiere.slice(start, start + pageSize);
     }, [sortedMatiere, pagination, pageSize]);
 
-    // Calcul du nombre total de pages
     const totalPages = Math.ceil(sortedMatiere.length / pageSize);
 
     const handleSort = (column: SortColumn) => {
@@ -92,11 +87,10 @@ function Matieres() {
             setSortColumn(column);
             setSortDirection("asc");
         }
-        // Remettre à la première page quand le tri change
+
         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     };
 
-    // On utilise le hook custom pour générer la liste des pages et ellipses
     const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
         currentPage: pagination.pageIndex + 1,
         totalPages: totalPages,
@@ -136,7 +130,19 @@ function Matieres() {
                                     {sortDirection === "asc" ? "\u2191" : "\u2193"}
                                 </span>
                             )}
+
                         </TableHead>
+                        <TableHead
+                                className="cursor-pointer"
+                                onClick={() => handleSort("nom")}
+                            >
+                                credits{" "}
+                                {sortColumn === "credits" && (
+                                    <span className="ml-1">
+                                        {sortDirection === "asc" ? "\u2191" : "\u2193"}
+                                    </span>
+                                )}
+                            </TableHead>
                         <TableHead
                             className="cursor-pointer"
                             onClick={() => handleSort("departements")}
@@ -168,6 +174,7 @@ function Matieres() {
                         paginatedMatiere.map((mt) => (
                             <TableRow key={mt.id}>
                                 <TableCell className="font-medium">{mt.nom}</TableCell>
+                                <TableCell className="font-medium">{mt.credits}</TableCell>
                                 <TableCell className="font-medium">
                                     {mt.departements?.length > 0 ? (
                                         mt.departements.map((dpt) => (
@@ -189,12 +196,12 @@ function Matieres() {
                                     })}
                                 </TableCell>
                                 <TableCell className="flex gap-1">
-                                <Button variant="secondary" onClick={() => handleEdit(mt)}>
+                                    <Button variant="secondary" onClick={() => handleEdit(mt)}>
                                         <Pencil className="size-4" />
                                     </Button>
                                     <Button variant="destructive" size="icon" onClick={() => { handleDelete(mt) }}>
 
-                                        <Trash2 className="size-4" />
+                                        <Trash2 className="size-4 text-white" />
                                     </Button>
 
                                 </TableCell>
