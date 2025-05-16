@@ -79,5 +79,42 @@ class ExamensController extends Controller
         ]);
         return back()->with('success', 'examens ajouté avec succès.');
     }
+    public function createForClasseUpdate(Request $request,examensclasse $examen){
+        $data = $request->validate([
+            'titre' => ['required', 'string', 'max:50'],
+            'sujet_explication' => ['nullable', 'string'],
+            'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+            'date_debut'=>['required','date'],
+            'date_fin'=>['required','date'],
+            'departement' => ['required', 'exists:departements,id'],
+            'niveaux' => ['required', 'exists:classes,id'],
+        ]);
+        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
+        if ($request->hasFile('fichier')) {
+            $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
+        }
+        $userAuth = Auth::id();
+        $profId = Professeur::where('user_id', $userAuth)->value('id');
+
+        $examen->update([
+            'titre' => $data['titre'],
+            'sujet_explication' => $data['sujet_explication'] ?? null,
+            'fichier' => $data['fichier'] ?? null,
+            'date_debut'=>$data['date_debut'] ?? null,
+            'date_fin'=>$data['date_fin'] ?? null,
+            'professeur_id' => $profId,
+            'departement_id' => $data['departement'] ,
+            'classes_id' => $data['niveaux'],
+            'annees_scolaire_id'=>$derniereAnneeScolaire->id
+        ]);
+        return back()->with('success', 'Examens modifié avec succès.');
+
+    }
+    public function createForClasseDelete(examensclasse $examen)
+    {
+
+        $examen->delete();
+        return back()->with('success', 'examens Supprimé avec succès.');
+    }
 
 }

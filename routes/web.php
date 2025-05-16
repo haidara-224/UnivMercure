@@ -103,6 +103,8 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
         /**Route Examens */
     Route::get('/examens',[ExamensController::class,'index'])->name('examens.index');
     Route::post('/examens',[ExamensController::class,'createForClasse'])->name('examens.create.classe');
+    Route::delete('/examens/{examen}',[ExamensController::class,'createForClasseDelete'])->name('examens.delete.classe');
+    Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
 });
 
 require __DIR__ . '/settings.php';

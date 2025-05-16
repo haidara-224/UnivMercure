@@ -66,14 +66,10 @@ function AddExamensForClasse({
 
     const dateDebut = new Date(data.date_debut);
     const dateFin = new Date(data.date_fin);
-
-    // Vérification 1 : La date de fin doit être après la date de début
     if (dateFin <= dateDebut) {
       alert("La date de fin doit être supérieure à la date de début.");
       return;
     }
-
-    // Vérification 2 : Au moins un fichier ou un sujet écrit doit être fourni
     const hasFile = data.fichier instanceof File;
     const hasSujet = data.sujet_explication && data.sujet_explication.trim().length > 0;
 

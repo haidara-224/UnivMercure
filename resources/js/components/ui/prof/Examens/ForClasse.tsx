@@ -7,6 +7,9 @@ import {
   import {
     FileText, BookOpen, Clock,
     Building2, Landmark, FileSearch, Search,
+    Edit,
+    Loader2,
+    Trash2,
   } from "lucide-react";
   import { format } from "date-fns";
   import { fr } from "date-fns/locale";
@@ -14,6 +17,10 @@ import {
   import { Departement, ExamensByClasse, Niveaux } from "@/types";
   import { useState } from "react";
   import { Input } from "@/components/ui/input";
+import { SubjectModal } from "./SujectModal";
+import { useForm } from "@inertiajs/react";
+import { toast } from "sonner";
+import { ExamensClasseModal } from "./EditExamesnForClasse";
 
   export default function ForClasse({
     departements,
@@ -25,14 +32,44 @@ import {
     examens: ExamensByClasse[];
   }) {
     const [search, setSearch] = useState("");
-
+    const [openDialogue, setOpenDialogue] = useState(false);
+    const [openDialogueEdit, setOpenDialogueEdit] = useState(false);
     const filteredExamens = examens.filter((ex) =>
       ex.titre.toLowerCase().includes(search.toLowerCase()) ||
       ex.departement?.name?.toLowerCase().includes(search.toLowerCase()) ||
       ex.classes?.niveau?.toLowerCase().includes(search.toLowerCase()) ||
       ex.annees_scolaire.annee_scolaire.toLowerCase().includes(search.toLowerCase())
     );
+    const [selectedExament, setSelectedExamen] = useState<ExamensByClasse | null>(null);
+    const [loadingExamens, setLoadingExamens] = useState<number | null>(null);
+ const handleOpenSubjectModal = (examen: ExamensByClasse) => {
+    setSelectedExamen(examen);
+        setOpenDialogue(true);
+    };
+    const { delete: destroy } = useForm({});
 
+    const handleEditTuto = (examen: ExamensByClasse) => {
+        setSelectedExamen(examen);
+        setOpenDialogueEdit(true);
+    };
+
+    const handleDeleteExamens = (id: number) => {
+        const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer ce tutoriel ?");
+        if (confirm) {
+            setLoadingExamens(id);
+            destroy(route("prof.examens.delete.classe", id), {
+                preserveScroll: true,
+                onFinish: () => setLoadingExamens(null),
+                onError: () => {
+                    setLoadingExamens(null);
+                    toast.error("Une erreur est survenue lors de la suppression");
+                },
+                onSuccess: () => {
+                    toast.success("Tutoriel supprimé avec succès");
+                },
+            });
+        }
+    };
     return (
       <div className="space-y-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -103,7 +140,7 @@ import {
                   </div>
                 </CardContent>
 
-                <CardFooter className="flex justify-between gap-2 pt-0">
+                <CardFooter className="flex justify-between gap-2 pt-2 border-t">
                   {examen.fichier && (
                     <Button asChild variant="outline" size="sm" className="gap-1.5">
                       <a href={`/storage/${examen.fichier}`} target="_blank">
@@ -117,17 +154,49 @@ import {
                       size="sm"
                       variant="ghost"
                       className="text-primary hover:bg-primary/5"
-                      onClick={() => alert("Voir le sujet écrit")}
+                      onClick={() => handleOpenSubjectModal(examen)}
                     >
                       <FileSearch className="h-4 w-4 mr-1" />
                       Sujet
                     </Button>
                   )}
+                   <div className="flex gap-2 w-full sm:w-auto">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="flex-1 sm:flex-none"
+                                        onClick={() => handleEditTuto(examen)}
+                                    >
+                                        <Edit className="h-4 w-4 mr-1" />
+                                        <span>Modifier</span>
+                                    </Button>
+                                    <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="flex-1 sm:flex-none text-white"
+                                        onClick={() => handleDeleteExamens(examen.id)}
+                                        disabled={loadingExamens === examen.id}
+                                    >
+                                        {loadingExamens === examen.id ? (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        ) : (
+                                            <>
+                                                <Trash2 className="h-4 w-4 mr-1 " />
+                                                <span>Supprimer</span>
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
                 </CardFooter>
               </Card>
             ))}
           </div>
         )}
+         <SubjectModal open={openDialogue}
+                onOpenChange={setOpenDialogue}
+                examen={selectedExament}/>
+                <ExamensClasseModal open={openDialogueEdit} onOpenChange={setOpenDialogueEdit} examen={selectedExament} departements={departements} classes={classes}/>
       </div>
+
     );
   }
