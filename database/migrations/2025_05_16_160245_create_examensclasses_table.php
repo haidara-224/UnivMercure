@@ -14,15 +14,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('examens', function (Blueprint $table) {
+        Schema::create('examensclasses', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->text('fichier');
-            $table->dateTime('date_limite');
+            $table->text('fichier')->nullable();
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
+            $table->text('sujet_explication')->nullable();
             $table->foreignIdFor(Professeur::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(departement::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(classes::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
+
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('examens');
+        Schema::dropIfExists('examensclasses');
     }
 };

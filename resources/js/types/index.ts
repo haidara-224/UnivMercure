@@ -184,6 +184,24 @@ export interface Tutos{
     created_at:Date;
     updated_at:Date;
 }
+export interface ExamensByClasse{
+    id:number,
+    titre:string,
+    sujet_explication:string,
+    fichier?:string | null,
+    annees_scolaire_id:number;
+    annees_scolaire:AnnessScolaire;
+    departement_id?:number ,
+    professeur_id?:number,
+    classes_id?:number,
+    departement?:Departement
+    classes?:Niveaux
+    professeur?:professeur
+    date_debut:Date,
+    date_fin:Date,
+    created_at:Date;
+    updated_at:Date;
+}
 
 
 

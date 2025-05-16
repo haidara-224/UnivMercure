@@ -2,9 +2,82 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\anneesScolaire;
+use App\Models\classes;
+use App\Models\departement;
+use App\Models\emploie;
+use App\Models\examensclasse;
+use App\Models\Professeur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ExamensController extends Controller
 {
-    //
+    private function getClasseDepartement()
+    {
+
+    }
+    public function index()
+    {
+        $prof = Professeur::where('user_id', Auth::id())->firstOrFail();
+
+        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
+
+        $infosProf = emploie::where('professeur_id', $prof->id)
+            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->select('departement_id', 'classes_id')
+            ->distinct()
+            ->get();
+
+        // Récupérer uniquement les départements utilisés dans l'emploi du temps
+        $departements = departement::whereIn('id', $infosProf->pluck('departement_id')->unique())
+            ->select('id', 'name')
+            ->get();
+
+        // Récupérer uniquement les classes utilisées dans l'emploi du temps
+        $niveaux = classes::whereIn('id', $infosProf->pluck('classes_id')->unique())
+            ->select('id', 'niveau')
+            ->get();
+        $examensclasse=examensclasse::with('anneesScolaire','departement','classes')
+        ->orderByDesc('created_at')
+        ->where('professeur_id',$prof->id)->get();
+
+        return Inertia::render('prof/examens/index', [
+            'departements' => $departements,
+            'Niveau' => $niveaux,
+            'examens'=>$examensclasse
+        ]);
+    }
+    public function createForClasse(Request $request)
+    {
+        $data = $request->validate([
+            'titre' => ['required', 'string', 'max:50'],
+            'sujet_explication' => ['nullable', 'string'],
+            'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+            'date_debut'=>['required','date'],
+            'date_fin'=>['required','date'],
+            'departement' => ['required', 'exists:departements,id'],
+            'niveaux' => ['required', 'exists:classes,id'],
+        ]);
+        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
+        if ($request->hasFile('fichier')) {
+            $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
+        }
+        $userAuth = Auth::id();
+        $profId = Professeur::where('user_id', $userAuth)->value('id');
+        examensclasse::create([
+            'titre' => $data['titre'],
+            'sujet_explication' => $data['sujet_explication'] ?? null,
+            'fichier' => $data['fichier'] ?? null,
+            'date_debut'=>$data['date_debut'] ?? null,
+            'date_fin'=>$data['date_fin'] ?? null,
+            'professeur_id' => $profId,
+            'departement_id' => $data['departement'] ,
+            'classes_id' => $data['niveaux'],
+            'annees_scolaire_id'=>$derniereAnneeScolaire->id
+        ]);
+        return back()->with('success', 'examens ajouté avec succès.');
+    }
+
 }

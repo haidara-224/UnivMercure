@@ -29,7 +29,7 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Examens',
-        url: '/prof/cours',
+        url: '/prof/examens',
         icon: BookCheck,
     }
     ,

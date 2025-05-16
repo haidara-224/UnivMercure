@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardProfesseurController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\ExamensController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
@@ -99,6 +100,9 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::post('/cours',[TutoController::class,'create'])->name('cours.create');
     Route::delete('/cours/{tuto}',[TutoController::class,'destroy'])->name('cours.delete');
     Route::put('/cours/{tuto}',[TutoController::class,'update'])->name('cours.update');
+        /**Route Examens */
+    Route::get('/examens',[ExamensController::class,'index'])->name('examens.index');
+    Route::post('/examens',[ExamensController::class,'createForClasse'])->name('examens.create.classe');
 });
 
 require __DIR__ . '/settings.php';
