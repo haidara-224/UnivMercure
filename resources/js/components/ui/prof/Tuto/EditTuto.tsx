@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import {
     Dialog, DialogClose, DialogContent, DialogFooter,
-    DialogHeader, DialogTitle, DialogTrigger,
+    DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,25 +11,29 @@ import {
     Select, SelectContent, SelectItem,
     SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { useId, useState } from "react";
-import { Upload, Video, FileText, X } from "lucide-react";
-import { useForm } from "@inertiajs/react";
-import { Departement, Niveaux } from "@/types";
+import { FormEventHandler, useEffect, useId, useState } from "react";
+import { Video, FileText, X } from "lucide-react";
+import { router, useForm } from "@inertiajs/react";
+import { Departement, Niveaux, Tutos } from "@/types";
 import { toast } from "sonner";
 import InputError from "@/components/input-error";
 
-interface Props {
+
+interface ProposDialogue {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    tuto: Tutos | null;
+
     departement: Departement[];
     niveau: Niveaux[];
 }
-
-function AddTuto({ departement, niveau }: Props) {
-    const [editorContent, setEditorContent] = useState('');
+function EditTuto({ departement, niveau, open, onOpenChange, tuto }: ProposDialogue) {
+    const [editorContent, setEditorContent] = useState(tuto?.contenue);
     const [filePreview, setFilePreview] = useState<File | null>(null);
     const [videoPreview, setVideoPreview] = useState<File | null>(null);
     const id = useId();
 
-    const { data, setData, post, processing, progress, reset, errors } = useForm({
+    const { data, setData, processing, progress, reset, errors } = useForm({
         titre: '',
         contenue: '',
         fichier: null as File | null,
@@ -37,24 +41,64 @@ function AddTuto({ departement, niveau }: Props) {
         departement: '',
         niveaux: '',
     });
+    useEffect(() => {
+        if (tuto) {
+            setData({
+                titre: tuto.titre || '',
+                contenue: tuto.contenue || '',
+                fichier: null,
+                video: null,
+                departement: tuto.departement?.id?.toString() || '',
+                niveaux: tuto.classes?.id?.toString() || '',
+            });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        post(route('prof.cours.create'), {
-            forceFormData: true,
-            onSuccess: () => {
-                toast('Tutoriel ajouté avec succès.')
-                reset();
-                setFilePreview(null);
-                setVideoPreview(null);
-                setEditorContent('');
-            },
-            onError: (error) => {
-                console.error(error)
-                console.log(data)
+            setEditorContent(tuto.contenue || '');
+
+            if (tuto.fichier) {
+                if (tuto.video) {
+                    setVideoPreview(new File([], tuto.video));
+                }
+
             }
-        });
-    };
+
+            if (tuto.video) {
+                setVideoPreview(new File([], tuto.video));
+            }
+        }
+    }, [tuto, setData]);
+
+
+       const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+            e.preventDefault();
+
+            router.post(route("prof.cours.update", tuto?.id), {
+                _method: "put",
+                titre: data?.titre,
+                contenue: data?.contenue,
+                fichier:data.fichier,
+                video:data.video,
+                departement: data?.departement,
+                niveaux:data.niveaux,
+
+
+            }, {
+                forceFormData:true,
+                onSuccess: () => {
+                    toast('Tutoriel ajouté avec succès.')
+                    reset();
+                    setFilePreview(null);
+                    setVideoPreview(null);
+                    setEditorContent('');
+
+                    onOpenChange(false);
+                },
+                onError: (error) => {
+                    console.error(error)
+                    console.log(data)
+                }
+            });
+        };
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -63,6 +107,13 @@ function AddTuto({ departement, niveau }: Props) {
             setData('fichier', file);
         }
     };
+    useEffect(() => {
+        return () => {
+            if (videoPreview) {
+                URL.revokeObjectURL(URL.createObjectURL(videoPreview));
+            }
+        };
+    }, [videoPreview]);
 
     const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -74,12 +125,8 @@ function AddTuto({ departement, niveau }: Props) {
     };
 
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                    <Upload size={16} /> Ajouter un Tuto
-                </Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+
 
             <DialogContent className="!max-w-none !w-screen !h-screen p-0 flex flex-col">
                 <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 p-8 space-y-6" encType="multipart/form-data">
@@ -119,16 +166,37 @@ function AddTuto({ departement, niveau }: Props) {
                             accept="video/mp4,video/avi,video/mpeg,video/quicktime,video/x-ms-wmv"
                             onChange={handleVideoChange}
                         />
+
                         {videoPreview && (
-                            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                                <Video size={16} />
-                                {videoPreview.name}
-                                <button onClick={() => { setVideoPreview(null); setData('video', null); }} className="ml-auto hover:text-red-500">
-                                    <X size={16} />
-                                </button>
+                            <div className="mt-2 space-y-2">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Video size={16} />
+                                    {videoPreview.name}
+                                    <button
+                                        onClick={() => {
+                                            setVideoPreview(null);
+                                            setData('video', null);
+                                        }}
+                                        className="ml-auto hover:text-red-500"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
+
+
+                                <video
+                                    src={
+                                        `/storage/${tuto?.video}`
+                                    }
+                                    controls
+                                    className="w-64 h-28 rounded-md border"
+                                    onError={() => toast.error('Impossible de lire la vidéo')}
+                                />
+
                             </div>
                         )}
                     </div>
+
 
                     {progress && (
                         <div className="mt-4">
@@ -139,31 +207,37 @@ function AddTuto({ departement, niveau }: Props) {
                     <InputError message={errors.video} className="mt-2" />
                     <div className="space-y-2 min-w-[300px]">
                         <Label htmlFor={`${id}-departement`}>Département</Label>
-                        <Select onValueChange={(val) => setData('departement', val)}>
+                        <Select value={data.departement} onValueChange={(val) => setData('departement', val)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Choisir un département" />
                             </SelectTrigger>
                             <SelectContent>
                                 {departement.map((dpt) => (
-                                    <SelectItem key={dpt.id} value={dpt.id.toString()}>{dpt.name}</SelectItem>
+                                    <SelectItem key={dpt.id} value={dpt.id.toString()}>
+                                        {dpt.name}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
+
                         <InputError message={errors.departement} className="mt-2" />
                     </div>
 
                     <div className="space-y-2 min-w-[300px]">
                         <Label htmlFor={`${id}-classe`}>Classe</Label>
-                        <Select onValueChange={(val) => setData('niveaux', val)}>
+                        <Select value={data.niveaux} onValueChange={(val) => setData('niveaux', val)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Choisir une classe" />
                             </SelectTrigger>
                             <SelectContent>
                                 {niveau.map((nv) => (
-                                    <SelectItem key={nv.id} value={nv.id.toString()}>{nv.niveau}</SelectItem>
+                                    <SelectItem key={nv.id} value={nv.id.toString()}>
+                                        {nv.niveau}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
+
                         <InputError message={errors.niveaux} className="mt-2" />
                     </div>
 
@@ -197,4 +271,4 @@ function AddTuto({ departement, niveau }: Props) {
     );
 }
 
-export { AddTuto };
+export { EditTuto };

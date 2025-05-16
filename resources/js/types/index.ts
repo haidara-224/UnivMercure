@@ -169,6 +169,21 @@ export interface Notes {
 
 
 }
+export interface Tutos{
+    id:number,
+    titre:string,
+    contenue:string,
+    fichier?:string | null,
+    video?:string | null,
+    departement_id?:number | null,
+    professeur_id?:number | null,
+    classes_id?:number | null,
+    departement?:Departement | null
+    classes?:Niveaux | null
+    professeur?:professeur | null
+    created_at:Date;
+    updated_at:Date;
+}
 
 
 

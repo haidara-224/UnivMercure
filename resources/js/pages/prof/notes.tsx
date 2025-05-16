@@ -259,7 +259,6 @@ export default function EtudiantsPage({ flash }: messageFlash) {
     };
 
     const [loadingEtudiant, setLoadingEtudiant] = useState<number | null>(null);
-    const [success, setSucess] = useState('')
 
 
 
@@ -288,10 +287,10 @@ export default function EtudiantsPage({ flash }: messageFlash) {
             },
             onSuccess: () => {
 
-                setSucess('Note enregistrée avec succès')
+
                 setLoadingEtudiant(null);
                 setTimeout(() => {
-                    setSucess('')
+
                 }, 2000);
 
 
@@ -306,11 +305,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
 
 
             <div className="p-6 bg-gray-100 min-h-screen">
-                {
-                    success && <div className='bg-green-500 text-white p-4 border-2 m-auto w-2/3 rounded'>
-                        {success}
-                    </div>
-                }
+
                 <h1 className='text-center text-2xl text-slate-800 mb-5'>Année Scolaire : {annees_scolaire.annee_scolaire}</h1>
 
                 <div className="flex flex-col md:flex-row gap-4 mb-6">

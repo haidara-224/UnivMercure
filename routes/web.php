@@ -95,7 +95,10 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::post('/notes', [NotesController::class, 'calculeNotes'])->name('notes.store');
     //Route::post('/notes', [NotesController::class, 'generationPdf'])->name('notes.generatedPdf');
     Route::get('/cours',[TutoController::class,'cours'])->name('cours');
+    Route::get('/cours/{tuto}',[TutoController::class,'show'])->name('cours.show');
     Route::post('/cours',[TutoController::class,'create'])->name('cours.create');
+    Route::delete('/cours/{tuto}',[TutoController::class,'destroy'])->name('cours.delete');
+    Route::put('/cours/{tuto}',[TutoController::class,'update'])->name('cours.update');
 });
 
 require __DIR__ . '/settings.php';
