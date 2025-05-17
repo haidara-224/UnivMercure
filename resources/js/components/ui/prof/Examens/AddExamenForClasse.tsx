@@ -46,7 +46,7 @@ function AddExamensForClasse({
     date_debut: "",
     date_fin: "",
     sujet_explication: "",
-
+    type:'classe',
     departement: "",
     niveaux: "",
   });
@@ -111,6 +111,14 @@ function AddExamensForClasse({
         <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
           {/* Titre */}
           <div>
+          <Input
+          type="hidden"
+              id="type"
+
+              value={data.titre}
+              onChange={(e) => setData("type", e.target.value)}
+            />
+
             <Label htmlFor="titre">Titre de l'examen</Label>
             <Input
               id="titre"

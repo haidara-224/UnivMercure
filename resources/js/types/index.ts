@@ -199,8 +199,7 @@ export interface ExamensByClasse{
     professeur?:professeur
     date_debut:Date,
     date_fin:Date,
-    created_at:Date;
-    updated_at:Date;
+
 }
 
 

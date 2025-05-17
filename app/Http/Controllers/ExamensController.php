@@ -7,6 +7,7 @@ use App\Models\classes;
 use App\Models\departement;
 use App\Models\emploie;
 use App\Models\examensclasse;
+use App\Models\examensstudents;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,36 +50,71 @@ class ExamensController extends Controller
             'examens'=>$examensclasse
         ]);
     }
-    public function createForClasse(Request $request)
+    public function store(Request $request)
     {
-        $data = $request->validate([
-            'titre' => ['required', 'string', 'max:50'],
-            'sujet_explication' => ['nullable', 'string'],
-            'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
-            'date_debut'=>['required','date'],
-            'date_fin'=>['required','date'],
-            'departement' => ['required', 'exists:departements,id'],
-            'niveaux' => ['required', 'exists:classes,id'],
-        ]);
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
-        if ($request->hasFile('fichier')) {
-            $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
+        $type = $request->input('type');
+
+        $derniereAnneeScolaire = anneesScolaire::latest('annee_scolaire')->firstOrFail();
+        $profId = Professeur::where('user_id', Auth::id())->value('id');
+
+        if ($type === 'classe') {
+            $data = $request->validate([
+                'titre' => ['required', 'string', 'max:50'],
+                'sujet_explication' => ['nullable', 'string'],
+                'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+                'date_debut' => ['required', 'date'],
+                'date_fin' => ['required', 'date', 'after:date_debut'],
+                'departement' => ['required', 'exists:departements,id'],
+                'niveaux' => ['required', 'exists:classes,id'],
+            ]);
+
+            if ($request->hasFile('fichier')) {
+                $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
+            }
+
+            examensclasse::create([
+                'titre' => $data['titre'],
+                'sujet_explication' => $data['sujet_explication'] ?? null,
+                'fichier' => $data['fichier'] ?? null,
+                'date_debut' => $data['date_debut'],
+                'date_fin' => $data['date_fin'],
+                'professeur_id' => $profId,
+                'departement_id' => $data['departement'],
+                'classes_id' => $data['niveaux'],
+                'annees_scolaire_id' => $derniereAnneeScolaire->id,
+            ]);
+
+        } elseif ($type === 'etudiant') {
+            $data = $request->validate([
+                'titre' => ['required', 'string', 'max:50'],
+                'sujet_explication' => ['nullable', 'string'],
+                'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+                'date_debut' => ['required', 'date'],
+                'date_fin' => ['required', 'date', 'after:date_debut'],
+                'etudiant' => ['required', 'exists:etudiants,id'],
+            ]);
+
+            if ($request->hasFile('fichier')) {
+                $data['fichier'] = $request->file('fichier')->store('examensetudiant/fichiers', 'public');
+            }
+
+            examensstudents::create([
+                'titre' => $data['titre'],
+                'sujet_explication' => $data['sujet_explication'] ?? null,
+                'fichier' => $data['fichier'] ?? null,
+                'date_debut' => $data['date_debut'],
+                'date_fin' => $data['date_fin'],
+                'professeur_id' => $profId,
+                'etudiant_id' => $data['etudiant'],
+                'annees_scolaire_id' => $derniereAnneeScolaire->id,
+            ]);
+        } else {
+            abort(400, 'Type d’examen invalide.');
         }
-        $userAuth = Auth::id();
-        $profId = Professeur::where('user_id', $userAuth)->value('id');
-        examensclasse::create([
-            'titre' => $data['titre'],
-            'sujet_explication' => $data['sujet_explication'] ?? null,
-            'fichier' => $data['fichier'] ?? null,
-            'date_debut'=>$data['date_debut'] ?? null,
-            'date_fin'=>$data['date_fin'] ?? null,
-            'professeur_id' => $profId,
-            'departement_id' => $data['departement'] ,
-            'classes_id' => $data['niveaux'],
-            'annees_scolaire_id'=>$derniereAnneeScolaire->id
-        ]);
-        return back()->with('success', 'examens ajouté avec succès.');
+
+        return back()->with('success', 'Examen créé avec succès.');
     }
+
     public function createForClasseUpdate(Request $request,examensclasse $examen){
         $data = $request->validate([
             'titre' => ['required', 'string', 'max:50'],
