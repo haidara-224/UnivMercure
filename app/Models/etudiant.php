@@ -18,5 +18,9 @@ class etudiant extends Model
     {
         return $this->hasMany(parcour::class);
     }
+    public function examensstudents()
+    {
+        $this->belongsToMany(examensstudents::class);
+    }
 
 }

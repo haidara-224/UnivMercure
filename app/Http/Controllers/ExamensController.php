@@ -8,6 +8,7 @@ use App\Models\departement;
 use App\Models\emploie;
 use App\Models\examensclasse;
 use App\Models\examensstudents;
+use App\Models\parcour;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,7 @@ use Inertia\Inertia;
 
 class ExamensController extends Controller
 {
-    private function getClasseDepartement()
-    {
-
-    }
+    private function getClasseDepartement() {}
     public function index()
     {
         $prof = Professeur::where('user_id', Auth::id())->firstOrFail();
@@ -31,23 +29,38 @@ class ExamensController extends Controller
             ->distinct()
             ->get();
 
-        // Récupérer uniquement les départements utilisés dans l'emploi du temps
+
+        $dptforProf = $infosProf->pluck('departement_id');
+        $clsForProf = $infosProf->pluck('classes_id');
+
         $departements = departement::whereIn('id', $infosProf->pluck('departement_id')->unique())
             ->select('id', 'name')
             ->get();
 
-        // Récupérer uniquement les classes utilisées dans l'emploi du temps
+
         $niveaux = classes::whereIn('id', $infosProf->pluck('classes_id')->unique())
             ->select('id', 'niveau')
             ->get();
-        $examensclasse=examensclasse::with('anneesScolaire','departement','classes')
-        ->orderByDesc('created_at')
-        ->where('professeur_id',$prof->id)->get();
+        $examensclasse = examensclasse::with('anneesScolaire', 'departement', 'classes')
+            ->orderByDesc('created_at')
+            ->where('professeur_id', $prof->id)->get();
+        $examensEtudiant = examensstudents::with('etudiants')
+            ->orderByDesc('created_at')
+            ->where('professeur_id', $prof->id)->get();
+        $parcours = parcour::with(['classes', 'departement', 'etudiant'])
+            ->whereIn('departement_id', $dptforProf)
+            ->whereIn('classes_id', $clsForProf)
+            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->get();
 
         return Inertia::render('prof/examens/index', [
             'departements' => $departements,
+            'parcours' => $parcours,
             'Niveau' => $niveaux,
-            'examens'=>$examensclasse
+            'examens' => $examensclasse,
+            'examensEtd' => $examensEtudiant,
+            'dptProf' => departement::whereIn('id', $dptforProf)->get(),
+            'clsProf' => classes::whereIn('id', $clsForProf)->get(),
         ]);
     }
     public function store(Request $request)
@@ -83,7 +96,6 @@ class ExamensController extends Controller
                 'classes_id' => $data['niveaux'],
                 'annees_scolaire_id' => $derniereAnneeScolaire->id,
             ]);
-
         } elseif ($type === 'etudiant') {
             $data = $request->validate([
                 'titre' => ['required', 'string', 'max:50'],
@@ -91,37 +103,41 @@ class ExamensController extends Controller
                 'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
                 'date_debut' => ['required', 'date'],
                 'date_fin' => ['required', 'date', 'after:date_debut'],
-                'etudiant' => ['required', 'exists:etudiants,id'],
+                'etudiants' => ['required', 'array'],
+                'etudiants.*' => ['exists:etudiants,id'],
             ]);
 
             if ($request->hasFile('fichier')) {
                 $data['fichier'] = $request->file('fichier')->store('examensetudiant/fichiers', 'public');
             }
 
-            examensstudents::create([
+            $examens =  examensstudents::create([
                 'titre' => $data['titre'],
                 'sujet_explication' => $data['sujet_explication'] ?? null,
                 'fichier' => $data['fichier'] ?? null,
                 'date_debut' => $data['date_debut'],
                 'date_fin' => $data['date_fin'],
                 'professeur_id' => $profId,
-                'etudiant_id' => $data['etudiant'],
+
                 'annees_scolaire_id' => $derniereAnneeScolaire->id,
             ]);
+            $examens->etudiants()->attach($data['etudiants']);
         } else {
+
             abort(400, 'Type d’examen invalide.');
         }
 
         return back()->with('success', 'Examen créé avec succès.');
     }
 
-    public function createForClasseUpdate(Request $request,examensclasse $examen){
+    public function createForClasseUpdate(Request $request, examensclasse $examen)
+    {
         $data = $request->validate([
             'titre' => ['required', 'string', 'max:50'],
             'sujet_explication' => ['nullable', 'string'],
             'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
-            'date_debut'=>['required','date'],
-            'date_fin'=>['required','date'],
+            'date_debut' => ['required', 'date'],
+            'date_fin' => ['required', 'date'],
             'departement' => ['required', 'exists:departements,id'],
             'niveaux' => ['required', 'exists:classes,id'],
         ]);
@@ -136,21 +152,29 @@ class ExamensController extends Controller
             'titre' => $data['titre'],
             'sujet_explication' => $data['sujet_explication'] ?? null,
             'fichier' => $data['fichier'] ?? null,
-            'date_debut'=>$data['date_debut'] ?? null,
-            'date_fin'=>$data['date_fin'] ?? null,
+            'date_debut' => $data['date_debut'] ?? null,
+            'date_fin' => $data['date_fin'] ?? null,
             'professeur_id' => $profId,
-            'departement_id' => $data['departement'] ,
+            'departement_id' => $data['departement'],
             'classes_id' => $data['niveaux'],
-            'annees_scolaire_id'=>$derniereAnneeScolaire->id
+            'annees_scolaire_id' => $derniereAnneeScolaire->id
         ]);
         return back()->with('success', 'Examens modifié avec succès.');
-
     }
-    public function createForClasseDelete(examensclasse $examen)
+    public function delete($type, $id)
     {
+        if ($type === 'classe') {
+            $examen = examensclasse::findOrFail($id);
+        } elseif ($type === 'etudiant') {
+            $examen = examensstudents::findOrFail($id);
+        } else {
+            abort(404);
+        }
 
         $examen->delete();
-        return back()->with('success', 'examens Supprimé avec succès.');
+
+        return back()->with('success', 'Examen supprimé.');
     }
+
 
 }

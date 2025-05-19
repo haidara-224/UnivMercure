@@ -103,7 +103,8 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
         /**Route Examens */
     Route::get('/examens',[ExamensController::class,'index'])->name('examens.index');
     Route::post('/examens',[ExamensController::class,'store'])->name('examens.create.classe');
-    Route::delete('/examens/{examen}',[ExamensController::class,'createForClasseDelete'])->name('examens.delete.classe');
+    Route::delete('/examens/{type}/{id}', [ExamensController::class, 'delete'])->name('examens.delete');
+
     Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
 });
 

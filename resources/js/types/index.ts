@@ -201,6 +201,22 @@ export interface ExamensByClasse{
     date_fin:Date,
 
 }
+export interface ExamensByEtudiant{
+    id:number,
+    titre:string,
+    sujet_explication:string,
+    fichier?:string | null,
+    annees_scolaire_id:number;
+    annees_scolaire:AnnessScolaire;
+    departement_id?:number ,
+    professeur_id?:number,
+   etudiant_id:number,
+   etudiants:Etudiants[],
+    professeur?:professeur
+    date_debut:Date,
+    date_fin:Date,
+
+}
 
 
 

@@ -8,9 +8,9 @@ class examensstudents extends Model
 {
     protected $fillable=['titre','sujet_explication','fichier','professeur_id','etudiant_id','date_debut','date_fin','annees_scolaire_id'];
 
-    public function etudiant()
+    public function etudiants()
     {
-        return $this->belongsTo(etudiant::class);
+        return $this->belongsToMany(etudiant::class);
     }
     public function professeur()
     {
