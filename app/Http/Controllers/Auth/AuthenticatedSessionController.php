@@ -43,6 +43,9 @@ class AuthenticatedSessionController extends Controller
         }else if($userAuth->hasRole('personnel'))
         {
             return redirect()->intended(route('prof.index',absolute:true));
+        }else if($userAuth->hasRole('documentaliste'))
+        {
+            return redirect()->intended(route('documentaliste.index',absolute:true));
         }else{
             return redirect()->intended(route('home',absolute:false));
         }

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardEtudiantController;
 use App\Http\Controllers\DashboardProfesseurController;
 use App\Http\Controllers\DemandedocumentsController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\documentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ExamensController;
@@ -115,6 +116,12 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
 
     Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
 
+});
+Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
+    Route::get('/', [documentalisteController::class, 'index'])->name('index');
+    Route::get('/documents',[documentalisteController::class, 'index'])->name('documents');
+    Route::put('/documents/{demande}',[documentalisteController::class, 'update'])->name('documents.update');
+    Route::delete('/documents/{demande}',[documentalisteController::class, 'destroy'])->name('documents.delete');
 });
 
 require __DIR__ . '/settings.php';
