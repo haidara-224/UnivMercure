@@ -30,12 +30,13 @@ export default function Page() {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div>
-                    <h1 className='text-center'>Bonjour <span className='text-2xl text-slate-800 font-bold'>{prof.name} {prof.prenom}-{prof.matricule}</span></h1>
+                    <h1 className='text-center text-2xl'>Bonjour <span className='text-2xl text-slate-800 font-bold'>{prof.name} {prof.prenom}</span></h1>
+                    <span className='text-2xl text-slate-800 font-bold'>{prof.matricule}</span>
                 </div>
 
                 <div>
 
-                    <Card className={`hover:shadow-lg hover:animate-pulse transition-all cursor-pointer`}>
+                    <Card className={`hover:shadow-lg  cursor-pointer`}>
                         <CardHeader className={`flex items-center justify-between p-4   text-black rounded-t-xl`}>
 
 

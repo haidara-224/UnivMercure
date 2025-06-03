@@ -87,6 +87,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
 });
 Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
     Route::get('/', [DashboardEtudiantController::class, 'index'])->name('index');
+    Route::get('/notes',[DashboardEtudiantController::class, 'notes'])->name('notes');
+    Route::get('/documents',[DashboardEtudiantController::class, 'documents'])->name('documents');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {
@@ -106,6 +108,7 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::delete('/examens/{type}/{id}', [ExamensController::class, 'delete'])->name('examens.delete');
 
     Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
+
 });
 
 require __DIR__ . '/settings.php';

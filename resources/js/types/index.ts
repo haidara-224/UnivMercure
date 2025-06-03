@@ -161,9 +161,21 @@ export interface EmploieTemps{
     updated_at:Date;
 }
 export interface Notes {
+    id:string
     note1:number;
     note2:number;
     note3:number;
+
+     classes:Niveaux;
+    classes_id:number;
+    annees_scolaire:AnnessScolaire;
+    annees_scolaire_id:number;
+    departement_id:number;
+     departement:Departement;
+      matiere_id:number;
+
+
+    matiere:Matiere;
     moyenne:null;
     moyenne_literaire:null
 

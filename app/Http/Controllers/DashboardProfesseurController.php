@@ -118,11 +118,12 @@ class DashboardProfesseurController extends Controller
 
         $departements = $infosProf->pluck('departement_id');
         $classes = $infosProf->pluck('classes_id');
+        $matieres = $infosProf->pluck('matiere_id')->unique();
         $notes = notes::with('etudiant')
         ->whereIn('departement_id', $departements)
         ->whereIn('classes_id', $classes)
         ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
-        ->whereIn('matiere_id', $infosProf->pluck('matiere_id'))
+        ->whereIn('matiere_id', $matieres)
         ->get();
 
 

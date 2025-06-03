@@ -41,4 +41,8 @@ class notes extends Model
     {
         return $this->belongsTo(departement::class);
     }
+    public function anneesScolaire()
+    {
+        return $this->belongsTo(anneesScolaire::class);
+    }
 }

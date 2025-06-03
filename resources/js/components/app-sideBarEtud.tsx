@@ -4,27 +4,34 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {  BookOpenCheck, Star, BookA, BookCopy, BookCheckIcon, BookMarked, BookDashed } from 'lucide-react';
+import {  Star, BookA, BookCheck, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
+    {
+        title: 'Dashboard',
+        url: '/etudiant',
+        icon: LayoutGrid,
 
+    },
     {
         title: 'Mes Notes',
-        url: '/',
+        url: '/etudiant/notes',
         icon: Star,
     },
+     {
+        title: 'Examens',
+        url: '/examens',
+        icon: BookCheck,
+    },
+
 
     {
-        title: 'Mon Emploie du Temps',
-        url: '/',
-        icon: BookOpenCheck,
-    },
-    {
-        title: 'Attestations',
+        title: 'Documents',
         url: '/',
         icon: BookA,
     },
+    /*
     {
         title: 'Bulettin de notes',
         url: '/',
@@ -45,6 +52,7 @@ const mainNavItems: NavItem[] = [
         url: '/',
         icon: BookDashed,
     },
+    */
 
 ];
 
