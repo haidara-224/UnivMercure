@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardEtudiantController;
 use App\Http\Controllers\DashboardProfesseurController;
+use App\Http\Controllers\DemandedocumentsController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
@@ -89,6 +90,7 @@ Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->nam
     Route::get('/', [DashboardEtudiantController::class, 'index'])->name('index');
     Route::get('/notes',[DashboardEtudiantController::class, 'notes'])->name('notes');
     Route::get('/documents',[DashboardEtudiantController::class, 'documents'])->name('documents');
+    Route::post('/documents',[DemandedocumentsController::class, 'demande'])->name('demande.document');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {

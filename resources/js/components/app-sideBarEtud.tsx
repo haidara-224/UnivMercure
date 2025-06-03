@@ -21,14 +21,14 @@ const mainNavItems: NavItem[] = [
     },
      {
         title: 'Examens',
-        url: '/examens',
+        url: '/etudiant/examens',
         icon: BookCheck,
     },
 
 
     {
         title: 'Documents',
-        url: '/',
+        url: '/etudiant/documents',
         icon: BookA,
     },
     /*

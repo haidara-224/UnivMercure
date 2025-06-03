@@ -229,6 +229,16 @@ export interface ExamensByEtudiant{
     date_fin:Date,
 
 }
+export interface Demandedocuments{
+    id:number;
+    etudiant_id:number;
+    type_document:string;
+    comment:string;
+    statut:string;
+    etudiant:Etudiants;
+    created_at:Date;
+    updated_at:Date;
+}
 
 
 

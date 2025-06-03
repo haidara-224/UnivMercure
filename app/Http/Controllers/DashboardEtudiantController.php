@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\etudiant;
 use App\Models\anneesScolaire;
 use App\Models\classes;
+use App\Models\demandedocuments;
 use App\Models\departement;
 use App\Models\emploie;
 use App\Models\notes;
@@ -89,17 +90,18 @@ class DashboardEtudiantController extends Controller
             'lastAnneesScolaire' => $derniereAnneeScolaire,
         ]);
     }
-    public function notes(){
-         $authUser = Auth::id();
+    public function notes()
+    {
+        $authUser = Auth::id();
         $etudiant = etudiant::where('user_id', $authUser)->first();
 
         if (!$etudiant) {
             return to_route('home');
         }
-        $annes_scolaire=anneesScolaire::select(['id','annee_scolaire'])->get();
-        $departements=departement::select(['id','name'])->get();
-        $classes=classes::select(['id','niveau'])->get();
-        $notes=notes::with(['matiere', 'anneesScolaire', 'classes', 'departement'])
+        $annes_scolaire = anneesScolaire::select(['id', 'annee_scolaire'])->get();
+        $departements = departement::select(['id', 'name'])->get();
+        $classes = classes::select(['id', 'niveau'])->get();
+        $notes = notes::with(['matiere', 'anneesScolaire', 'classes', 'departement'])
             ->where('etudiant_id', $etudiant->id)
             ->get();
 
@@ -109,6 +111,27 @@ class DashboardEtudiantController extends Controller
             'departements' => $departements,
             'classes' => $classes,
             'notes' => $notes,
+        ]);
+    }
+    public function documents()
+    {
+        $authUser = Auth::id();
+
+        $etudiant = etudiant::where('user_id', $authUser)
+            ->with(['demandes' => function ($query) {
+                $query->orderByDesc('created_at');
+            }])
+            ->first();
+
+        if (!$etudiant) {
+            return to_route('home');
+        }
+
+        $documents = $etudiant->demandes;
+
+        return Inertia::render('etudiant/documents', [
+            'etudiant' => $etudiant,
+            'documents' => $documents,
         ]);
     }
 }

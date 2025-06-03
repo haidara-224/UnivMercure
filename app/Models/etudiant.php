@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class etudiant extends Model
 {
     use HasFactory;
-    protected $fillable=['matricule','name','prenom','telephone','photo','sexe','user_id'];
-    public function departement():BelongsTo{
+    protected $fillable = ['matricule', 'name', 'prenom', 'telephone', 'photo', 'sexe', 'user_id'];
+    public function departement(): BelongsTo
+    {
         return $this->belongsTo(departement::class);
     }
-    public function parcours():HasMany
+    public function parcours(): HasMany
     {
         return $this->hasMany(parcour::class);
     }
@@ -22,5 +23,9 @@ class etudiant extends Model
     {
         $this->belongsToMany(examensstudents::class);
     }
+    public function demandes()
+{
+    return $this->hasMany(demandedocuments::class, 'etudiant_id');
+}
 
 }
