@@ -77,6 +77,12 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard',
         icon: Proportions,
     },
+      {
+        title: 'Utisateurs',
+        url: '/dashboard/users',
+        icon: UsersRound,
+    },
+
 ];
 /*
 const footerNavItems: NavItem[] = [

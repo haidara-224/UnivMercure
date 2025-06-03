@@ -83,6 +83,9 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::delete('/emploie-du-temps/{emploi}', [EmploieController::class, 'destroy'])->name('emploi.delete');
     Route::get('/emploie-du-temps/{emploi}/edit', [EmploieController::class, 'edit'])->name('emploi.edit');
     Route::put('/emploie-du-temps/{emploi}', [EmploieController::class, 'update'])->name('emploi.update');
+    //Users Routes
+    Route::get('/users', [DashboardController::class, 'users'])->name('users.index');
+    Route::put('/users', [DashboardController::class, 'AddOrRevoqueRole'])->name('users.roles');
 
 
 });

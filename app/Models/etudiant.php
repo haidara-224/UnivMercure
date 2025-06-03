@@ -24,8 +24,7 @@ class etudiant extends Model
         $this->belongsToMany(examensstudents::class);
     }
     public function demandes()
-{
-    return $this->hasMany(demandedocuments::class, 'etudiant_id');
-}
-
+    {
+        return $this->hasMany(demandedocuments::class, 'etudiant_id');
+    }
 }

@@ -7,8 +7,10 @@ use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
 use App\Models\Professeur;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -94,5 +96,34 @@ class DashboardController extends Controller
             'last_annees_scolaire'     => $derniereAnneeScolaire
         ]);
     }
+    public function users()
+    {
+        $users = User::with(['etudiant', 'professeur', 'roles'])->get();
+        $roles = Role::all();
+
+        return Inertia::render('dashboard/users/index', [
+            'users' => $users,
+            'roles' => $roles
+        ]);
+    }
+   public function AddOrRevoqueRole(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'role_id' => 'required|exists:roles,id',
+        'action' => 'required|in:add,revoke',
+    ]);
+
+    $user = User::findOrFail($request->user_id);
+    $role = Role::findOrFail($request->role_id);
+
+    if ($request->action === 'add') {
+        $user->assignRole($role);
+    } elseif ($request->action === 'revoke') {
+        $user->removeRole($role);
+    }
+
+    return back()->with('success', 'Rôle mis à jour avec succès.');
+}
 
 }

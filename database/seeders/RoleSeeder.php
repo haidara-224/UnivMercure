@@ -19,6 +19,7 @@ class RoleSeeder extends Seeder
         Role::create(['name'=>'personnel']);
         Role::create(['name'=>'BDE']);
         Role::create(['name'=>'jc']);
+        Role::create(['name'=>'documentaliste']);
 
     }
 }

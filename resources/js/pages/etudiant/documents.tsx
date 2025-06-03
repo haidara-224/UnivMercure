@@ -81,7 +81,6 @@ export default function Documents({ flash }: messageFlash) {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <SendDemandeDocument />
                 </div>
-           {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                         <h3 className="text-sm font-medium text-gray-500">Total des demandes</h3>
@@ -100,7 +99,6 @@ export default function Documents({ flash }: messageFlash) {
                         </p>
                     </div>
                 </div>
-                {/* Liste des documents */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
@@ -155,8 +153,6 @@ export default function Documents({ flash }: messageFlash) {
                         </table>
                     </div>
                 </div>
-
-
             </div>
         </AppSidebarLayoutEtudiant>
     );
