@@ -14,7 +14,7 @@ export function Role({ openAddDialogue, onOpenAddChange, user, roles }: ProposDi
     const [localUser, setLocalUser] = useState<User | null>(user);
     const [loading, setLoading] = useState(false);
 
-    // Synchroniser quand le user change (quand on ouvre une nouvelle modale)
+
     useEffect(() => {
         setLocalUser(user);
     }, [user]);

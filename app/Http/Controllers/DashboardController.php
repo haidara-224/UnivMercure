@@ -98,13 +98,29 @@ class DashboardController extends Controller
     }
     public function users()
     {
-        $users = User::with(['etudiant', 'professeur', 'roles'])->get();
+        $users = User::with(['etudiant', 'professeur', 'roles'])->orderByDesc('created_at')->get();
         $roles = Role::all();
 
         return Inertia::render('dashboard/users/index', [
             'users' => $users,
             'roles' => $roles
         ]);
+    }
+    public function create(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|',
+        ]);
+
+         User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return back()->with('success', 'Utilisateur créé avec succès.');
     }
    public function AddOrRevoqueRole(Request $request)
 {

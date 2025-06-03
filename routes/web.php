@@ -85,6 +85,7 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::put('/emploie-du-temps/{emploi}', [EmploieController::class, 'update'])->name('emploi.update');
     //Users Routes
     Route::get('/users', [DashboardController::class, 'users'])->name('users.index');
+    Route::post('/users', [DashboardController::class, 'create'])->name('users.create');
     Route::put('/users', [DashboardController::class, 'AddOrRevoqueRole'])->name('users.roles');
 
 

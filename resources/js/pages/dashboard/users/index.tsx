@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { AddUser } from "@/components/ui/dashbord/Roles/AddUsers";
 import { Role } from "@/components/ui/dashbord/Roles/roles";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem, Roles, User } from "@/types";
@@ -40,14 +41,15 @@ export default function Page({ flash }: messageFlash){
         }
     useEffect(() => {
         if (flash?.success) {
-            toast.success(flash.success);
+            toast(flash.success);
         }
     }, [flash]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Utilisateurs" />
             <div className="container mt-5">
-
+                <h1 className="text-2xl font-bold mb-4">Liste des utilisateurs</h1>
+                <AddUser/>
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
@@ -68,7 +70,7 @@ export default function Page({ flash }: messageFlash){
                                     <td className="px-6 py-4 whitespace-nowrap">{user.roles.map(role => role.name).join(', ')}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                          <Button className="bg-green-500 hover:bg-green-600" onClick={() => HanddleRoles(user)}><Edit /></Button>
-                                        <button className="text-red-600 hover:text-red-900">Delete</button>
+
                                     </td>
                                 </tr>
                             ))}
