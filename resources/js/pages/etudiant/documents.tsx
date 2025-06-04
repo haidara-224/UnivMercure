@@ -133,7 +133,10 @@ export default function Documents({ flash }: messageFlash) {
                                                 {document.statut === 'traité' && (
                                                     <button className="text-indigo-600 hover:text-indigo-900 flex items-center gap-1">
                                                         <Download size={16} />
-                                                        Télécharger
+                                                        <a href={`/storage/${document.traitement?.document}`} target="_blank">
+                                                            <FileText className="h-4 w-4" />
+                                                            Fichier
+                                                        </a>
                                                     </button>
                                                 )}
                                             </td>

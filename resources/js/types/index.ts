@@ -231,10 +231,20 @@ export interface ExamensByEtudiant{
     date_fin:Date,
 
 }
+export interface Traitement{
+    id:number;
+    demandedocuments_id:number;
+    document:string;
+    created_at:Date;
+    updated_at:Date;
+    demande:Demandedocuments;
+}
 export interface Demandedocuments{
     id:number;
     etudiant_id:number;
     type_document:string;
+    traitement?:Traitement | null;
+    traitement_id?:number | null;
     comment:string;
     statut:string;
     etudiant:Etudiants;

@@ -17,6 +17,7 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
+use App\Http\Controllers\TraitementdocumentsController;
 use App\Http\Controllers\TutoController;
 use App\Http\Controllers\VerifcationMatriculeController;
 use Illuminate\Support\Facades\Route;
@@ -119,7 +120,7 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
 });
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
     Route::get('/', [documentalisteController::class, 'index'])->name('index');
-    Route::get('/documents',[documentalisteController::class, 'index'])->name('documents');
+    Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');
     Route::put('/documents/{demande}',[documentalisteController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{demande}',[documentalisteController::class, 'destroy'])->name('documents.delete');
 });

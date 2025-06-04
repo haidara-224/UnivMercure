@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { AddExamensForStudents } from './AddExamensForStudents';
 import { toast } from 'sonner';
 import { useForm, usePage } from '@inertiajs/react';
@@ -18,22 +18,13 @@ interface PageProps {
 interface CustomPageProps extends PageProps {
     examensEtd: ExamensByEtudiant[]
 }
-interface messageFlash {
-    flash: {
-        success: string,
-    }
-}
 
-export default function ForStudents({ flash }: messageFlash) {
+
+export default function ForStudents() {
     const { examensEtd } = usePage<CustomPageProps>().props;
     const [selectedExament, setSelectedExamen] = useState<ExamensByEtudiant | null>(null);
 
     const [openDialogue, setOpenDialogue] = useState(false);
-    useEffect(() => {
-        if (flash?.success) {
-            toast(flash.success);
-        }
-    }, [flash]);
 
 
     const handleOpenSubjectModal = (examen: ExamensByEtudiant) => {

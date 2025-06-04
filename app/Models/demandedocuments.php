@@ -16,4 +16,9 @@ class demandedocuments extends Model
     {
         return $this->belongsTo(etudiant::class);
     }
+    public function traitement()
+{
+    return $this->hasOne(traitementdocuments::class);
+}
+
 }
