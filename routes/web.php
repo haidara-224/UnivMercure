@@ -15,6 +15,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\TraitementdocumentsController;
@@ -121,6 +122,9 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
 });
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
     Route::get('/', [documentalisteController::class, 'index'])->name('index');
+    Route::post('/{id}', [documentalisteController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+
     Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');
 
 });

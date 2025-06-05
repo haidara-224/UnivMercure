@@ -69,7 +69,7 @@ export default function NotesPage() {
             const timeout = setTimeout(() => {
                 setLoading(false);
                 setShowTable(true);
-            }, 1000); // Réduit à 1 seconde pour une meilleure UX
+            }, 1000);
 
             return () => clearTimeout(timeout);
         } else {
@@ -115,12 +115,10 @@ export default function NotesPage() {
     const renderTable = () => {
         if (loading) {
             return (
-
-                   <div className="text-center mt-6">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-        <p className="text-gray-500 mt-2">Chargement des notes...</p>
-    </div>
-
+                <div className="text-center mt-6">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                    <p className="text-gray-500 mt-2">Chargement des notes...</p>
+                </div>
             );
         }
 
@@ -135,89 +133,146 @@ export default function NotesPage() {
         }
 
         return (
-            <div className="overflow-x-auto mt-4 border rounded-lg">
-                <table className="w-full">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            {TABLE_COLUMNS.map((col) => (
-                                <th key={col} className="p-3 text-left">
-                                    {col}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                        {filteredNotes.map((note) => (
-                            <tr key={note.id} className="hover:bg-gray-50">
-                                <td className="p-3">{note.matiere?.nom || '-'}</td>
-                                <td className="p-3 font-bold">{note.note1 || '-'}</td>
-                                <td className="p-3">{note.note2 || '-'}</td>
-                                <td className="p-3">{note.note3 || '-'}</td>
-                                <td className="p-3">{note.moyenne || '-'}</td>
-                                <td className="p-3">{note.moyenne_literaire || '-'}</td>
-                                <td className="p-3">{note.classes?.niveau || '-'}</td>
-                                <td className="p-3">{note.departement?.name || '-'}</td>
-                                <td className="p-3">{note.annees_scolaire?.annee_scolaire || '-'}</td>
+            <>
+                {/* Version desktop (tableau) */}
+                <div className="hidden md:block overflow-x-auto mt-4 border rounded-lg">
+                    <table className="w-full">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                {TABLE_COLUMNS.map((col) => (
+                                    <th key={col} className="p-3 text-left text-sm">
+                                        {col}
+                                    </th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className="divide-y">
+                            {filteredNotes.map((note) => (
+                                <tr key={note.id} className="hover:bg-gray-50">
+                                    <td className="p-3 text-sm">{note.matiere?.nom || '-'}</td>
+                                    <td className="p-3 font-bold text-sm">{note.note1 || '-'}</td>
+                                    <td className="p-3 text-sm">{note.note2 || '-'}</td>
+                                    <td className="p-3 text-sm">{note.note3 || '-'}</td>
+                                    <td className="p-3 text-sm">{note.moyenne || '-'}</td>
+                                    <td className="p-3 text-sm">{note.moyenne_literaire || '-'}</td>
+                                    <td className="p-3 text-sm">{note.classes?.niveau || '-'}</td>
+                                    <td className="p-3 text-sm">{note.departement?.name || '-'}</td>
+                                    <td className="p-3 text-sm">{note.annees_scolaire?.annee_scolaire || '-'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Version mobile (cartes) */}
+                <div className="md:hidden space-y-3 mt-4">
+                    {filteredNotes.map((note) => (
+                        <div key={note.id} className="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="font-bold text-gray-800">{note.matiere?.nom || 'Matière inconnue'}</h3>
+                                    <p className="text-sm text-gray-500">{note.classes?.niveau || '-'} • {note.departement?.name || '-'}</p>
+                                </div>
+                                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                    {note.annees_scolaire?.annee_scolaire || '-'}
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2 mt-3">
+                                <div className="text-center">
+                                    <p className="text-xs text-gray-500">Note 1</p>
+                                    <p className="font-bold">{note.note1 || '-'}</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xs text-gray-500">Note 2</p>
+                                    <p className="font-bold">{note.note2 || '-'}</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xs text-gray-500">Note 3</p>
+                                    <p className="font-bold">{note.note3 || '-'}</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 mt-3">
+                                <div className="text-center">
+                                    <p className="text-xs text-gray-500">Moyenne</p>
+                                    <p className="font-bold">{note.moyenne || '-'}</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xs text-gray-500">Moy. Litt.</p>
+                                    <p className="font-bold">{note.moyenne_literaire || '-'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </>
         );
     };
 
     return (
         <AppSidebarLayoutEtudiant breadcrumbs={breadcrumbs}>
             <Head title="Mes Notes" />
-            <div className="flex flex-col gap-6 p-6 bg-white rounded-xl shadow-lg">
-                <h1 className="text-3xl font-bold text-center text-gray-800">Mes Notes</h1>
+            <div className="flex flex-col gap-4 p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+                <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">Mes Notes</h1>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Input
-                        placeholder="Département"
-                        list="departements"
-                        value={filters.departement}
-                        onChange={(e) => handleFilterChange('departement', e.target.value)}
-                    />
-                    <datalist id="departements">
-                        {departements.map((d) => (
-                            <option key={d.id} value={d.name} />
-                        ))}
-                    </datalist>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                    <div>
+                        <Input
+                            placeholder="Département"
+                            list="departements"
+                            value={filters.departement}
+                            onChange={(e) => handleFilterChange('departement', e.target.value)}
+                            className="w-full"
+                        />
+                        <datalist id="departements">
+                            {departements.map((d) => (
+                                <option key={d.id} value={d.name} />
+                            ))}
+                        </datalist>
+                    </div>
 
-                    <Input
-                        placeholder="Classe"
-                        list="classes"
-                        value={filters.classe}
-                        onChange={(e) => handleFilterChange('classe', e.target.value)}
-                    />
-                    <datalist id="classes">
-                        {classes.map((c) => (
-                            <option key={c.id} value={c.niveau} />
-                        ))}
-                    </datalist>
+                    <div>
+                        <Input
+                            placeholder="Classe"
+                            list="classes"
+                            value={filters.classe}
+                            onChange={(e) => handleFilterChange('classe', e.target.value)}
+                            className="w-full"
+                        />
+                        <datalist id="classes">
+                            {classes.map((c) => (
+                                <option key={c.id} value={c.niveau} />
+                            ))}
+                        </datalist>
+                    </div>
 
-                    <Input
-                        placeholder="Année scolaire"
-                        list="annes_scolaire"
-                        value={filters.annee}
-                        onChange={(e) => handleFilterChange('annee', e.target.value)}
-                    />
-                    <datalist id="annes_scolaire">
-                        {annes_scolaire.map((a) => (
-                            <option key={a.id} value={a.annee_scolaire} />
-                        ))}
-                    </datalist>
+                    <div>
+                        <Input
+                            placeholder="Année scolaire"
+                            list="annes_scolaire"
+                            value={filters.annee}
+                            onChange={(e) => handleFilterChange('annee', e.target.value)}
+                            className="w-full"
+                        />
+                        <datalist id="annes_scolaire">
+                            {annes_scolaire.map((a) => (
+                                <option key={a.id} value={a.annee_scolaire} />
+                            ))}
+                        </datalist>
+                    </div>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-2 sm:mt-0">
                     <Button
                         className="flex gap-2 items-center"
                         onClick={exportPDF}
                         disabled={filteredNotes.length === 0}
+                        size="sm"
                     >
-                        <FileDown size={18} />
-                        Exporter en PDF
+                        <FileDown size={16} />
+                        <span className="hidden sm:inline">Exporter en PDF</span>
+                        <span className="sm:hidden">PDF</span>
                     </Button>
                 </div>
 

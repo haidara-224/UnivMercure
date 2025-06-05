@@ -13,9 +13,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: "Accueil", href: "/" },
     { title: "Mes Documents", href: "#" },
 ];
+
 interface PageProps {
     [key: string]: unknown;
 }
+
 interface messageFlash {
     flash: {
         success: string,
@@ -76,91 +78,102 @@ export default function Documents({ flash }: messageFlash) {
         <AppSidebarLayoutEtudiant breadcrumbs={breadcrumbs}>
             <Head title="Mes Documents" />
 
-            <div className="space-y-8 p-4 md:p-6">
+            <div className="space-y-4 p-2 sm:p-4 md:p-6">
 
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                {/* Header avec bouton */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Mes Demandes de Documents</h1>
                     <SendDemandeDocument />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                        <h3 className="text-sm font-medium text-gray-500">Total des demandes</h3>
-                        <p className="text-2xl font-semibold mt-1">{documents.length}</p>
+
+                {/* Cartes statistiques */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total des demandes</h3>
+                        <p className="text-xl sm:text-2xl font-semibold mt-1">{documents.length}</p>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                        <h3 className="text-sm font-medium text-gray-500">Demandes traitées</h3>
-                        <p className="text-2xl font-semibold mt-1 text-green-600">
+                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-500">Demandes traitées</h3>
+                        <p className="text-xl sm:text-2xl font-semibold mt-1 text-green-600">
                             {documents.filter(d => d.statut === 'traité').length}
                         </p>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                        <h3 className="text-sm font-medium text-gray-500">Non traitées</h3>
-                        <p className="text-2xl font-semibold mt-1 text-amber-500">
+                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-500">Non traitées</h3>
+                        <p className="text-xl sm:text-2xl font-semibold mt-1 text-amber-500">
                             {documents.filter(d => d.statut === 'non traité').length}
                         </p>
                     </div>
                 </div>
+
+                {/* Tableau responsive */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commentaire</th>
-                                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Date</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Commentaire</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {documents.length > 0 ? (
                                     documents.map((document) => (
                                         <tr key={document.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-4 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-3">
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
+                                                <div className="flex items-center gap-2 sm:gap-3">
                                                     {getDocumentIcon(document.type_document)}
-                                                    <span className="capitalize">{document.type_document}</span>
+                                                    <span className="capitalize text-sm sm:text-base">{document.type_document}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden sm:table-cell">
                                                 {format(new Date(document.created_at), 'PPP', { locale: fr })}
                                             </td>
-                                            <td className="px-4 py-4 whitespace-nowrap">
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
                                                 {getStatusBadge(document.statut)}
                                             </td>
-                                            <td className="px-4 py-4 whitespace-nowrap" dangerouslySetInnerHTML={{ __html: document.comment }}>
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 hidden md:table-cell" dangerouslySetInnerHTML={{ __html: document.comment }}>
                                             </td>
-                                            <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                                                {document.statut === 'traité' && (
-                                                    <button className="text-indigo-600 hover:text-indigo-900 flex items-center gap-1">
-                                                        <Download size={16} />
-                                                        <a href={`/storage/${document.traitement?.document}`} target="_blank">
-                                                            <FileText className="h-4 w-4" />
-                                                            Fichier
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
+                                                <div className="flex items-center gap-2">
+                                                    {document.statut === 'traité' && (
+                                                        <a
+                                                            href={`/storage/${document.traitement?.document}`}
+                                                            target="_blank"
+                                                            className="text-indigo-600 hover:text-indigo-900 flex items-center gap-1 text-xs sm:text-sm"
+                                                        >
+                                                            <Download size={14} className="shrink-0" />
+                                                            <span className="hidden xs:inline">Télécharger</span>
                                                         </a>
-                                                    </button>
-                                                )}
-                                                {document.statut === 'non traité' && (
-                                                    <button className="text-red-600 hover:text-red-900 flex items-center gap-1" onClick={() => {
-                                                        if (confirm("Êtes-vous sûr de vouloir supprimer cette demande de document ?")) {
-                                                            router.delete(route("etudiant.demande.destroy", document.id), {
-                                                                preserveScroll: true,
-
-                                                            });
-                                                        }
-                                                    }}>
-                                                       <Trash size={24} />
-
-                                                    </button>
-                                                )}
+                                                    )}
+                                                    {document.statut === 'non traité' && (
+                                                        <button
+                                                            className="text-red-600 hover:text-red-900 flex items-center gap-1"
+                                                            onClick={() => {
+                                                                if (confirm("Êtes-vous sûr de vouloir supprimer cette demande de document ?")) {
+                                                                    router.delete(route("etudiant.demande.destroy", document.id), {
+                                                                        preserveScroll: true,
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Trash size={14} className="shrink-0" />
+                                                            <span className="hidden xs:inline">Supprimer</span>
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                                        <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                                             <div className="flex flex-col items-center justify-center gap-2">
                                                 <FileText className="h-8 w-8 text-gray-400" />
-                                                <p>Aucune demande de document pour le moment</p>
+                                                <p className="text-sm sm:text-base">Aucune demande de document pour le moment</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -169,6 +182,8 @@ export default function Documents({ flash }: messageFlash) {
                         </table>
                     </div>
                 </div>
+
+
             </div>
         </AppSidebarLayoutEtudiant>
     );

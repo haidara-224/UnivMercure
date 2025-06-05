@@ -1,29 +1,30 @@
-
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {   BookA } from 'lucide-react';
+import {  BookA } from 'lucide-react';
 import AppLogo from './app-logo';
+import { NotificationButton } from './NotificationButton';
+
 
 const mainNavItems: NavItem[] = [
-
-
-
     {
         title: 'Documents',
         url: '/documentaliste',
         icon: BookA,
     },
 
-
 ];
 
-
 export function AppSidebarDocument() {
+
+
     return (
         <Sidebar collapsible="icon" variant="inset">
+           <NotificationButton />
+
+
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -43,7 +44,6 @@ export function AppSidebarDocument() {
             <SidebarFooter>
                 <NavUser />
             </SidebarFooter>
-
         </Sidebar>
     );
 }

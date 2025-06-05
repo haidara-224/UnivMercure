@@ -2,62 +2,69 @@
 
 namespace App\Notifications;
 
+use App\Models\demandedocuments;
+use App\Models\etudiant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class DemandeNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    public $etudiantId;
+    public $demandeId;
+    public $connection = null;
+    public $queue = null;
+    public $delay = null;
 
-    public $etudiant;
-    public $type_document;
-    public $comment;
-    public $statut;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($etudiant, $type_document, $comment, $statut)
+    public function __construct($etudiantId, $demandeId)
     {
-        $this->etudiant = $etudiant;
-        $this->type_document = $type_document;
-        $this->comment = $comment;
-        $this->statut = $statut;
+        $this->etudiantId = $etudiantId;
+        $this->demandeId = $demandeId;
+    }
+    public function via($notifiable)
+    {
+        return ['mail', 'database'];
+    }
+    public function toMail(object $notifiable): MailMessage
+    {
+        $etudiant = etudiant::find($this->etudiantId);
+        $demande = demandedocuments::find($this->demandeId);
+
+        return (new MailMessage)
+            ->greeting('Bonjour!')
+            ->line("Vous avez une nouvelle demande de document par {$etudiant->name}.")
+
+            ->line('Merci d\'utiliser notre application!');
     }
 
-    /**
-     * Get the notification's delivery channels.
-     */
-    public function via(object $notifiable): array
-    {
-        return ['database'];
-    }
-
-    /**
-     * Get the array representation of the notification.
-     */
     public function toArray(object $notifiable): array
     {
-        return [
-            'etudiant_id' => $this->etudiant->id,
-            'etudiant_nom' => $this->etudiant->nom_complet,
-            'type_document' => $this->type_document,
-            'comment' => $this->comment,
-            'statut' => $this->statut,
-            'message' => $this->getMessage(),
+        $etudiant = etudiant::find($this->etudiantId);
+        $demande = demandedocuments::find($this->demandeId);
 
+        return [
+            'etudiant_id' => $etudiant->id,
+            'etudiant_nom' => $etudiant->name,
+            'type_document' => $demande->type_document,
+            'comment' => $demande->comment,
+            'statut' => $demande->statut,
+            'message' => $this->getMessage(),
             'time' => now()->toDateTimeString(),
         ];
     }
 
-    protected function getMessage(): string
-    {
-        return match($this->statut) {
-            'traité' => "Votre demande de {$this->type_document} a été traitée",
-            'en cours' => "Votre demande de {$this->type_document} est en cours de traitement",
-            'refusé' => "Votre demande de {$this->type_document} a été refusée",
-            default => "Nouvelle mise à jour concernant votre demande de {$this->type_document}",
-        };
-    }
+  protected function getMessage()
+{
+    $demande = demandedocuments::find($this->demandeId);
+    $statut = mb_strtolower(trim($demande->statut));
+
+    return match ($statut) {
+        'traité' => "Votre demande de {$demande->type_document} a été traitée",
+        'non traité' => "Votre demande de {$demande->type_document} n'a pas encore été traitée",
+        default => "Statut inconnu pour votre demande",
+    };
+}
+
 }

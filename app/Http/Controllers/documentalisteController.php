@@ -7,29 +7,32 @@ use Illuminate\Http\Request;
 
 class documentalisteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $documents=demandedocuments::with(['etudiant'])
+        $documents = demandedocuments::with(['etudiant'])
             ->orderBy('created_at', 'desc')
             ->get();
+        $notifications = $request->user()->notifications
+            ->map(fn($n) => $n->only(['id', 'data', 'read_at', 'created_at']));
 
         return inertia('documentaliste/index', [
-            'documents' => $documents
+            'documents' => $documents,
+            'notifications' => $notifications
         ]);
     }
 
-    public function update(Request $request, $demande)
+    public function markAsRead(Request $request, $id)
     {
-        // Logique pour mettre à jour une demande de document
-        // ...
-        return redirect()->back()->with('success', 'Demande mise à jour avec succès.');
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+
+        return back()->with('success', 'Notification marquée comme lue.');
     }
 
-    public function destroy($demande)
+    public function markAllAsRead(Request $request)
     {
-        // Logique pour supprimer une demande de document
-        // ...
-        return redirect()->back()->with('success', 'Demande supprimée avec succès.');
-    }
+        $request->user()->unreadNotifications->markAsRead();
 
+        return back()->with('success', 'Toutes les notifications ont été marquées comme lues.');
+    }
 }

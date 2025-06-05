@@ -98,7 +98,7 @@ function TraitementModale({
             <DialogContent className="w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 space-y-6">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">
-                        {document ? "Modifier le document" : "Créer un document pour une classe"}
+                        {document?.statut==='traité' ? "Modifier le document" : "Télecharger le document"}
                     </DialogTitle>
                 </DialogHeader>
 
