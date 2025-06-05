@@ -20,7 +20,8 @@ interface CustomPageProps extends PageProps {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: "Notes", href: "/Notes" },
+    { title: "Accueil", href: "/" },
+    { title: "Notes", href: "/etudiant/notes" },
 ];
 
 const TABLE_COLUMNS = [

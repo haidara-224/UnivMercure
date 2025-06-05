@@ -11,6 +11,7 @@ use App\Http\Controllers\documentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ExamensController;
+use App\Http\Controllers\ExamensStudentsresponsesController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
@@ -99,6 +100,7 @@ Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->nam
     Route::get('/documents',[DashboardEtudiantController::class, 'documents'])->name('documents');
     Route::post('/documents',[DemandedocumentsController::class, 'demande'])->name('demande.document');
     Route::delete('/documents/{document}',[DemandedocumentsController::class, 'destroy'])->name('demande.destroy');
+    Route::get('/examens',[ExamensController::class, 'examenStudent'])->name('examens.index');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {
@@ -130,4 +132,5 @@ Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documenta
 });
 
 require __DIR__ . '/settings.php';
+
 require __DIR__ . '/auth.php';

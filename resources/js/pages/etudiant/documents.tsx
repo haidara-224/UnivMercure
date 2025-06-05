@@ -11,7 +11,7 @@ import { fr } from 'date-fns/locale';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: "Accueil", href: "/" },
-    { title: "Mes Documents", href: "#" },
+    { title: "Mes Documents", href: "/etudiant/documents" },
 ];
 
 interface PageProps {

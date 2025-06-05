@@ -176,5 +176,35 @@ class ExamensController extends Controller
         return back()->with('success', 'Examen supprimé.');
     }
 
+  public function examenStudent()
+{
+
+    $etudiant = Auth::user()->etudiant;
+
+    $examensEtudiant = examensstudents::with('etudiants','professeur','anneesScolaire')
+        ->whereHas('etudiants', function ($query) use ($etudiant) {
+            $query->where('etudiants.id', $etudiant->id);
+        })
+        ->orderByDesc('created_at')
+        ->get();
+ $parcours = $etudiant->parcours;
+
+$classesIds = $parcours->pluck('classes_id')->unique();
+$departementIds = $parcours->pluck('departement_id')->unique();
+
+
+$examensClasse = examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
+    ->whereIn('classes_id', $classesIds)
+    ->whereIn('departement_id', $departementIds)
+    ->orderByDesc('created_at')
+    ->get();
+
+    return Inertia::render('etudiant/examens', [
+        'examensEtd' => $examensEtudiant,
+        'examens' => $examensClasse,
+    ]);
+}
+
+
 
 }
