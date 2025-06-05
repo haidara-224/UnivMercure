@@ -27,4 +27,12 @@ class etudiant extends Model
     {
         return $this->hasMany(demandedocuments::class, 'etudiant_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function traitementdocuments()
+    {
+        return $this->hasMany(traitementdocuments::class, 'etudiant_id');
+    }
 }

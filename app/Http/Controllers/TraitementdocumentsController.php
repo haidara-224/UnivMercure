@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TraitementEmail;
 use App\Models\demandedocuments;
 use App\Models\traitementdocuments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class TraitementdocumentsController extends Controller
@@ -44,7 +46,7 @@ class TraitementdocumentsController extends Controller
         $demande->statut = 'traité';
         $demande->save();
     }
-
+    Mail::to($demande->etudiant->user->email)->send(new TraitementEmail($request->demandedocument_id));
     return redirect()->back()->with('success', 'Document traité avec succès.');
 }
 
