@@ -120,7 +120,7 @@ class DashboardEtudiantController extends Controller
         $etudiant = etudiant::where('user_id', $authUser)
     ->with(['demandes' => function ($query) {
         $query->orderByDesc('created_at')
-              ->with('traitement'); // on ajoute ici le traitement
+              ->with('traitement');
     }])
     ->first();
 

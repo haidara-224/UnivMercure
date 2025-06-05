@@ -1,10 +1,10 @@
 import { SendDemandeDocument } from "@/components/ui/etudiant/SendDemandeDocument";
 import AppSidebarLayoutEtudiant from "@/layouts/app/app-sidebarEtud-layout";
 import { BreadcrumbItem, Demandedocuments } from "@/types";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { FileText, CheckCircle2, Clock, Download } from 'lucide-react';
+import { FileText, CheckCircle2, Clock, Download, Trash } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -137,6 +137,19 @@ export default function Documents({ flash }: messageFlash) {
                                                             <FileText className="h-4 w-4" />
                                                             Fichier
                                                         </a>
+                                                    </button>
+                                                )}
+                                                {document.statut === 'non traité' && (
+                                                    <button className="text-red-600 hover:text-red-900 flex items-center gap-1" onClick={() => {
+                                                        if (confirm("Êtes-vous sûr de vouloir supprimer cette demande de document ?")) {
+                                                            router.delete(route("etudiant.demande.destroy", document.id), {
+                                                                preserveScroll: true,
+
+                                                            });
+                                                        }
+                                                    }}>
+                                                       <Trash size={24} />
+
                                                     </button>
                                                 )}
                                             </td>

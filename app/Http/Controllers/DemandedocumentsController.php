@@ -29,5 +29,12 @@ class DemandedocumentsController extends Controller
 
     return redirect()->back()->with('success', 'Demande de document soumise avec succès.');
 }
+    public function destroy($id)
+    {
+     $document = demandedocuments::findOrFail($id);
+     $document->delete();
+
+     return redirect()->back()->with('success', 'Demande de document supprimée avec succès.');
+    }
 
 }

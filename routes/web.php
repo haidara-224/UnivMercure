@@ -97,6 +97,7 @@ Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->nam
     Route::get('/notes',[DashboardEtudiantController::class, 'notes'])->name('notes');
     Route::get('/documents',[DashboardEtudiantController::class, 'documents'])->name('documents');
     Route::post('/documents',[DemandedocumentsController::class, 'demande'])->name('demande.document');
+    Route::delete('/documents/{document}',[DemandedocumentsController::class, 'destroy'])->name('demande.destroy');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {
@@ -121,8 +122,7 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
     Route::get('/', [documentalisteController::class, 'index'])->name('index');
     Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');
-    Route::put('/documents/{demande}',[documentalisteController::class, 'update'])->name('documents.update');
-    Route::delete('/documents/{demande}',[documentalisteController::class, 'destroy'])->name('documents.delete');
+
 });
 
 require __DIR__ . '/settings.php';

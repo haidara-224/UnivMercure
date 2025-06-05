@@ -105,7 +105,7 @@ function TraitementModale({
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                     <div>
-                        <Label htmlFor="titre">Titre</Label>
+
                         <Input
                             id="titre"
                             type="hidden"
@@ -119,7 +119,7 @@ function TraitementModale({
 
                     <div>
                         <Label>Fichier (PDF, Word...)</Label>
-                        <Input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
+                        <Input type="file"  onChange={handleFileChange} />
                         {fileName && (
                             <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
                                 <FileText className="h-4 w-4" />
@@ -136,7 +136,7 @@ function TraitementModale({
 
                     <div className="flex justify-end">
                         <Button type="submit" disabled={isSubmited}>
-                            {isSubmited ? "Enregistrement..." : "Valider l'examen"}
+                            {isSubmited ? "Enregistrement..." : "Uploader le document"}
                         </Button>
                     </div>
                 </form>

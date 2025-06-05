@@ -194,14 +194,17 @@ const DocumentTable = ({ documents }: { documents: Demandedocuments[] }) => {
                                     <td className="hidden md:table-cell px-4 py-3 text-xs sm:text-sm text-gray-500 max-w-xs truncate" dangerouslySetInnerHTML={{ __html: document.comment }} />
                                     <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
                                         <div className="flex gap-1">
-                                            <Button variant="outline" size="sm" className="h-6 sm:h-9">
+                                            {/**
+                                             *   <Button variant="outline" size="sm" className="h-6 sm:h-9">
                                                 <span className="hidden sm:inline">Détails</span>
                                                 <span className="sm:hidden">...</span>
                                             </Button>
+                                             */}
+
 
                                                 <Button variant="default" size="sm" className="h-6 sm:h-9 gap-1" onClick={() => handleOpenDialogue(document)}>
                                                     <Download size={12}  />
-                                                    <span className="hidden sm:inline">Télécharger le document</span>
+                                                    <span className="hidden sm:inline">{document.statut=="non traité" ? 'Télécharger le document' : 'Modifier le document'}</span>
                                                 </Button>
 
                                         </div>
