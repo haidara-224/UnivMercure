@@ -1,7 +1,7 @@
 import React, {  useState } from 'react'
 import { AddExamensForStudents } from './AddExamensForStudents';
 import { toast } from 'sonner';
-import { useForm, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { ExamensByEtudiant } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -144,6 +144,9 @@ export default function ForStudents() {
                                         {examen.professeur.name} {examen.professeur.prenom}
                                     </div>
                                 )}
+                                 <Link href={`/prof/examens/reponse/student/${examen.id}`} className="text-blue-600 hover:text-blue-900 mr-3">
+                                                    Voir Reponse
+                                                </Link>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex items-center text-sm">

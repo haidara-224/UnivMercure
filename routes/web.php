@@ -126,7 +126,8 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
     Route::get('/examens/reponse/class/{examen}',[ExamensreponsesController::class,'index'])->name('examens.responses.index');
     Route::get('/examens/reponse/class/student/{examensclasseresponse}',[ExamensreponsesController::class,'show'])->name('examens.responses.show');
-
+    Route::get('/examens/reponse/student/{examensstudents}',[ExamensStudentsresponsesController::class,'index'])->name('examens.responses.student.index');
+    Route::get('/examens/reponse/student/show/{examensstudents}/{etudiant}',[ExamensStudentsresponsesController::class,'show'])->name('examens.responses.student.show');
 });
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
     Route::get('/', [documentalisteController::class, 'index'])->name('index');

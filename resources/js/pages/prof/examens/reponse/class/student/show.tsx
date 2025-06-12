@@ -1,10 +1,6 @@
 import AppSidebarLayoutProf from "@/layouts/app/app-sidebarProf-layout";
 import { BreadcrumbItem, examentclasseresponse } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
-import { useEffect } from "react";
-
-
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Examens',
@@ -26,17 +22,10 @@ interface CustomPageProps extends PageProps {
 
 export default function Page() {
     const { examansResponse } = usePage<CustomPageProps>().props;
-
-    useEffect(() => {
-        console.log('Examens Responses:', examansResponse);
-    }, [examansResponse]);
-
     return (
         <AppSidebarLayoutProf breadcrumbs={breadcrumbs}>
             <Head title="Réponses Examens" />
-
             <div className="p-6 space-y-6">
-                {/* Header Section */}
                 <div className="flex justify-between items-start">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Réponse d'examen</h1>
@@ -44,11 +33,7 @@ export default function Page() {
                             Détails de la réponse soumise par l'étudiant
                         </p>
                     </div>
-
-
                 </div>
-
-                {/* Student Info Card */}
                 <div className="bg-white overflow-hidden shadow rounded-lg">
                     <div className="px-4 py-5 sm:px-6 flex items-center">
                         <div className="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -71,8 +56,7 @@ export default function Page() {
                     </div>
                 </div>
 
-                {/* Exam Info */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-white p-4 rounded-lg shadow">
                         <h4 className="text-sm font-medium text-gray-500">Examen</h4>
                         <p className="mt-1 text-lg font-semibold text-gray-900">
