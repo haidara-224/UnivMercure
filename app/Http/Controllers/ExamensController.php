@@ -8,6 +8,7 @@ use App\Models\classes;
 use App\Models\departement;
 use App\Models\emploie;
 use App\Models\examensclasse;
+use App\Models\examensclasseresponse;
 use App\Models\examensstudents;
 use App\Models\examensstudentsresponses;
 use App\Models\parcour;
@@ -252,6 +253,57 @@ class ExamensController extends Controller
 
         examensstudentsresponses::create(array_merge($data, [
             'examensstudents_id' => $examen->id,
+            'etudiant_id' => $etudiantId,
+        ]));
+
+        return back()->with('success', 'Réponse soumise avec succès.');
+    }
+
+    public function createResponseStudentclass(examensclasse $examen)
+    {
+        $etudiant = Auth::user()->etudiant;
+
+
+
+        return Inertia::render('etudiant/examens/class/Response/index', [
+            'examen' => $examen,
+            'response' =>  $examen->examensclassresponses->where('etudiant_id', $etudiant->id)->first(),
+
+        ]);
+    }
+     public function storeResponseStudentclass(Request $request, examensclasse $examen)
+    {
+        $request->validate([
+            'response' => ['nullable', 'string',],
+            'fichier' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx', 'max:10240'],
+        ]);
+
+        $etudiantId = Auth::user()->etudiant->id;
+
+        $fichierPath = null;
+        if ($request->hasFile('fichier')) {
+            $fichierPath = $request->file('fichier')->store('response/fichiers', 'public');
+        }
+
+        $reponseExistante = examensclasseresponse::where('examensclasse_id', $examen->id)
+            ->where('etudiant_id', $etudiantId)
+            ->first();
+
+        $data = [
+            'reponse' => $request->response,
+        ];
+
+        if ($fichierPath) {
+            $data['fichier'] = $fichierPath;
+        }
+
+        if ($reponseExistante) {
+            $reponseExistante->update($data);
+            return back()->with('success', 'Réponse mise à jour avec succès.');
+        }
+
+        examensclasseresponse::create(array_merge($data, [
+            'examensclasse_id' => $examen->id,
             'etudiant_id' => $etudiantId,
         ]));
 

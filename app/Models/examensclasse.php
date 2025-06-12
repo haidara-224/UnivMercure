@@ -23,4 +23,9 @@ class examensclasse extends Model
     {
         return $this->belongsTo(anneesScolaire::class);
     }
+    public function examensclassresponses()
+    {
+        return $this->hasMany(examensclasseresponse::class);
+    }
+
 }

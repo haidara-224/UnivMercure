@@ -103,6 +103,8 @@ Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->nam
     Route::get('/examens',[ExamensController::class, 'examenStudent'])->name('examens.index');
     Route::get('/examens/{examen}/response',[ExamensController::class, 'createResponseStudent'])->name('examens.create.response');
     Route::post('/examens/{examen}/response',[ExamensController::class, 'storeResponseStudent'])->name('examens.store.response');
+    Route::get('/examens/class/{examen}/response',[ExamensController::class, 'createResponseStudentclass'])->name('examensclass.create.response');
+    Route::post('/examens/class/{examen}/response',[ExamensController::class, 'storeResponseStudentclass'])->name('examensclass.store.response');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {

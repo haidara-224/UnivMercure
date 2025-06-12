@@ -2,16 +2,15 @@ import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SubjectModalEtudiant } from "@/components/ui/prof/Examens/SujectModalEtudiant";
+import { SubjectModal } from "@/components/ui/prof/Examens/SujectModal";
 import AppSidebarLayoutEtudiant from "@/layouts/app/app-sidebarEtud-layout";
-import { BreadcrumbItem, ExamensByEtudiant, examenstudentresponse } from "@/types";
+import { BreadcrumbItem, ExamensByClasse, examentclassresponse, } from "@/types";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import { FileSearch, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { toast } from "sonner";
-
 const breadcrumbs: BreadcrumbItem[] = [
     { title: "Accueil", href: "/" },
     { title: "Examens", href: "/etudiant/examens/responses" },
@@ -20,11 +19,9 @@ interface PageProps {
     [key: string]: unknown;
 }
 
-
-
 interface CustomPageProps extends PageProps {
-    examen: ExamensByEtudiant;
-    response: examenstudentresponse
+    examen: ExamensByClasse;
+    response: examentclassresponse
 }
 export default function Page() {
     const [editorContent, setEditorContent] = useState("");
@@ -50,6 +47,7 @@ export default function Page() {
             setFileName(response?.fichier ? response.fichier : null);
 
         }
+        console.log("Response:", response);
     }, [response, setData]);
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -63,7 +61,7 @@ export default function Page() {
             return;
         }
 
-        post(route("etudiant.examens.store.response", examen.id), {
+        post(route("etudiant.examensclass.store.response", examen.id), {
             forceFormData: true,
             onSuccess: () => {
                 toast.success("Examen créé avec succès");
@@ -76,28 +74,27 @@ export default function Page() {
     };
     const [openDialogue, setOpenDialogue] = useState(false);
 
-const handleOpenSubjectModal = () => {
+    const handleOpenSubjectModal = () => {
 
         setOpenDialogue(true);
     };
-
-
     return (
         <AppSidebarLayoutEtudiant breadcrumbs={breadcrumbs}>
             <Head title="Reponses Au Examens" />
             <div className="px-8 py-5">
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-primary hover:bg-primary/5"
-                    onClick={ handleOpenSubjectModal}
-                >
-                    <FileSearch className="h-4 w-4 mr-1" />
-                    Voir Sujet
-                </Button>
-                <SubjectModalEtudiant open={openDialogue}
-                    onOpenChange={setOpenDialogue}
-                    examen={examen} />
+                {
+                    examen.sujet_explication && (
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-primary hover:bg-primary/5"
+                            onClick={handleOpenSubjectModal}
+                        >
+                            <FileSearch className="h-4 w-4 mr-1" />
+                            Voir Sujet
+                        </Button>
+                    )
+                }
                 <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
                     <div>
                         <div>
@@ -135,11 +132,7 @@ const handleOpenSubjectModal = () => {
                                 </a>
                             </div>
                         )}
-
-
                     </div>
-
-
                     <div className="space-y-2">
                         <Label>
                             Respone Au sujet (facultatif)
@@ -157,13 +150,15 @@ const handleOpenSubjectModal = () => {
                         </div>
                     </div>
                     <InputError message={errors.response} className="mt-2" />
-
                     <div className="flex justify-end pt-2">
                         <Button type="submit" disabled={processing}>
                             {processing ? "Envoi en cours..." : "Soumettre Votre réponse"}
                         </Button>
                     </div>
                 </form>
+                <SubjectModal open={openDialogue}
+                    onOpenChange={setOpenDialogue}
+                    examen={examen} />
             </div>
         </AppSidebarLayoutEtudiant>
     )

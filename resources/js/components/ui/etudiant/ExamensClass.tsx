@@ -143,7 +143,7 @@ export default function ExamensClass({
                                     </Button>
                                 )}
                                 <Link
-                                    href={`/etudiant/examens/${examen.id}/response`}
+                                    href={`/etudiant/examens/class/${examen.id}/response`}
                                     className='cursor-pointer text-primary hover:border-b-2 hover:border-blue-600 mt-2'
 
                                 >
