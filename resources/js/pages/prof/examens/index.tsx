@@ -32,9 +32,6 @@ export default function Page() {
                     'nav-2': <ForStudents />,
                 }}
             />
-
-
-
         </AppSidebarLayoutProf>
     </>)
 }

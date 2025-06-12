@@ -165,9 +165,7 @@ export default function ForStudents() {
                                 <div className="text-sm">
                                     <div className="flex items-start">
                                         <BookOpen className="h-4 w-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
-                                        <p className="text-muted-foreground line-clamp-3">
-                                            {examen.sujet_explication}
-                                        </p>
+                                        <p className="text-muted-foreground line-clamp-3" dangerouslySetInnerHTML={{ __html: examen.sujet_explication }} />
                                     </div>
                                 </div>
 

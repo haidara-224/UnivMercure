@@ -11,6 +11,7 @@ use App\Http\Controllers\documentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ExamensController;
+use App\Http\Controllers\ExamensreponsesController;
 use App\Http\Controllers\ExamensStudentsresponsesController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\HomeController;
@@ -122,8 +123,9 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::get('/examens',[ExamensController::class,'index'])->name('examens.index');
     Route::post('/examens',[ExamensController::class,'store'])->name('examens.create.classe');
     Route::delete('/examens/{type}/{id}', [ExamensController::class, 'delete'])->name('examens.delete');
-
     Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
+    Route::get('/examens/reponse/class/{examen}',[ExamensreponsesController::class,'index'])->name('examens.responses.index');
+    Route::get('/examens/reponse/class/student/{examensclasseresponse}',[ExamensreponsesController::class,'show'])->name('examens.responses.show');
 
 });
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {

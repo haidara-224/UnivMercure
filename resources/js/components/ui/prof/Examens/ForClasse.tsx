@@ -19,7 +19,7 @@ import { Departement, ExamensByClasse, Niveaux } from "@/types";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { SubjectModal } from "./SujectModal";
-import { useForm } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 import { ExamensClasseModal } from "./EditExamesnForClasse";
 
@@ -127,6 +127,12 @@ export default function ForClasse({
                                     <Badge className="flex items-center gap-1.5 bg-primary/10 text-primary">
                                         <Clock className="h-3.5 w-3.5" />
                                         {examen.annees_scolaire.annee_scolaire}
+                                    </Badge>
+                                    <Badge className="flex items-center gap-1.5 bg-primary/10 text-primary">
+
+                                        <Link href={`/prof/examens/reponse/class/${examen.id}`} className="flex items-center gap-1.5">
+                                            <span className="text-sm">Voir Reponse</span>
+                                        </Link>
                                     </Badge>
                                 </CardDescription>
                             </CardHeader>

@@ -57,7 +57,7 @@ export default function Page() {
         const hasSujet = data.response && data.response.trim().length > 0;
 
         if (!hasFile && !hasSujet) {
-            alert("Veuillez fournir un fichier ou saisir la eeponse.");
+            alert("Veuillez fournir un fichier ou saisir la réponse.");
             return;
         }
 

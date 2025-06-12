@@ -199,9 +199,23 @@ export interface Tutos{
     updated_at:Date;
 }
 export interface examentclassresponse{
+    id:number;
     examensclass_id:number;
     etudiant_id:number;
     examensclass:ExamensByClasse;
+    etudiant:Etudiants;
+    fichier:string | null;
+
+    reponse:string | null;
+    commentaire:string | null;
+    created_at:Date;
+    updated_at:Date;
+}
+export interface examentclasseresponse{
+    id:number;
+    examensclass_id:number;
+    etudiant_id:number;
+    examensclasse:ExamensByClasse;
     etudiant:Etudiants;
     fichier:string | null;
 
