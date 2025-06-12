@@ -118,11 +118,11 @@ class DashboardEtudiantController extends Controller
         $authUser = Auth::id();
 
         $etudiant = etudiant::where('user_id', $authUser)
-    ->with(['demandes' => function ($query) {
-        $query->orderByDesc('created_at')
-              ->with('traitement');
-    }])
-    ->first();
+            ->with(['demandes' => function ($query) {
+                $query->orderByDesc('created_at')
+                    ->with('traitement');
+            }])
+            ->first();
 
 
         if (!$etudiant) {

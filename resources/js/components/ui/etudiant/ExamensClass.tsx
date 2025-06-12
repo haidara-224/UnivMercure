@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
     FileText, BookOpen, Clock,
     Building2, Landmark, FileSearch, Search,
-
     Calendar,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -16,8 +15,9 @@ import { fr } from "date-fns/locale";
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import {  ExamensByClasse } from "@/types";
+import { ExamensByClasse } from "@/types";
 import { SubjectModal } from "../prof/Examens/SujectModal";
+import { Link } from "@inertiajs/react";
 
 
 
@@ -142,7 +142,14 @@ export default function ExamensClass({
                                         Sujet
                                     </Button>
                                 )}
+                                <Link
+                                    href={`/etudiant/examens/${examen.id}/response`}
+                                    className='cursor-pointer text-primary hover:border-b-2 hover:border-blue-600 mt-2'
 
+                                >
+
+                                    Soumettre Votre Réponse
+                                </Link>
                             </CardFooter>
                         </Card>
                     ))}

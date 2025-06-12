@@ -20,4 +20,8 @@ class examensstudents extends Model
     {
         return $this->belongsTo(anneesScolaire::class);
     }
+    public function examensstudentsresponses()
+    {
+        return $this->hasMany(examensstudentsresponses::class);
+    }
 }

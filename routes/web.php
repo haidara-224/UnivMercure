@@ -101,6 +101,8 @@ Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->nam
     Route::post('/documents',[DemandedocumentsController::class, 'demande'])->name('demande.document');
     Route::delete('/documents/{document}',[DemandedocumentsController::class, 'destroy'])->name('demande.destroy');
     Route::get('/examens',[ExamensController::class, 'examenStudent'])->name('examens.index');
+    Route::get('/examens/{examen}/response',[ExamensController::class, 'createResponseStudent'])->name('examens.create.response');
+    Route::post('/examens/{examen}/response',[ExamensController::class, 'storeResponseStudent'])->name('examens.store.response');
 
 });
 Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {

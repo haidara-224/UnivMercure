@@ -2,7 +2,7 @@ import { ExamensByEtudiant } from '@/types';
 import React, { useState } from 'react'
 import { Input } from '../input';
 import { Card, CardContent, CardHeader, CardTitle } from '../card';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Button } from '../button';
 import { BookOpen, Calendar, Clock, FileSearch, FileText, User } from 'lucide-react';
 import { format } from 'date-fns';
@@ -27,6 +27,7 @@ export default function ExamensStutend() {
         setSelectedExamen(examen);
         setOpenDialogue(true);
     };
+
 
     const [search, setSearch] = useState("");
 
@@ -59,7 +60,7 @@ export default function ExamensStutend() {
             {examensEtd.length === 0 ? (
                 <Card className="text-center p-8">
                     <p className="text-lg text-muted-foreground">
-                        Aucun examen n'a été assigné à vos étudiants pour le moment.
+                        Aucun examen ne vous a été assigné pour le moment.
                     </p>
                 </Card>
             ) : (
@@ -94,6 +95,14 @@ export default function ExamensStutend() {
                                                 Sujet
                                             </Button>
                                         )}
+                                        <Link
+                                            href={`/etudiant/examens/${examen.id}/response`}
+                                            className='cursor-pointer hover:border-b-2 hover:border-blue-600 mt-2'
+
+                                        >
+
+                                            Soumettre Votre Réponse
+                                        </Link>
 
                                     </div>
                                     <div className="flex justify-between items-start">
@@ -129,8 +138,8 @@ export default function ExamensStutend() {
                                     <div className="text-sm">
                                         <div className="flex items-start">
                                             <BookOpen className="h-4 w-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
-                                            <p className="text-muted-foreground line-clamp-3">
-                                                {examen.sujet_explication}
+                                            <p className="text-muted-foreground line-clamp-3" dangerouslySetInnerHTML={{ __html: examen.sujet_explication }}>
+
                                             </p>
                                         </div>
                                     </div>
@@ -139,14 +148,17 @@ export default function ExamensStutend() {
 
                                     {examen.etudiants && examen.etudiants.length > 0 && (
                                         <div className="pt-2">
-                                            <p className="text-sm font-medium mb-1">Étudiants concernés:</p>
-                                            <div className="flex flex-wrap gap-2">
+                                            <p className="text-sm font-medium mb-1">Professeur:</p>
+                                            <div className="flex flex-wrap  gap-2">
 
                                                 <Badge variant="outline">
                                                     {examen.professeur?.name} {examen.professeur?.prenom}
                                                 </Badge>
 
+
+
                                             </div>
+
                                         </div>
                                     )}
                                 </CardContent>

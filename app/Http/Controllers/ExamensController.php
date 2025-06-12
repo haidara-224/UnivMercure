@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\responsesstudentRequestValidated;
 use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\emploie;
 use App\Models\examensclasse;
 use App\Models\examensstudents;
+use App\Models\examensstudentsresponses;
 use App\Models\parcour;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
@@ -176,35 +178,83 @@ class ExamensController extends Controller
         return back()->with('success', 'Examen supprimé.');
     }
 
-  public function examenStudent()
-{
+    public function examenStudent()
+    {
 
-    $etudiant = Auth::user()->etudiant;
+        $etudiant = Auth::user()->etudiant;
 
-    $examensEtudiant = examensstudents::with('etudiants','professeur','anneesScolaire')
-        ->whereHas('etudiants', function ($query) use ($etudiant) {
-            $query->where('etudiants.id', $etudiant->id);
-        })
-        ->orderByDesc('created_at')
-        ->get();
- $parcours = $etudiant->parcours;
+        $examensEtudiant = examensstudents::with('etudiants', 'professeur', 'anneesScolaire')
+            ->whereHas('etudiants', function ($query) use ($etudiant) {
+                $query->where('etudiants.id', $etudiant->id);
+            })
+            ->orderByDesc('created_at')
+            ->get();
+        $parcours = $etudiant->parcours;
 
-$classesIds = $parcours->pluck('classes_id')->unique();
-$departementIds = $parcours->pluck('departement_id')->unique();
-
-
-$examensClasse = examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
-    ->whereIn('classes_id', $classesIds)
-    ->whereIn('departement_id', $departementIds)
-    ->orderByDesc('created_at')
-    ->get();
-
-    return Inertia::render('etudiant/examens', [
-        'examensEtd' => $examensEtudiant,
-        'examens' => $examensClasse,
-    ]);
-}
+        $classesIds = $parcours->pluck('classes_id')->unique();
+        $departementIds = $parcours->pluck('departement_id')->unique();
 
 
+        $examensClasse = examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
+            ->whereIn('classes_id', $classesIds)
+            ->whereIn('departement_id', $departementIds)
+            ->orderByDesc('created_at')
+            ->get();
 
+        return Inertia::render('etudiant/examens', [
+            'examensEtd' => $examensEtudiant,
+            'examens' => $examensClasse,
+        ]);
+    }
+    public function createResponseStudent(examensstudents $examen)
+    {
+        $etudiant = Auth::user()->etudiant;
+
+        if (!$examen->etudiants->contains($etudiant->id)) {
+            return back()->with('error', 'Vous n\'êtes pas autorisé à répondre à cet examen.');
+        }
+
+        return Inertia::render('etudiant/examens/Response/index', [
+            'examen' => $examen,
+            'response' => $examen->examensstudentsresponses->where('etudiant_id', $etudiant->id)->first(),
+        ]);
+    }
+    public function storeResponseStudent(Request $request, examensstudents $examen)
+    {
+        $request->validate([
+            'response' => ['nullable', 'string',],
+            'fichier' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx', 'max:10240'],
+        ]);
+
+        $etudiantId = Auth::user()->etudiant->id;
+
+        $fichierPath = null;
+        if ($request->hasFile('fichier')) {
+            $fichierPath = $request->file('fichier')->store('response/fichiers', 'public');
+        }
+
+        $reponseExistante = examensstudentsresponses::where('examensstudents_id', $examen->id)
+            ->where('etudiant_id', $etudiantId)
+            ->first();
+
+        $data = [
+            'reponse' => $request->response,
+        ];
+
+        if ($fichierPath) {
+            $data['fichier'] = $fichierPath;
+        }
+
+        if ($reponseExistante) {
+            $reponseExistante->update($data);
+            return back()->with('success', 'Réponse mise à jour avec succès.');
+        }
+
+        examensstudentsresponses::create(array_merge($data, [
+            'examensstudents_id' => $examen->id,
+            'etudiant_id' => $etudiantId,
+        ]));
+
+        return back()->with('success', 'Réponse soumise avec succès.');
+    }
 }

@@ -215,6 +215,18 @@ export interface ExamensByClasse{
     date_fin:Date,
 
 }
+export interface examentstudentresponse{
+    examensstudents_id:number;
+    etudiant_id:number;
+    examensstudents:ExamensByEtudiant;
+    etudiant:Etudiants;
+    fichier:string | null;
+
+    reponse:string | null;
+    commentaire:string | null;
+    created_at:Date;
+    updated_at:Date;
+}
 export interface ExamensByEtudiant{
     id:number,
     titre:string,
@@ -226,6 +238,7 @@ export interface ExamensByEtudiant{
     professeur_id?:number,
    etudiant_id:number,
    etudiants:Etudiants[],
+
     professeur?:professeur
     date_debut:Date,
     date_fin:Date,

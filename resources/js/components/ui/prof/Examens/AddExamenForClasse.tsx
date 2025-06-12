@@ -109,7 +109,7 @@ function AddExamensForClasse({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
-          {/* Titre */}
+
           <div>
           <Input
           type="hidden"
@@ -129,7 +129,6 @@ function AddExamensForClasse({
           </div>
            <InputError message={errors.titre} className="mt-2" />
 
-          {/* Département et Classe */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label>Département</Label>
@@ -169,7 +168,6 @@ function AddExamensForClasse({
           </div>
 
 
-          {/* Date limite */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label>Date et heure Debut</Label>
@@ -203,7 +201,6 @@ function AddExamensForClasse({
           </div>
 
 
-          {/* Fichier */}
           <div>
             <Label>Fichier de l'examen (PDF, Word...)</Label>
             <Input
@@ -226,7 +223,7 @@ function AddExamensForClasse({
             )}
           </div>
           <InputError message={errors.fichier} className="mt-2" />
-          {/* Éditeur de contenu (sujet écrit) */}
+
           <div className="space-y-2">
             <Label>
               Sujet de l'examen ou Quelque instruction du sujet (facultatif)
@@ -244,7 +241,7 @@ function AddExamensForClasse({
             </div>
           </div>
           <InputError message={errors.sujet_explication} className="mt-2" />
-          {/* Bouton submit */}
+
           <div className="flex justify-end pt-2">
             <Button type="submit" disabled={processing}>
               {processing ? "Envoi en cours..." : "Créer l'examen"}
