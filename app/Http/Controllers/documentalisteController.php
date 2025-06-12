@@ -9,7 +9,7 @@ class documentalisteController extends Controller
 {
     public function index(Request $request)
     {
-        $documents = demandedocuments::with(['etudiant'])
+        $documents = demandedocuments::with(['etudiant','classes','departement','anneesScolaire'])
             ->orderBy('created_at', 'desc')
             ->get();
         $notifications = $request->user()->notifications

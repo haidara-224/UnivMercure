@@ -116,13 +116,19 @@ class DashboardEtudiantController extends Controller
     public function documents()
     {
         $authUser = Auth::id();
+        $classes = classes::select(['id', 'niveau'])->get();
+        $departements = departement::select(['id', 'name'])->get();
+        $annes_scolaire = anneesScolaire::select(['id', 'annee_scolaire'])->get();
 
-        $etudiant = etudiant::where('user_id', $authUser)
-            ->with(['demandes' => function ($query) {
-                $query->orderByDesc('created_at')
-                    ->with('traitement');
-            }])
-            ->first();
+       $etudiant = etudiant::where('user_id', $authUser)
+    ->with([
+        'demandes' => function ($query) {
+            $query->orderByDesc('created_at')
+                  ->with(['traitement', 'classes', 'departement', 'anneesScolaire']);
+        }
+    ])
+    ->first();
+;
 
 
         if (!$etudiant) {
@@ -134,6 +140,9 @@ class DashboardEtudiantController extends Controller
         return Inertia::render('etudiant/documents', [
             'etudiant' => $etudiant,
             'documents' => $documents,
+            'classes' => $classes,
+            'departements' => $departements,
+            'annes_scolaire' => $annes_scolaire,
         ]);
     }
 }

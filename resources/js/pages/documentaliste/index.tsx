@@ -119,7 +119,7 @@ export default function Page() {
 }
 
 const DocumentTable = ({ documents }: { documents: Demandedocuments[] }) => {
-      const [selectedDocument, setSelectedDocument] = useState<Demandedocuments | null>(null);
+    const [selectedDocument, setSelectedDocument] = useState<Demandedocuments | null>(null);
     const [openDialogue, setOpenDialogue] = useState(false);
     const handleOpenDialogue = (document: Demandedocuments) => {
         setSelectedDocument(document);
@@ -158,6 +158,9 @@ const DocumentTable = ({ documents }: { documents: Demandedocuments[] }) => {
                             <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                             <th className="hidden sm:table-cell px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                             <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                            <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Niveau</th>
+                            <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departement</th>
+                            <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Années Scolaire</th>
                             <th className="hidden md:table-cell px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comment</th>
                             <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -191,7 +194,17 @@ const DocumentTable = ({ documents }: { documents: Demandedocuments[] }) => {
                                     <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                                         {getStatusBadge(document.statut)}
                                     </td>
-                                    <td className="hidden md:table-cell px-4 py-3 text-xs sm:text-sm text-gray-500 max-w-xs truncate" dangerouslySetInnerHTML={{ __html: document.comment }} />
+
+                                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                                        {document.classes ? document.classes.niveau : "---"}
+                                    </td>
+                                     <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                                        {document.departement ? document.departement.name : "----"}
+                                    </td>
+                                     <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                                        {document.annees_scolaire ? document.annees_scolaire.annee_scolaire : "----"}
+                                    </td>
+                                                                        <td className="hidden md:table-cell px-4 py-3 text-xs sm:text-sm text-gray-500 max-w-xs truncate" dangerouslySetInnerHTML={{ __html: document.comment }} />
                                     <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-xs sm:text-sm font-medium">
                                         <div className="flex gap-1">
                                             {/**
@@ -202,10 +215,10 @@ const DocumentTable = ({ documents }: { documents: Demandedocuments[] }) => {
                                              */}
 
 
-                                                <Button variant="default" size="sm" className="h-6 sm:h-9 gap-1" onClick={() => handleOpenDialogue(document)}>
-                                                    <Download size={12}  />
-                                                    <span className="hidden sm:inline">{document.statut=="non traité" ? 'Télécharger le document' : 'Modifier le document'}</span>
-                                                </Button>
+                                            <Button variant="default" size="sm" className="h-6 sm:h-9 gap-1" onClick={() => handleOpenDialogue(document)}>
+                                                <Download size={12} />
+                                                <span className="hidden sm:inline">{document.statut == "non traité" ? 'Télécharger le document' : 'Modifier le document'}</span>
+                                            </Button>
 
                                         </div>
                                     </td>

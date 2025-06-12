@@ -30,10 +30,13 @@ class DemandedocumentsController extends Controller
         $demandeDocument->etudiant_id = $etudiant->id;
         $demandeDocument->type_document = $documentRequest['type_document'];
         $demandeDocument->comment = $documentRequest['comment'];
+        $demandeDocument->classes_id = $documentRequest['classes_id'];
+        $demandeDocument->departement_id = $documentRequest['departement_id'];
+        $demandeDocument->annees_scolaire_id = $documentRequest['annees_scolaire_id'];
         $demandeDocument->save();
-       $users->each(function ($user) use ($etudiant, $demandeDocument) {
-    $user->notify(new DemandeNotification($etudiant->id, $demandeDocument->id));
-});
+        $users->each(function ($user) use ($etudiant, $demandeDocument) {
+            $user->notify(new DemandeNotification($etudiant->id, $demandeDocument->id));
+        });
 
 
         return redirect()->back()->with('success', 'Demande de document soumise avec succès.');

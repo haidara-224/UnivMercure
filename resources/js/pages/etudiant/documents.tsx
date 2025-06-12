@@ -1,6 +1,6 @@
 import { SendDemandeDocument } from "@/components/ui/etudiant/SendDemandeDocument";
 import AppSidebarLayoutEtudiant from "@/layouts/app/app-sidebarEtud-layout";
-import { BreadcrumbItem, Demandedocuments } from "@/types";
+import { AnnessScolaire, BreadcrumbItem, Demandedocuments, Departement, Niveaux } from "@/types";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -26,10 +26,13 @@ interface messageFlash {
 
 interface CustomPageProps extends PageProps {
     documents: Demandedocuments[];
+    classes:Niveaux[];
+    departements:Departement[];
+    annes_scolaire:AnnessScolaire[];
 }
 
 export default function Documents({ flash }: messageFlash) {
-    const { documents } = usePage<CustomPageProps>().props;
+    const { documents, classes, departements, annes_scolaire } = usePage<CustomPageProps>().props;
 
     useEffect(() => {
         if (flash?.success) {
@@ -80,13 +83,12 @@ export default function Documents({ flash }: messageFlash) {
 
             <div className="space-y-4 p-2 sm:p-4 md:p-6">
 
-                {/* Header avec bouton */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Mes Demandes de Documents</h1>
-                    <SendDemandeDocument />
+                    <SendDemandeDocument classes={classes} departements={departements} annes_scolaire={annes_scolaire} />
                 </div>
 
-                {/* Cartes statistiques */}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
                         <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total des demandes</h3>
@@ -115,6 +117,9 @@ export default function Documents({ flash }: messageFlash) {
                                     <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                                     <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Date</th>
                                     <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Niveau</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Département</th>
+                                    <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Année Scolaire</th>
                                     <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Commentaire</th>
                                     <th scope="col" className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -135,6 +140,15 @@ export default function Documents({ flash }: messageFlash) {
                                             <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
                                                 {getStatusBadge(document.statut)}
                                             </td>
+                                            <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
+                                        {document.classes ? document.classes.niveau : "---"}
+                                    </td>
+                                     <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
+                                        {document.departement ? document.departement.name : "----"}
+                                    </td>
+                                     <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">
+                                        {document.annees_scolaire ? document.annees_scolaire.annee_scolaire : "----"}
+                                    </td>
                                             <td className="px-3 py-3 sm:px-4 sm:py-4 hidden md:table-cell" dangerouslySetInnerHTML={{ __html: document.comment }}>
                                             </td>
                                             <td className="px-3 py-3 sm:px-4 sm:py-4 whitespace-nowrap">

@@ -24,6 +24,9 @@ class demandeDocumentRequest extends FormRequest
         return [
             'type_document' => 'required|string|max:255',
             'comment' => 'nullable|string|max:500',
+            'classes_id' => 'nullable|exists:classes,id',
+            'departement_id' => 'nullable|exists:departements,id',
+            'annees_scolaire_id' => 'nullable|exists:annees_scolaires,id',
         ];
     }
 }

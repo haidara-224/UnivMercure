@@ -284,6 +284,12 @@ export interface Demandedocuments{
     type_document:string;
     traitement?:Traitement | null;
     traitement_id?:number | null;
+    departement_id:number;
+    departement:Departement;
+    classes_id:number;
+    classes:Niveaux;
+     annees_scolaire_id:number;
+    annees_scolaire:AnnessScolaire;
     comment:string;
     statut:string;
     etudiant:Etudiants;
