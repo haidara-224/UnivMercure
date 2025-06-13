@@ -69,7 +69,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Notes',
-        url: '/dashboard',
+        url: '/dashboard/notes',
         icon: Star,
     },
     {

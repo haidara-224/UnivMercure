@@ -168,7 +168,8 @@ export interface Notes {
     note1:number;
     note2:number;
     note3:number;
-
+    etudiant_id:number
+    etudiant:Etudiants
      classes:Niveaux;
     classes_id:number;
     annees_scolaire:AnnessScolaire;

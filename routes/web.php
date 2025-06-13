@@ -94,6 +94,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::get('/users', [DashboardController::class, 'users'])->name('users.index');
     Route::post('/users', [DashboardController::class, 'create'])->name('users.create');
     Route::put('/users', [DashboardController::class, 'AddOrRevoqueRole'])->name('users.roles');
+    //Notes Routes
+    Route::get('/notes',[NotesController::class,'notesAdmin'])->name('note.admin');
 
 
 });
