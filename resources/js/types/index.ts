@@ -88,6 +88,7 @@ export interface AnnessScolaire{
     annee_scolaire:string;
     date_debut:Date;
     date_fin:Date;
+    isActive:boolean;
     created_at:Date;
     updated_at:Date;
 }

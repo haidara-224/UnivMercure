@@ -44,4 +44,18 @@ class anneesScolaireController extends Controller
         return redirect()->back()->with('success','Années Scolaire a été Supprimé avec success');
 
     }
+    public function active(){
+        $annees_scolaire=anneesScolaire::select(['id','annee_scolaire','isActive'])->get();
+        return Inertia::render('dashboard/annees-scolaire/active',[
+            'annees'=>$annees_scolaire
+        ]);
+    }
+    public function activeannees(anneesScolaire $anneesScolaire)
+    {
+    anneesScolaire::where('id', '!=', $anneesScolaire->id)->update(['isActive' => false]);
+    $anneesScolaire->update(['isActive' => true]);
+
+        return redirect()->back()->with('success', 'Année activée avec succès');
+
+    }
 }

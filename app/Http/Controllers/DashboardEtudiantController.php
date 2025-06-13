@@ -36,8 +36,7 @@ class DashboardEtudiantController extends Controller
         if (!$etudiant) {
             return to_route('home');
         }
-
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+$derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
 
         $parcours = $etudiant->parcours()
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)

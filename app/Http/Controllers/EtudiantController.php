@@ -22,7 +22,7 @@ class EtudiantController extends Controller
      */
     public function index()
     {
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
 
 
         if (!$derniereAnneeScolaire) {

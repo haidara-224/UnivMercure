@@ -27,9 +27,9 @@ class EmploieController extends Controller
         };
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
         $departement = departement::select('id', 'name')->get();
         $salle = salle::select('id', 'salle')->get();
         $classes = classes::select('id', 'niveau')->get();

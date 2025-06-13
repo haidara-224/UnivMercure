@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AppLayout from "@/layouts/app-layout";
 import { AnnessScolaire, type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -94,6 +94,9 @@ export default function Page({ flash }: messageFlash) {
                     placeholder="Rechercher....."
                     autoComplete="off"
                 />
+                <div className="flex float-end mr-4">
+                    <Link href="/dashboard/annees-scolaire/active" className="bg-blue-600 p-2 rounded-xl mb-2 text-white">Activé une anees</Link>
+                </div>
                 <div className="overflow-x-auto w-full">
                     <Table className="w-full border border-gray-300 dark:border-gray-700 rounded-lg shadow-md divide-y divide-gray-200 dark:divide-gray-700">
                         <TableHeader>
@@ -101,6 +104,7 @@ export default function Page({ flash }: messageFlash) {
                                 <TableHead>Années Scolaire</TableHead>
                                 <TableHead>Début de l'année</TableHead>
                                 <TableHead>Fin de l'année</TableHead>
+                                <TableHead>Est Active</TableHead>
                                 <TableHead>Action</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -112,6 +116,9 @@ export default function Page({ flash }: messageFlash) {
                                     }</TableCell>
                                     <TableCell>{new Date(ann.date_fin).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" })
                                     }</TableCell>
+                                    {
+                                        ann.isActive ? 'Actif' :'inactif'
+                                    }
                                     <TableCell className="space-x-2">
                                         <Button className="bg-red-500 hover:bg-red-600" onClick={()=>onDelete(ann)}>
                                             <Trash2 />

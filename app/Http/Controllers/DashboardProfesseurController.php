@@ -35,7 +35,7 @@ class DashboardProfesseurController extends Controller
         if (!$prof) {
             return to_route('home');
         }
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
         $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->where('professeur_id', $prof->id)
@@ -80,7 +80,7 @@ class DashboardProfesseurController extends Controller
     }
     public function classe_dpt()
     {
-        // $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+        // $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
         $authUser = Auth::id();
         $prof = Professeur::where('user_id', $authUser)->first();
 
@@ -108,7 +108,7 @@ class DashboardProfesseurController extends Controller
             return to_route('home');
         }
 
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->first();
+        $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
 
         $infosProf = emploie::where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)

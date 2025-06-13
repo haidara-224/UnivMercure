@@ -36,6 +36,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::put('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'update'])->name('ann_scolaire.update');
     Route::delete('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'destroy'])->name('ann_scolaire.destroy');
     Route::post('/annees-scolaire', [anneesScolaireController::class, 'create'])->name('ann_scolaire.create');
+    Route::get('/annees-scolaire/active', [anneesScolaireController::class, 'active'])->name('ann_scolaire.active');
+    Route::patch('/annees-scolaire/active/{anneesScolaire}', [anneesScolaireController::class, 'activeannees'])->name('ann_scolaire.active');
     /**Faculties Route */
     Route::put('/faculty/{faculty}', [FacultyController::class, 'update'])->name('faculty.update');
     Route::post('/faculty', [FacultyController::class, 'create'])->name('faculty.create');
