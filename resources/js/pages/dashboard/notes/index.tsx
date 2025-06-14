@@ -19,7 +19,8 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Etudiants, Matiere, Notes } from "@/types";
 
@@ -111,6 +112,75 @@ export default function Page() {
     };
 
     const getActiveAnnee = anneesScolaire.find(a => a.isActive);
+const generatePDF = () => {
+    const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm'
+    });
+
+    filteredGroups.forEach((group, groupIndex) => {
+        if (groupIndex > 0) {
+            doc.addPage();
+        }
+        doc.setFontSize(16);
+        doc.setTextColor(40);
+        doc.text(`Bulletin de Notes - ${group.annee_scolaire}`, 105, 15, { align: 'center' });
+
+        doc.setFontSize(12);
+        doc.text(`Département: ${group.departement} - Classe: ${group.classe}`, 105, 22, { align: 'center' });
+        const tableData = group.notes.map(note => [
+            `${note.etudiant.name} ${note.etudiant.prenom}\n${note.etudiant.matricule}`,
+            note.matiere.nom,
+            note.note.note1?.toFixed(2) || '-',
+            note.note.note2?.toFixed(2) || '-',
+            note.note.note3?.toFixed(2) || '-',
+            note.note.moyenne || '-',
+            note.note.moyenne_literaire || '-'
+        ]);
+
+
+        autoTable(doc, {
+            startY: 30,
+            head: [
+                ['Étudiant', 'Matière', 'Note 1', 'Note 2', 'Note 3', 'Moyenne', 'Moyenne Littéraire']
+            ],
+            body: tableData,
+            theme: 'grid',
+            headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: 255,
+                fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245]
+            },
+            columnStyles: {
+                0: { cellWidth: 'auto', fontStyle: 'bold' },
+                1: { cellWidth: 'auto' },
+                2: { cellWidth: 'auto', halign: 'center' },
+                3: { cellWidth: 'auto', halign: 'center' },
+                4: { cellWidth: 'auto', halign: 'center' },
+                5: { cellWidth: 'auto', halign: 'center' },
+                6: { cellWidth: 'auto', halign: 'center' }
+            },
+            styles: {
+                fontSize: 10,
+                cellPadding: 2,
+                overflow: 'linebreak'
+            },
+            margin: { left: 10, right: 10 }
+        });
+        const pageCount = doc.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text(`Page ${i} sur ${pageCount}`, 200, 200, { align: 'right' });
+            doc.text(`Exporté le ${new Date().toLocaleDateString()}`, 10, 200);
+        }
+    });
+    doc.save(`Notes_${new Date().toISOString().slice(0, 10)}.pdf`);
+};
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -224,6 +294,7 @@ export default function Page() {
                                 <Button
                                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 flex items-center space-x-2"
                                     disabled={filteredGroups.length === 0}
+                                     onClick={generatePDF}
                                 >
                                     <Download className="h-4 w-4" />
                                     <span>Exporter</span>

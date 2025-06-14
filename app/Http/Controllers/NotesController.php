@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Laravel\Prompts\Note;
 use Illuminate\Support\Collection;
+
 class NotesController extends Controller
 {
     public function calculeNotes(Request $request)
@@ -81,47 +82,45 @@ class NotesController extends Controller
     }
 
 
-public function notesAdmin()
-{
-    $departements = departement::select(['id', 'name'])->get();
-    $niveaux = classes::select(['id', 'niveau'])->get();
-    $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->get();
+    public function notesAdmin()
+    {
+        $departements = departement::select(['id', 'name'])->get();
+        $niveaux = classes::select(['id', 'niveau'])->get();
+        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->get();
 
-    $notes = notes::with(['etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire'])
-        ->join('annees_scolaires', 'notes.annees_scolaire_id', '=', 'annees_scolaires.id')
-        ->orderByDesc('annees_scolaires.isActive')
-        ->select('notes.*')
-        ->get();
+        $notes = notes::with(['etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire'])
+            ->join('annees_scolaires', 'notes.annees_scolaire_id', '=', 'annees_scolaires.id')
+            ->orderByDesc('annees_scolaires.isActive')
+            ->select('notes.*')
+            ->get();
 
-    // On groupe les notes selon le triplet: année_scolaire_id - departement_id - classe_id
-    $grouped = $notes->groupBy(function ($note) {
-        return $note->annees_scolaire_id . '-' . $note->departement_id . '-' . $note->classe_id;
-    });
+        // On groupe les notes selon le triplet: année_scolaire_id - departement_id - classe_id
+        $grouped = $notes->groupBy(function ($note) {
+            return $note->annees_scolaire_id . '-' . $note->departement_id . '-' . $note->classe_id;
+        });
 
-    // On restructure pour le front
-    $groupedNotes = $grouped->map(function ($group) {
-        $first = $group->first();
-        return [
-            'annee_scolaire' => $first->anneesScolaire->annee_scolaire,
-            'departement' => $first->departement->name,
-            'classe' => $first->classes->niveau,
-            'notes' => $group->map(function ($note) {
-                return [
-                    'etudiant' => $note->etudiant ?? 'N/A',
-                    'matiere' => $note->matiere ?? 'N/A',
-                    'note' => $note
-                ];
-            })->toArray()
-        ];
-    })->values();
+        // On restructure pour le front
+        $groupedNotes = $grouped->map(function ($group) {
+            $first = $group->first();
+            return [
+                'annee_scolaire' => $first->anneesScolaire->annee_scolaire,
+                'departement' => $first->departement->name,
+                'classe' => $first->classes->niveau,
+                'notes' => $group->map(function ($note) {
+                    return [
+                        'etudiant' => $note->etudiant ?? 'N/A',
+                        'matiere' => $note->matiere ?? 'N/A',
+                        'note' => $note
+                    ];
+                })->toArray()
+            ];
+        })->values();
 
-    return Inertia::render('dashboard/notes/index', [
-        'notesGroupes' => $groupedNotes,
-        'departements' => $departements,
-        'niveaux' => $niveaux,
-        'anneesScolaire' => $anneesScolaire
-    ]);
-}
-
-
+        return Inertia::render('dashboard/notes/index', [
+            'notesGroupes' => $groupedNotes,
+            'departements' => $departements,
+            'niveaux' => $niveaux,
+            'anneesScolaire' => $anneesScolaire
+        ]);
+    }
 }
