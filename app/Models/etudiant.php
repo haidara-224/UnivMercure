@@ -35,4 +35,8 @@ class etudiant extends Model
     {
         return $this->hasMany(traitementdocuments::class, 'etudiant_id');
     }
+    public function repartitions()
+    {
+        return $this->hasMany(ExamsEtudiantsSalle::class);
+    }
 }

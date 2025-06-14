@@ -64,7 +64,7 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Examens',
-        url: '/dashboard',
+        url: '/dashboard/examens',
         icon: BookCheck,
     },
     {

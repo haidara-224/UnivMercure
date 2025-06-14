@@ -29,7 +29,6 @@ class salle extends Model
         if ($filters['search'] ?? false) {
             $query->search($filters['search']);
         }
-
     }
     public function scopeSort($query, $sort)
     {
@@ -50,5 +49,9 @@ class salle extends Model
         } else {
             return $query->orderBy('created_at', 'desc');
         }
+    }
+    public function repartitions()
+    {
+        return $this->hasMany(ExamsEtudiantsSalle::class);
     }
 }

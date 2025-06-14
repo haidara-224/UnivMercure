@@ -48,8 +48,11 @@ function AddMatiere({ departements }: AddMatiereProps) {
         post(route("dashboard.matiere.create"), {
             onFinish: () => {
                 reset();
-                setOpen(false);
+
             },
+            onSuccess:()=>{
+                 setOpen(false);
+            }
         });
     };
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\documentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamensController;
 use App\Http\Controllers\ExamensreponsesController;
 use App\Http\Controllers\ExamensStudentsresponsesController;
@@ -96,6 +97,10 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::put('/users', [DashboardController::class, 'AddOrRevoqueRole'])->name('users.roles');
     //Notes Routes
     Route::get('/notes',[NotesController::class,'notesAdmin'])->name('note.admin');
+    //Examen Routes
+    Route::get('/examens',[ExamController::class,'index'])->name('exam.index');
+    Route::get('/examens/create',[ExamController::class, 'create'])->name('exam.create');
+    Route::get('/examens/get-etudiants', [ExamController::class, 'getEtudiants']);
 
 
 });
