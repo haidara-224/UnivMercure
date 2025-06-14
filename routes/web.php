@@ -100,7 +100,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     //Examen Routes
     Route::get('/examens',[ExamController::class,'index'])->name('exam.index');
     Route::get('/examens/create',[ExamController::class, 'create'])->name('exam.create');
-    Route::get('/examens/get-etudiants', [ExamController::class, 'getEtudiants']);
+    Route::post('/examens/create',[ExamController::class, 'store'])->name('exam.store');
+
 
 
 });

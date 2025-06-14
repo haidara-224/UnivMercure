@@ -11,7 +11,7 @@ class ExamRequestValidated extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,18 @@ class ExamRequestValidated extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            //
-        ];
-    }
+   public function rules(): array
+{
+    return [
+        'module' => 'required',
+      'matiere_id' => 'required|exists:matieres,id',
+        'date_examen' => 'required|date',
+        'heure_debut' => 'required| date_format:H:i',
+        'heure_fin' => 'required|date_format:H:i',
+        'salle_id' => 'required|exists:salles,id',
+        'etudiant_ids' => 'required|array',
+        'etudiant_ids.*' => 'exists:etudiants,id',
+    ];
+}
+
 }
