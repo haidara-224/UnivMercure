@@ -22,7 +22,7 @@ class ExamController extends Controller
     $matieres = Matiere::select('id', 'nom')->get();
     $departements = Departement::select('id', 'name')->get();
     $classes = classes::select('id', 'niveau')->get();
-    $salles = Salle::select('id', 'salle')->get();
+    $salles = Salle::select('id', 'salle','capacite')->get();
     $anneeActive = AnneesScolaire::where('isActive', true)->first();
 
     $etudiants = collect();
