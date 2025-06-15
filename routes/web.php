@@ -19,6 +19,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ParcourController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\TraitementdocumentsController;
@@ -102,7 +103,9 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::get('/examens/create',[ExamController::class, 'create'])->name('exam.create');
     Route::post('/examens/create',[ExamController::class, 'store'])->name('exam.store');
     Route::delete('/examens/{examens}',[ExamController::class, 'delete'])->name('exam.delete');
-
+    //Parcours Routes
+    Route::get('/reincriptions',[ParcourController::class,'reincriptions'])->name('parcours.reincriptions');
+    Route::delete('/reincriptions/{parcours}',[ParcourController::class,'delete'])->name('parcours.delete');
 
 
 });

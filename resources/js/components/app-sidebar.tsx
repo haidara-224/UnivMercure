@@ -73,8 +73,8 @@ const mainNavItems: NavItem[] = [
         icon: Star,
     },
     {
-        title: 'Resultats',
-        url: '/dashboard',
+        title: 'Réinscription',
+        url: '/dashboard/reincriptions',
         icon: Proportions,
     },
       {
