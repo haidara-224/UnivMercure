@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "@inertiajs/react";
 import { CalendarIcon, ClockIcon, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -38,13 +39,18 @@ interface CustomPageProps extends PageProps {
     anneeActive: AnnessScolaire;
     etudiants: Etudiants[];
 }
-
-export default function Page() {
+interface messageFlash {
+    flash: {
+        success: string,
+        error: string
+    }
+}
+export default function Page({ flash }: messageFlash) {
     const { matieres, departements, classes, salles, anneeActive, etudiants: initialEtudiants } = usePage<CustomPageProps>().props;
     const [etudiants, setEtudiants] = useState<Etudiants[]>(initialEtudiants);
     const [loadingEtudiants, setLoadingEtudiants] = useState(false);
-
-    const { data, setData, post, processing, errors } = useForm({
+    const [ErrorEtudiant, setErrorEtudiant] = useState('')
+    const { data, setData, post, processing, errors,reset } = useForm({
         module: "",
         matiere_id: "",
         departement_id: "",
@@ -75,6 +81,16 @@ export default function Page() {
             onFinish: () => setLoadingEtudiants(false)
         });
     };
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        if (flash?.error) {
+            setErrorEtudiant(flash.error)
+            toast.error(flash.error);
+        }
+    }, [flash]);
+
 
     useEffect(() => {
         setEtudiants(initialEtudiants);
@@ -86,24 +102,22 @@ export default function Page() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route("examens.store"));
+        post(route("dashboard.exam.store"),{
+            onSuccess:()=>{
+
+                reset()
+            },
+
+        })
+        if (!flash.error) {
+            setErrorEtudiant('')
+             setEtudiants([]);
+        }
+
+
     };
 
-    const resetForm = () => {
-        setData({
-            module: "",
-            matiere_id: "",
-            departement_id: "",
-            classe_id: "",
-            annees_scolaire_id: anneeActive?.id || "",
-            date_examen: "",
-            heure_debut: "",
-            heure_fin: "",
-            salle_id: "",
-            etudiants_ids: [] as string[],
-        });
-        setEtudiants([]);
-    };
+
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -145,12 +159,12 @@ export default function Page() {
                                             </SelectTrigger>
                                             <SelectContent>
 
-                                                    <SelectItem  value="Premier Module">
-                                                        Premier Module
-                                                    </SelectItem>
-                                                      <SelectItem  value="Deuxieme Module">
-                                                        Deuxieme Module
-                                                    </SelectItem>
+                                                <SelectItem value="Premier Module">
+                                                    Premier Module
+                                                </SelectItem>
+                                                <SelectItem value="Deuxieme Module">
+                                                    Deuxieme Module
+                                                </SelectItem>
 
                                             </SelectContent>
                                         </Select>
@@ -247,6 +261,7 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="space-y-4 p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
+                                {ErrorEtudiant && <p className="text-xl text-red-500 mt-1">{ErrorEtudiant}</p>}
                                 <div className="flex items-center space-x-2">
                                     <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                                     <h3 className="text-lg font-semibold text-gray-900">Lieu et Participants</h3>
@@ -373,6 +388,9 @@ export default function Page() {
                                     </div>
                                 </div>
                             </div>
+                            {errors.etudiants_ids && (
+                                <p className="text-sm text-red-500 mt-1">{errors.etudiants_ids}</p>
+                            )}
                             <div className="space-y-4 p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
                                 <div className="flex items-center space-x-2">
                                     <div className="w-2 h-2 rounded-full bg-blue-500"></div>
@@ -431,14 +449,7 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="flex justify-between pt-4">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={resetForm}
-                                    className="text-gray-700 border-gray-300 hover:bg-gray-50"
-                                >
-                                    Réinitialiser
-                                </Button>
+
                                 <Button
                                     type="submit"
                                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 py-3 text-md font-medium shadow-md transition-all"

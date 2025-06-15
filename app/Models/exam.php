@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class exam extends Model
 {
@@ -10,5 +11,11 @@ class exam extends Model
     public function repartitions()
     {
         return $this->hasMany(ExamsEtudiantsSalle::class);
+    }
+    public function matiere(){
+        return $this->belongsTo(matiere::class);
+    }
+     public function anneesScolaire(){
+        return $this->belongsTo(anneesScolaire::class);
     }
 }

@@ -301,3 +301,37 @@ export interface Demandedocuments{
 
 
 
+export interface Exam {
+  id: number;
+  module: string;
+  matiere_id: number;
+  annees_scolaire_id: number;
+  date_examen: string;
+  heure_debut: string;
+  heure_fin: string;
+  created_at: string;
+  updated_at: string;
+
+  // 👇 ajout des relations
+  repartitions?: ExamsEtudiantsSalle[];
+  matiere?: Matiere;
+  annees_scolaire?: AnnessScolaire;
+}
+export interface ExamsEtudiantsSalle {
+  id: number;
+  exam_id: number;
+  etudiant_id: number;
+  salle_id: number;
+  created_at: string;
+  updated_at: string;
+
+  // 👇 relations reçues du backend
+  exam?: Exam;
+  etudiant?: Etudiants;
+  salle?: Salle;
+}
+
+
+
+
+

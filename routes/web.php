@@ -101,6 +101,7 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::get('/examens',[ExamController::class,'index'])->name('exam.index');
     Route::get('/examens/create',[ExamController::class, 'create'])->name('exam.create');
     Route::post('/examens/create',[ExamController::class, 'store'])->name('exam.store');
+    Route::delete('/examens/{examens}',[ExamController::class, 'delete'])->name('exam.delete');
 
 
 
