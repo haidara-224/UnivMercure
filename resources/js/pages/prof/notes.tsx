@@ -63,8 +63,14 @@ export default function EtudiantsPage({ flash }: messageFlash) {
     const [loading, setLoading] = useState(false);
     const [hasFiltered, setHasFiltered] = useState(false);
     const [isGenerate, setIsGenerate] = useState(false)
+
+    const [studentNotes, setStudentNotes] = useState<Record<number, FormData>>({});
+    const [selectedMatiere, setSelectedMatiere] = useState('');
+
     const matiereCorrespondante = enseignements.find(
-        (e) => e.departement_id === Number(selectedDepartement) && e.classes_id === Number(selectedClasse)
+        (e) => e.departement_id === Number(selectedDepartement) &&
+            e.classes_id === Number(selectedClasse) &&
+            e.matiere.id === Number(selectedMatiere)
     )?.matiere;
 
     useEffect(() => {
@@ -75,8 +81,6 @@ export default function EtudiantsPage({ flash }: messageFlash) {
     }, [flash]);
 
 
-
-    const [studentNotes, setStudentNotes] = useState<Record<number, FormData>>({});
 
     const handleFiltrer = () => {
         setLoading(true);
@@ -89,7 +93,10 @@ export default function EtudiantsPage({ flash }: messageFlash) {
 
             const initialNotes: Record<number, FormData> = {};
             result.forEach(p => {
-                const existingNote = notes[Number(p.etudiant.id)]?.[0];
+                // Trouver la note existante pour la matière sélectionnée
+                const existingNote = notes[Number(p.etudiant.id)]?.find(
+                    n => n.matiere_id === Number(selectedMatiere)
+                );
 
                 initialNotes[Number(p.etudiant.id)] = {
                     note1: existingNote?.note1 ?? 0,
@@ -97,15 +104,14 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                     note3: existingNote?.note3 ?? 0,
                     moyenne: existingNote?.moyenne ?? null,
                     moyenne_literaire: existingNote?.moyenne_literaire ?? null,
-                    matiere: Number(matiereCorrespondante?.id),
-                    module: 'hello babe',
+                    matiere: Number(selectedMatiere), // Utilisez la matière sélectionnée
+                    module: 'Module à définir', // Vous pourriez vouloir changer ceci
                     annees_scolaire: annees_scolaire.id,
                     classe: Number(selectedClasse),
                     departement: Number(selectedDepartement),
                     etudiant: Number(p.etudiant.id),
                 };
             });
-
 
             setStudentNotes(initialNotes);
             setFilteredData(result);
@@ -298,7 +304,31 @@ export default function EtudiantsPage({ flash }: messageFlash) {
         });
 
     };
+    useEffect(() => {
+        if (selectedMatiere && filteredData) {
+            const initialNotes: Record<number, FormData> = {};
+            filteredData.forEach(p => {
+                const existingNote = notes[Number(p.etudiant.id)]?.find(
+                    n => n.matiere_id === Number(selectedMatiere)
+                );
 
+                initialNotes[Number(p.etudiant.id)] = {
+                    note1: existingNote?.note1 ?? 0,
+                    note2: existingNote?.note2 ?? 0,
+                    note3: existingNote?.note3 ?? 0,
+                    moyenne: existingNote?.moyenne ?? null,
+                    moyenne_literaire: existingNote?.moyenne_literaire ?? null,
+                    matiere: Number(selectedMatiere),
+                    module: 'Module à définir',
+                    annees_scolaire: annees_scolaire.id,
+                    classe: Number(selectedClasse),
+                    departement: Number(selectedDepartement),
+                    etudiant: Number(p.etudiant.id),
+                };
+            });
+            setStudentNotes(initialNotes);
+        }
+    }, [selectedMatiere]);
     return (
         <AppSidebarLayoutProf breadcrumbs={breadcrumbs}>
             <Head title="Liste des étudiants" />
@@ -309,7 +339,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                 <h1 className='text-center text-2xl text-slate-800 mb-5'>Année Scolaire : {annees_scolaire.annee_scolaire}</h1>
 
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <div className="w-full md:w-1/3">
+                    <div className="w-full md:w-1/4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Département</label>
                         <select
                             value={selectedDepartement}
@@ -323,7 +353,7 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                         </select>
                     </div>
 
-                    <div className="w-full md:w-1/3">
+                    <div className="w-full md:w-1/4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Classe</label>
                         <select
                             value={selectedClasse}
@@ -337,7 +367,35 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                         </select>
                     </div>
 
-                    <div className="w-full md:w-1/3 flex items-center">
+                    <div className="w-full md:w-1/4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Matière</label>
+                        <select
+                            value={selectedMatiere}
+                            onChange={(e) => setSelectedMatiere(e.target.value)}
+                            className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+                            disabled={!selectedDepartement || !selectedClasse}
+                        >
+                            <option value="">Sélectionnez une matière</option>
+                            {Array.from(
+                                new Map(
+                                    enseignements
+                                        .filter(e =>
+                                            (!selectedDepartement || e.departement_id === Number(selectedDepartement)) &&
+                                            (!selectedClasse || e.classes_id === Number(selectedClasse))
+                                        )
+                                        .map(e => e.matiere)
+                                        .filter(Boolean) // Enlève les matières undefined
+                                        .map(matiere => [matiere.id, matiere]) // Crée une Map avec ID comme clé
+                                ).values()
+                            ).map((matiere) => (
+                                <option key={matiere.id} value={matiere.id}>
+                                    {matiere.nom} ({matiere.credits} crédits)
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="w-full md:w-1/4 flex items-center">
                         <Button
                             onClick={handleFiltrer}
                             className="w-fit mt-4"
@@ -417,8 +475,10 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                                                 <TableCell>{p.etudiant.prenom}</TableCell>
                                                 <TableCell>{p.classes.niveau}</TableCell>
                                                 <TableCell>{p.departement.name}</TableCell>
-                                                <TableCell>{matiereCorrespondante?.nom || '-'}</TableCell>
-                                                <TableCell>{matiereCorrespondante?.credits || '-'}</TableCell>
+
+
+                                                <TableCell>{selectedMatiere ? (enseignements.find(e => e.matiere.id === Number(selectedMatiere)))?.matiere.nom || '-' : '-'}</TableCell>
+                                                <TableCell>{selectedMatiere ? (enseignements.find(e => e.matiere.id === Number(selectedMatiere)))?.matiere.credits || '-' : '-'}</TableCell>
 
                                                 <TableCell>
                                                     <input
@@ -465,7 +525,11 @@ export default function EtudiantsPage({ flash }: messageFlash) {
                                                     <Button
                                                         onClick={() => handleSubmit(Number(p.etudiant.id))}
 
-                                                        disabled={!studentNotes[Number(p.etudiant.id)]?.note1 || !studentNotes[Number(p.etudiant.id)]?.note2 || !studentNotes[Number(p.etudiant.id)]?.note3 || !matiereCorrespondante?.id}
+                                                        // Dans votre bouton Enregistrer :
+                                                        disabled={!studentNotes[Number(p.etudiant.id)]?.note1 ||
+                                                            !studentNotes[Number(p.etudiant.id)]?.note2 ||
+                                                            !studentNotes[Number(p.etudiant.id)]?.note3 ||
+                                                            !selectedMatiere}
                                                     >
                                                         {loadingEtudiant === Number(p.etudiant.id) ? (
                                                             <Loader2 className="animate-spin w-4 h-4 mr-2" />

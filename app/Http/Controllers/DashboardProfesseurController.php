@@ -35,7 +35,7 @@ class DashboardProfesseurController extends Controller
         if (!$prof) {
             return to_route('home');
         }
-       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
+        $derniereAnneeScolaire = anneesScolaire::where('isActive', true)->first();
         $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->where('professeur_id', $prof->id)
@@ -108,7 +108,7 @@ class DashboardProfesseurController extends Controller
             return to_route('home');
         }
 
-        $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
+        $derniereAnneeScolaire = anneesScolaire::where('isActive', true)->first();
 
         $infosProf = emploie::where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
@@ -120,11 +120,11 @@ class DashboardProfesseurController extends Controller
         $classes = $infosProf->pluck('classes_id');
         $matieres = $infosProf->pluck('matiere_id')->unique();
         $notes = notes::with('etudiant')
-        ->whereIn('departement_id', $departements)
-        ->whereIn('classes_id', $classes)
-        ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
-        ->whereIn('matiere_id', $matieres)
-        ->get();
+            ->whereIn('departement_id', $departements)
+            ->whereIn('classes_id', $classes)
+            ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
+            ->whereIn('matiere_id', $matieres)
+            ->get();
 
 
         $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
@@ -133,22 +133,22 @@ class DashboardProfesseurController extends Controller
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
 
-            $enseignements = emploie::with('matiere')
+        $enseignements = emploie::with('matiere')
             ->where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->select('departement_id', 'classes_id', 'matiere_id')
-            ->get();
+            ->get()
+            ->unique('matiere_id')
+            ->values(); // pour réindexer proprement
 
         return Inertia::render('prof/notes', [
             'parcours' => $parcours,
             'departements' => departement::whereIn('id', $departements)->get(),
             'classes' => classes::whereIn('id', $classes)->get(),
-         'enseignements' => $enseignements,
-         'annees_scolaire' => $derniereAnneeScolaire,
-         'notes' => $notes->groupBy('etudiant_id'),
+            'enseignements' => $enseignements,
+            'annees_scolaire' => $derniereAnneeScolaire,
+            'notes' => $notes->groupBy('etudiant_id'),
 
         ]);
     }
-
-
 }
