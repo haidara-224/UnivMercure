@@ -93,13 +93,9 @@ class NotesController extends Controller
             ->orderByDesc('annees_scolaires.isActive')
             ->select('notes.*')
             ->get();
-
-        // On groupe les notes selon le triplet: année_scolaire_id - departement_id - classe_id
         $grouped = $notes->groupBy(function ($note) {
             return $note->annees_scolaire_id . '-' . $note->departement_id . '-' . $note->classe_id;
         });
-
-        // On restructure pour le front
         $groupedNotes = $grouped->map(function ($group) {
             $first = $group->first();
             return [

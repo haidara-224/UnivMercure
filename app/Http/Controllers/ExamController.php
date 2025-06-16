@@ -19,15 +19,15 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $exam = Exam::with('matiere','anneesScolaire','repartitions.etudiant', 'repartitions.salle','repartitions.exam')->get();
+        $exam = Exam::with('matiere', 'anneesScolaire', 'repartitions.etudiant', 'repartitions.salle', 'repartitions.exam')->get();
 
-        $examsEtudiants=ExamsEtudiantsSalle::with('etudiant','salle','etudiant')->get();
-        $salle=salle::select(['id','salle','capacite'])->get();
+        $examsEtudiants = ExamsEtudiantsSalle::with('etudiant', 'salle', 'etudiant')->get();
+        $salle = salle::select(['id', 'salle', 'capacite'])->get();
 
-        return Inertia::render('dashboard/examens/index',[
-            'exam'=>$exam,
-            'examsEtudiants'=>$examsEtudiants,
-            'salle'=>$salle
+        return Inertia::render('dashboard/examens/index', [
+            'exam' => $exam,
+            'examsEtudiants' => $examsEtudiants,
+            'salle' => $salle
         ]);
     }
     public function create(Request $request)
@@ -71,71 +71,69 @@ class ExamController extends Controller
 
 
 
-public function store(Request $request)
-{
-    $data = $request->validate([
-        'module' => 'required',
-        'matiere_id' => 'required|exists:matieres,id',
-        'date_examen' => 'required|date',
-        'heure_debut' => 'required|date_format:H:i',
-        'heure_fin' => 'required|date_format:H:i',
-        'salle_id' => 'required|exists:salles,id',
-        'etudiants_ids' => 'required|array',
-        'etudiants_ids.*' => 'exists:etudiants,id',
-    ]);
-
-    $anneeActive = AnneesScolaire::where('isActive', true)->first();
-
-    if (!$anneeActive) {
-        return back()->withErrors('Aucune année scolaire active trouvée.');
-    }
-    $salle = Salle::find($data['salle_id']);
-    $nombreEtudiants = count($data['etudiants_ids']);
-
-    if ($nombreEtudiants > $salle->capacite) {
-        return back()->with('error',"La salle ne peut contenir que {$salle->capacite} étudiants, mais vous avez sélectionné $nombreEtudiants étudiants.");
-    }
-    $etudiantsDejaInscrits = ExamsEtudiantsSalle::whereHas('exam', function ($query) use ($data, $anneeActive) {
-        $query->where('matiere_id', $data['matiere_id']);
-        $query->where('module', $data['module'])
-              ->where('annees_scolaire_id', $anneeActive->id);
-
-    })->whereIn('etudiant_id', $data['etudiants_ids'])->pluck('etudiant_id')->toArray();
-
-    if (!empty($etudiantsDejaInscrits)) {
-
-        return back()->with('error',"Certains étudiants sont déjà inscrits à un examen pour cette matière et ce module : " . implode(', ', $etudiantsDejaInscrits));
-    }
-    DB::beginTransaction();
-    try {
-        $exam = Exam::create([
-            'matiere_id' => $data['matiere_id'],
-            'module' => $data['module'],
-            'annees_scolaire_id' => $anneeActive->id,
-            'date_examen' => $data['date_examen'],
-            'heure_debut' => $data['heure_debut'],
-            'heure_fin' => $data['heure_fin'],
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'module' => 'required',
+            'matiere_id' => 'required|exists:matieres,id',
+            'date_examen' => 'required|date',
+            'heure_debut' => 'required|date_format:H:i',
+            'heure_fin' => 'required|date_format:H:i',
+            'salle_id' => 'required|exists:salles,id',
+            'etudiants_ids' => 'required|array',
+            'etudiants_ids.*' => 'exists:etudiants,id',
         ]);
 
-        foreach ($data['etudiants_ids'] as $etudiantId) {
-            ExamsEtudiantsSalle::create([
-                'exam_id' => $exam->id,
-                'etudiant_id' => $etudiantId,
-                'salle_id' => $data['salle_id'],
-            ]);
+        $anneeActive = AnneesScolaire::where('isActive', true)->first();
+
+        if (!$anneeActive) {
+            return back()->withErrors('Aucune année scolaire active trouvée.');
         }
+        $salle = Salle::find($data['salle_id']);
+        $nombreEtudiants = count($data['etudiants_ids']);
 
-        DB::commit();
-        return redirect()->back()->with('success', 'Examen créé avec succès.');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error','Erreur lors de la création de l\'examen : ' . $e->getMessage());
+        if ($nombreEtudiants > $salle->capacite) {
+            return back()->with('error', "La salle ne peut contenir que {$salle->capacite} étudiants, mais vous avez sélectionné $nombreEtudiants étudiants.");
+        }
+        $etudiantsDejaInscrits = ExamsEtudiantsSalle::whereHas('exam', function ($query) use ($data, $anneeActive) {
+            $query->where('matiere_id', $data['matiere_id']);
+            $query->where('module', $data['module'])
+                ->where('annees_scolaire_id', $anneeActive->id);
+        })->whereIn('etudiant_id', $data['etudiants_ids'])->pluck('etudiant_id')->toArray();
+
+        if (!empty($etudiantsDejaInscrits)) {
+
+            return back()->with('error', "Certains étudiants sont déjà inscrits à un examen pour cette matière et ce module : " . implode(', ', $etudiantsDejaInscrits));
+        }
+        DB::beginTransaction();
+        try {
+            $exam = Exam::create([
+                'matiere_id' => $data['matiere_id'],
+                'module' => $data['module'],
+                'annees_scolaire_id' => $anneeActive->id,
+                'date_examen' => $data['date_examen'],
+                'heure_debut' => $data['heure_debut'],
+                'heure_fin' => $data['heure_fin'],
+            ]);
+
+            foreach ($data['etudiants_ids'] as $etudiantId) {
+                ExamsEtudiantsSalle::create([
+                    'exam_id' => $exam->id,
+                    'etudiant_id' => $etudiantId,
+                    'salle_id' => $data['salle_id'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Examen créé avec succès.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Erreur lors de la création de l\'examen : ' . $e->getMessage());
+        }
     }
-}
-public function delete(exam $examens){
-    $examens->delete();
-return redirect()->back()->with('success', 'Examen Supprimé.');
-}
-
-
+    public function delete(exam $examens)
+    {
+        $examens->delete();
+        return redirect()->back()->with('success', 'Examen Supprimé.');
+    }
 }

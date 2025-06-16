@@ -106,6 +106,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     //Parcours Routes
     Route::get('/reincriptions',[ParcourController::class,'reincriptions'])->name('parcours.reincriptions');
     Route::delete('/reincriptions/{parcours}',[ParcourController::class,'delete'])->name('parcours.delete');
+    Route::get('/reinscriptions/create',[ParcourController::class,'create'])->name('parcours.create');
+    Route::post('/reinscriptions/create',[ParcourController::class,'store'])->name('parcours.store');
 
 
 });

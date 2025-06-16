@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/app-layout";
 import { AnnessScolaire, Departement, Niveaux, Parcours } from "@/types";
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import {
   GraduationCap,
@@ -155,7 +155,7 @@ const { delete: destroy,  } = useForm({});
                     <div className="flex gap-3">
                         <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                             <Plus className="w-4 h-4 mr-2" />
-                            Nouvelle réinscription
+                            <Link href="/dashboard/reinscriptions/create">Nouvelle réinscription</Link>
                         </button>
                     </div>
                 </div>
