@@ -109,6 +109,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::get('/reinscriptions/create',[ParcourController::class,'create'])->name('parcours.create');
     Route::post('/reinscriptions/create',[ParcourController::class,'store'])->name('parcours.store');
 
+    //Route Parcours
+    Route::get('/parcours',[ParcourController::class,'index'])->name('parcours.index');
 
 });
 Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {

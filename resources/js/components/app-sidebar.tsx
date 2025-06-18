@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound,BookOpenCheck,BookCheck,Proportions, Star, Heater, BookCopy } from 'lucide-react';
+import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound, BookOpenCheck, BookCheck, Proportions, Star, Heater, BookCopy, PartyPopperIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -77,7 +77,12 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard/reincriptions',
         icon: Proportions,
     },
-      {
+    {
+        title: 'Parcours',
+        url: '/dashboard/parcours',
+        icon: PartyPopperIcon,
+    },
+    {
         title: 'Utisateurs',
         url: '/dashboard/users',
         icon: UsersRound,

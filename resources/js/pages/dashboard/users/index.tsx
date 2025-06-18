@@ -5,7 +5,7 @@ import { Role } from "@/components/ui/dashbord/Roles/roles";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem, Roles, User } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
-import { Edit } from "lucide-react";
+import { Crown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 const breadcrumbs: BreadcrumbItem[] = [
@@ -69,7 +69,7 @@ export default function Page({ flash }: messageFlash){
                                     <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{user.roles.map(role => role.name).join(', ')}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                         <Button className="bg-green-500 hover:bg-green-600" onClick={() => HanddleRoles(user)}><Edit /></Button>
+                                         <Button className=" bg-amber-400 hover:bg-amber-600" onClick={() => HanddleRoles(user)}><Crown /></Button>
 
                                     </td>
                                 </tr>
