@@ -1,11 +1,10 @@
 import { SharedData } from "@/types";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { FormEventHandler, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import UserButton from "./UserButton";
-
 
 export function Headers() {
     const { auth, authUsers } = usePage<SharedData>().props;
@@ -37,14 +36,14 @@ export function Headers() {
                 transition={{ duration: 0.5 }}
             >
                 <div className="container mx-auto px-6">
-                    <div className="flex items-center justify-between">
+  <div className="flex items-center justify-between">
                         {/* Logo animé */}
                         <motion.div
                             className="flex items-center space-x-2"
                             whileHover={{ scale: 1.05 }}
                         >
                             <motion.div
-                                className={`p-2 rounded-lg ${scrolled ? 'bg-amber-500' : 'bg-white'}`}
+                                className={`p-1 rounded-full ${scrolled ? '' : 'bg-white'}`}
                                 animate={{
                                     rotate: [0, 10, -10, 0],
                                 }}
@@ -54,10 +53,17 @@ export function Headers() {
                                     repeatType: "reverse"
                                 }}
                             >
-                                <GraduationCap className={`w-6 h-6 ${scrolled ? 'text-white' : 'text-amber-500'}`} />
+                                <img
+                                    src="/mercure.jpeg"
+                                    alt="Mercure"
+                                    className="w-16 h-16 rounded-full  object-contain"
+                                />
                             </motion.div>
-                            <span className={`text-xl font-bold ${scrolled ? 'text-gray-900' : 'text-white'}`}>Université Mercure International</span>
+                            <span className={`text-xl font-bold ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+                                Université Mercure International
+                            </span>
                         </motion.div>
+
 
                         {/* Navigation desktop */}
                         <nav className="hidden md:flex space-x-8 items-center">
@@ -138,10 +144,10 @@ export function Headers() {
                                         }
 
                                     </motion.div>
-                                      <motion.div whileHover={{ scale: 1.05 }}>
-                                     <UserButton/>
+                                    <motion.div whileHover={{ scale: 1.05 }}>
+                                        <UserButton />
 
-                                      </motion.div>
+                                    </motion.div>
 
 
 
@@ -280,7 +286,7 @@ export function Headers() {
                                                 animate={{ x: 0, opacity: 1 }}
                                                 transition={{ delay: 0.7 }}
                                             >
-                                                <UserButton/>
+                                                <UserButton />
                                                 <Button
                                                     type='submit'
                                                     onClick={(e) => {
