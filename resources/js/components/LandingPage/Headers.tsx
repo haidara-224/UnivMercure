@@ -104,7 +104,7 @@ export function Headers() {
                                         {
                                             authUsers?.map((r) => (
                                                 r.name == 'etudiant' && <Link key={r.id}
-                                                    href={route('etudiant.index')}
+                                                    href={route('etudiant.documents')}
                                                     className="inline-block rounded-md bg-amber-500 px-5 py-1.5 text-sm font-medium leading-normal text-white hover:bg-amber-600 transition"
                                                 >
                                                     Mon Espace
