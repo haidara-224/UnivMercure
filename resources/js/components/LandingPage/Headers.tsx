@@ -76,6 +76,9 @@ export function Headers() {
                             <motion.div whileHover={{ scale: 1.1 }}>
                                 <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Admissions</Link>
                             </motion.div>
+                              <motion.div whileHover={{ scale: 1.1 }}>
+                                <Link href="/forum" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Forum</Link>
+                            </motion.div>
                             <motion.div whileHover={{ scale: 1.1 }}>
                                 <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Campus</Link>
                             </motion.div>
@@ -236,6 +239,19 @@ export function Headers() {
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
                                         Admissions
+                                    </Link>
+                                </motion.div>
+                                 <motion.div
+                                    initial={{ x: -50, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <Link
+                                        href="/forum"
+                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        Forum
                                     </Link>
                                 </motion.div>
                                 <motion.div

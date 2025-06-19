@@ -15,6 +15,7 @@ use App\Http\Controllers\ExamensController;
 use App\Http\Controllers\ExamensreponsesController;
 use App\Http\Controllers\ExamensStudentsresponsesController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
@@ -155,6 +156,8 @@ Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documenta
     Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');
 
 });
+Route::get('/forum',[ForumController::class,'index'])->name('forum');
+Route::get('/forum/details',[ForumController::class,'show'])->name('forum');
 
 require __DIR__ . '/settings.php';
 

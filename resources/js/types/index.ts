@@ -333,5 +333,24 @@ export interface ExamsEtudiantsSalle {
 
 
 
+export interface Topic {
+  id: number;
+  title: string;
+  author: string;
+  role: 'student' | 'teacher' | 'admin';
+  category: string;
+  replies: number;
+  likes: number;
+  lastActivity: string;
+  content: string;
+}
+export interface PostType {
+  id: number;
+  author: string;
+  role: 'student' | 'teacher' | 'admin';
+  content: string;
+  date: string;
+  likes: number;
+}
 
 
