@@ -36,7 +36,7 @@ export function Headers() {
                 transition={{ duration: 0.5 }}
             >
                 <div className="container mx-auto px-6">
-  <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                         {/* Logo animé */}
                         <motion.div
                             className="flex items-center space-x-2"
@@ -273,13 +273,61 @@ export function Headers() {
                                                 animate={{ x: 0, opacity: 1 }}
                                                 transition={{ delay: 0.6 }}
                                             >
-                                                <Link
+                                               {
+                                            authUsers?.map((r) => (
+                                                r.name == 'super admin' && <Link key={r.id}
                                                     href={route('dashboard.index')}
-                                                    className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
-                                                    onClick={() => setMobileMenuOpen(false)}
+                                                     className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
                                                 >
-                                                    Mon Espace
+                                                    Dashboard
                                                 </Link>
+                                            ))
+
+                                        }
+                                            </motion.div>
+                                            <motion.div whileHover={{ scale: 1.05 }}>
+                                                {
+                                                    authUsers?.map((r) => (
+                                                        r.name == 'etudiant' && <Link key={r.id}
+                                                            href={route('etudiant.documents')}
+                                                            className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                        >
+                                                            Mon Espace
+                                                        </Link>
+                                                    ))
+
+                                                }
+
+                                            </motion.div>
+                                            <motion.div whileHover={{ scale: 1.05 }}>
+                                                {
+                                                    authUsers?.map((r) => (
+                                                        r.name == 'personnel' && <Link key={r.id}
+
+                                                            href={route('prof.index')}
+                                                            className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                        >
+                                                            Mon Espace
+                                                        </Link>
+                                                    ))
+
+                                                }
+
+                                            </motion.div>
+                                            <motion.div whileHover={{ scale: 1.05 }}>
+                                                {
+                                                    authUsers?.map((r) => (
+                                                        r.name == 'documentaliste' && <Link key={r.id}
+
+                                                            href={route('documentaliste.index')}
+                                                            className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                        >
+                                                            Mon Espace
+                                                        </Link>
+                                                    ))
+
+                                                }
+
                                             </motion.div>
                                             <motion.div
                                                 initial={{ x: -50, opacity: 0 }}

@@ -6,9 +6,12 @@ export default function Hero() {
   return (
     <>
                 {/* Image de fond avec overlay */}
+                {
+                    /**https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80 */
+                }
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                        src="http://umi-gn.com/wp-content/uploads/2024/08/451292750_919555600184366_9151248013299387831_n.jpg.webp"
                         alt="Campus universitaire"
                         className="w-full h-full object-cover"
                     />
