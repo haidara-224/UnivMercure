@@ -7,10 +7,19 @@ import { Button } from "../ui/button";
 import UserButton from "./UserButton";
 
 export function Headers() {
-    const { auth, authUsers } = usePage<SharedData>().props;
+    const { url } = usePage();
+  const { auth, authUsers } = usePage<SharedData>().props;
+
+
     const { post } = useForm({});
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const isActive = (path: string) => {
+        if (!url) return false;
+
+        return url === path || (path !== "/" && url.startsWith(path));
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 10) {
@@ -67,24 +76,32 @@ export function Headers() {
 
                         {/* Navigation desktop */}
                         <nav className="hidden md:flex space-x-8 items-center">
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="#" className={`font-medium ${scrolled ? 'text-gray-900 hover:text-amber-500' : 'text-white hover:text-amber-300'} transition`}>Accueil</Link>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Formations</Link>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Admissions</Link>
-                            </motion.div>
-                              <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="/forum" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Forum</Link>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Campus</Link>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                                <Link href="#" className={`font-medium ${scrolled ? 'text-gray-600 hover:text-amber-500' : 'text-gray-200 hover:text-amber-300'} transition`}>Contact</Link>
-                            </motion.div>
+                            {[
+                                { path: "/", label: "Accueil" },
+                                { path: "/formations", label: "Formations" },
+                                { path: "/admissions", label: "Admissions" },
+                                { path: "/forum", label: "Forum" },
+                                { path: "/campus", label: "Campus" },
+                                { path: "/contact", label: "Contact" },
+                            ].map((item) => (
+                                <motion.div key={item.path} whileHover={{ scale: 1.1 }}>
+                                    <Link
+                                        href={item.path}
+                                        className={`font-medium ${isActive(item.path)
+                                                ? scrolled
+                                                    ? 'text-amber-500'
+                                                    : 'text-amber-300'
+                                                : scrolled
+                                                    ? 'text-gray-600 hover:text-amber-500'
+                                                    : 'text-gray-200 hover:text-amber-300'
+                                            } transition`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </motion.div>
+                            ))
+                            }
+
 
                             {/* Boutons de connexion */}
                             {auth.user ? (
@@ -202,104 +219,62 @@ export function Headers() {
                     >
                         <div className="container mx-auto px-6 py-4">
                             <nav className="flex flex-col space-y-6">
-                                <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.1 }}
-                                >
-                                    <Link
-                                        href="#"
-                                        className="text-2xl font-medium text-white hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
+
+                                {[
+                                    { path: "/", label: "Accueil" },
+                                    { path: "/formations", label: "Formations" },
+                                    { path: "/admissions", label: "Admissions" },
+                                    { path: "/forum", label: "Forum" },
+                                    { path: "/campus", label: "Campus" },
+                                    { path: "/contact", label: "Contact" },
+                                ].map((item, index) => (
+                                    <motion.div
+                                        key={item.path}
+                                        initial={{ x: -50, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.1 * (index + 1) }}
                                     >
-                                        Accueil
-                                    </Link>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.2 }}
-                                >
-                                    <Link
-                                        href="#"
-                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Formations
-                                    </Link>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.3 }}
-                                >
-                                    <Link
-                                        href="#"
-                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Admissions
-                                    </Link>
-                                </motion.div>
-                                 <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.3 }}
-                                >
-                                    <Link
-                                        href="/forum"
-                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Forum
-                                    </Link>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
-                                >
-                                    <Link
-                                        href="#"
-                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Campus
-                                    </Link>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ x: -50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.5 }}
-                                >
-                                    <Link
-                                        href="#"
-                                        className="text-2xl font-medium text-gray-300 hover:text-amber-300 transition"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Contact
-                                    </Link>
-                                </motion.div>
+                                        <Link
+                                            href={item.path}
+                                            className={`text-2xl font-medium ${
+                                                isActive(item.path)
+                                                    ? 'text-amber-300'
+                                                    : 'text-gray-300 hover:text-amber-300'
+                                            } transition`}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                                {auth.user && (
+                                     <motion.div whileHover={{ scale: 1.05 }}>
+                                        <UserButton />
+
+                                    </motion.div>
+
+                                )}
 
                                 <div className="pt-8 border-t border-gray-700 mt-4">
                                     {auth.user ? (
+
                                         <div className="flex flex-col space-y-4">
                                             <motion.div
                                                 initial={{ x: -50, opacity: 0 }}
                                                 animate={{ x: 0, opacity: 1 }}
                                                 transition={{ delay: 0.6 }}
                                             >
-                                               {
-                                            authUsers?.map((r) => (
-                                                r.name == 'super admin' && <Link key={r.id}
-                                                    href={route('dashboard.index')}
-                                                     className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
-                                                >
-                                                    Dashboard
-                                                </Link>
-                                            ))
+                                                {
+                                                    authUsers?.map((r) => (
+                                                        r.name == 'super admin' && <Link key={r.id}
+                                                            href={route('dashboard.index')}
+                                                            className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                        >
+                                                            Dashboard
+                                                        </Link>
+                                                    ))
 
-                                        }
+                                                }
                                             </motion.div>
                                             <motion.div whileHover={{ scale: 1.05 }}>
                                                 {
@@ -345,12 +320,13 @@ export function Headers() {
                                                 }
 
                                             </motion.div>
+
                                             <motion.div
                                                 initial={{ x: -50, opacity: 0 }}
                                                 animate={{ x: 0, opacity: 1 }}
                                                 transition={{ delay: 0.7 }}
                                             >
-                                                <UserButton />
+
                                                 <Button
                                                     type='submit'
                                                     onClick={(e) => {
@@ -362,6 +338,7 @@ export function Headers() {
                                                     Déconnexion
                                                 </Button>
                                             </motion.div>
+
                                         </div>
                                     ) : (
                                         <div className="flex flex-col space-y-4">
@@ -391,6 +368,8 @@ export function Headers() {
                                                     Créer un compte
                                                 </Link>
                                             </motion.div>
+
+
                                         </div>
                                     )}
                                 </div>
