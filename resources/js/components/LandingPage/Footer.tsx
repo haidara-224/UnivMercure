@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react'
 import { motion } from 'framer-motion'
+import { DeveloperCredit } from './Developper'
 
 
 
@@ -134,7 +135,9 @@ export default function Footers() {
                         </div>
                     </div>
                 </div>
-
+                <div>
+                    <DeveloperCredit/>
+                </div>
                 <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
                     <p>© {new Date().getFullYear()} Université Mercure International. Tous droits réservés.</p>
                 </div>

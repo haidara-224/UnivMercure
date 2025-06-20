@@ -1,9 +1,9 @@
-import { MapPin, Building2, School, Library, Camera, Activity } from 'lucide-react';
+import { MapPin, Building2, School, Library, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 const CampusSection = () => {
-  const [activeFilter, setActiveFilter] = useState('toutes');
+  const [activeFilter, setActiveFilter] = useState('batiments');
 
  const campusPhotos = [
   // Bâtiments (6)
@@ -17,7 +17,7 @@ const CampusSection = () => {
     id: 2,
     title: "Faculté des Sciences",
     category: "batiments",
-    url: "https://images.unsplash.com/photo-1562774053-701939a5854b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80"
+    url: "https://images.unsplash.com/photo-1575467678971-7cd5c2937dc6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY3VsdGUlMjBzY2llbmNlfGVufDB8fDB8fHww"
   },
   {
     id: 3,
@@ -55,7 +55,7 @@ const CampusSection = () => {
     id: 8,
     title: "Amphi Nelson Mandela",
     category: "amphis",
-    url: "https://images.unsplash.com/photo-1571260898938-1c70da891f06?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1434&q=80"
+    url: "https://images.unsplash.com/photo-1640416639872-93aabd8d91d3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YW1waGlzfGVufDB8fDB8fHww"
   },
   {
     id: 9,
@@ -73,7 +73,7 @@ const CampusSection = () => {
     id: 11,
     title: "Amphi informatique",
     category: "amphis",
-    url: "https://images.unsplash.com/photo-1592424002053-21f359ad7bdb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80"
+    url: "https://images.unsplash.com/photo-1569653402334-2e98fbaa80ee?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YW1waGlzJTIwaW5mb3JtYXRpcXVlfGVufDB8fDB8fHww"
   },
   {
     id: 12,
@@ -93,7 +93,7 @@ const CampusSection = () => {
     id: 14,
     title: "Laboratoire de chimie",
     category: "salles",
-    url: "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
+    url: "https://plus.unsplash.com/premium_photo-1721921134127-d836717619eb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YW1waGlzfGVufDB8fDB8fHww"
   },
   {
     id: 15,
@@ -143,13 +143,13 @@ const CampusSection = () => {
     id: 22,
     title: "Court de tennis",
     category: "sport",
-    url: "https://images.unsplash.com/photo-1622279450236-4bd63c7b4599?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+    url: "https://plus.unsplash.com/premium_photo-1685088255984-f672021dee19?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHNwb3J0JTIwdW5pdmVyc2l0YWlyZXxlbnwwfHwwfHx8MA%3D%3D"
   },
   {
     id: 23,
     title: "Piste d'athlétisme",
     category: "sport",
-    url: "https://images.unsplash.com/photo-1543357480-c60d400e2ef9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+    url: "https://images.unsplash.com/photo-1710429026709-bc8bd40685c9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3BvcnQlMjB1bml2ZXJzaXRhaXJlfGVufDB8fDB8fHww"
   },
   {
     id: 24,
@@ -161,7 +161,7 @@ const CampusSection = () => {
   // Lien Google Maps exact pour UMI Conakry
   const UMI_MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3859.238927476104!2d-13.6477865!3d9.6011443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xf1cd6737bf8b07f%3A0xc41cd7d40604ad66!2sUniversit%C3%A9%20Mercure%20International!5e1!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus";
 
-  const filteredPhotos = activeFilter === 'toutes'
+  const filteredPhotos = activeFilter === 'batiments'
     ? campusPhotos.slice(0, 6)
     : campusPhotos.filter(photo => photo.category === activeFilter);
 
@@ -218,7 +218,7 @@ const CampusSection = () => {
 
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
-              { id: 'toutes', icon: <Camera />, label: 'Toutes' },
+
               { id: 'batiments', icon: <Building2 />, label: 'Bâtiments' },
               { id: 'amphis', icon: <School />, label: 'Amphis' },
               { id: 'salles', icon: <Library />, label: 'Salles' },
