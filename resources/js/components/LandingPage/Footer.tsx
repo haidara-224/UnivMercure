@@ -3,26 +3,27 @@ import { motion } from 'framer-motion'
 
 
 
+
 export default function Footers() {
     return (
         <footer className="bg-gray-900 text-white py-12">
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                   <div>
-  <div className="flex items-center space-x-2 mb-4">
-    <div className="rounded-full overflow-hidden border-2 border-white shadow-md">
-      <img
-        src="/mercure.jpeg"
-        alt="Mercure"
-        className="w-12 h-12 object-cover" // object-cover au lieu de object-contain
-      />
-    </div>
-    <span className="text-xl font-bold">Université Mercure International</span>
-  </div>
-  <p className="text-gray-400">
-    Fondée en 2005, l'UMI s'engage à fournir une éducation de qualité et à promouvoir la recherche innovante en Guinée et en Afrique.
-  </p>
-</div>
+                    <div>
+                        <div className="flex items-center space-x-2 mb-4">
+                            <div className="rounded-full overflow-hidden border-2 border-white shadow-md">
+                                <img
+                                    src="/mercure.jpeg"
+                                    alt="Mercure"
+                                    className="w-12 h-12 object-cover" // object-cover au lieu de object-contain
+                                />
+                            </div>
+                            <span className="text-xl font-bold">Université Mercure International</span>
+                        </div>
+                        <p className="text-gray-400">
+                            Fondée en 2005, l'UMI s'engage à fournir une éducation de qualité et à promouvoir la recherche innovante en Guinée et en Afrique.
+                        </p>
+                    </div>
 
                     <div>
                         <h3 className="text-lg font-semibold mb-4">Liens rapides</h3>

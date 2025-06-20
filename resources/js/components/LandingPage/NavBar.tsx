@@ -16,11 +16,11 @@ const NavBar = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                         <div className="bg-white text-white p-2 rounded-lg">
-                            <img
+                           <Link href='/'> <img
                                 src="/mercure.jpeg"
                                 alt="Mercure"
                                 className="w-6 h-6 rounded-full  object-contain"
-                            />
+                            /></Link>
                         </div>
                         <span className="text-xl font-bold">Forum Universitaire</span>
                     </div>
