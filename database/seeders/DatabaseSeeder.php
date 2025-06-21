@@ -52,7 +52,9 @@ class DatabaseSeeder extends Seeder
          *
          */
 
-        ForumRoleUser::factory()->create(100);
+
+
+
 
     }
 }
