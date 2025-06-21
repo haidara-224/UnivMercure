@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class anneesScolaire extends Model
+class AnneesScolaire extends Model
 {
     use HasFactory;
     protected $fillable=['annee_scolaire','date_debut','date_fin','isActive'];
-    public function anneeScolaire()
-{
-    return $this->belongsTo(anneesScolaire::class);
-}
+
 
 }

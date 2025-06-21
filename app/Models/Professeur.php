@@ -25,11 +25,11 @@ class Professeur extends Model
     }
     public function departements():BelongsTo
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function classes():BelongsTo
     {
-        return $this->belongsTo(classes::class);
+        return $this->belongsTo(Classes::class);
     }
 
 }

@@ -4,28 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class examensclasse extends Model
+class Examensclasse extends Model
 {
     protected $fillable=['titre','sujet_explication','fichier','professeur_id','departement_id','classes_id','date_debut','date_fin','annees_scolaire_id'];
     public function departement()
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function classes()
     {
-        return $this->belongsTo(classes::class);
+        return $this->belongsTo(Classes::class);
     }
     public function professeur()
     {
-        return $this->belongsTo(professeur::class);
+        return $this->belongsTo(Professeur::class);
     }
     public function anneesScolaire()
     {
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
     public function examensclassresponses()
     {
-        return $this->hasMany(examensclasseresponse::class);
+        return $this->hasMany(Examensclasseresponse::class);
     }
 
 }

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExamRequestValidated;
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\exam;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Exam;
 use App\Models\ExamsEtudiantsSalle;
-use App\Models\matiere;
-use App\Models\parcour;
-use App\Models\salle;
+use App\Models\Matiere;
+use App\Models\Parcour;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -22,7 +22,7 @@ class ExamController extends Controller
         $exam = Exam::with('matiere', 'anneesScolaire', 'repartitions.etudiant', 'repartitions.salle', 'repartitions.exam')->get();
 
         $examsEtudiants = ExamsEtudiantsSalle::with('etudiant', 'salle', 'etudiant')->get();
-        $salle = salle::select(['id', 'salle', 'capacite'])->get();
+        $salle = Salle::select(['id', 'salle', 'capacite'])->get();
 
         return Inertia::render('dashboard/examens/index', [
             'exam' => $exam,
@@ -34,7 +34,7 @@ class ExamController extends Controller
     {
         $matieres = Matiere::select('id', 'nom')->get();
         $departements = Departement::select('id', 'name')->get();
-        $classes = classes::select('id', 'niveau')->get();
+        $classes = Classes::select('id', 'niveau')->get();
         $salles = Salle::select('id', 'salle', 'capacite')->get();
         $anneeActive = AnneesScolaire::where('isActive', true)->first();
 
@@ -131,7 +131,7 @@ class ExamController extends Controller
             return back()->with('error', 'Erreur lors de la création de l\'examen : ' . $e->getMessage());
         }
     }
-    public function delete(exam $examens)
+    public function delete(Exam $examens)
     {
         $examens->delete();
         return redirect()->back()->with('success', 'Examen Supprimé.');

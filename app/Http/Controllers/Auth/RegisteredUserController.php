@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\etudiant;
+use App\Models\Etudiant;
 use App\Models\Professeur;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'matriculeUser'=>['required']
         ]);
-        $etudiant=etudiant::where('matricule',$request->matriculeUser)->first();
+        $etudiant=Etudiant::where('matricule',$request->matriculeUser)->first();
         $Prof=Professeur::where('matricule',$request->matriculeUser)->first();
 
         $user = User::create([

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\parcour;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Parcour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -14,9 +14,9 @@ class ParcourController extends Controller
 {
     public function index()
     {
-          $AnneeScolaire = anneesScolaire::select(['id','annee_scolaire'])->get();
-        $departement = departement::select(['id', 'name'])->get();
-        $classe = classes::select(['id', 'niveau'])->get();
+          $AnneeScolaire = AnneesScolaire::select(['id','annee_scolaire'])->get();
+        $departement = Departement::select(['id', 'name'])->get();
+        $classe = Classes::select(['id', 'niveau'])->get();
 
 
         $parcours = Parcour::with(['anneesScolaire', 'departement', 'etudiant.user', 'classes'])
@@ -32,9 +32,9 @@ class ParcourController extends Controller
     }
     public function reincriptions()
     {
-        $derniereAnneeScolaire = anneesScolaire::where('isActive', true)->first();
-        $departement = departement::select(['id', 'name'])->get();
-        $classe = classes::select(['id', 'niveau'])->get();
+        $derniereAnneeScolaire = AnneesScolaire::where('isActive', true)->first();
+        $departement = Departement::select(['id', 'name'])->get();
+        $classe = Classes::select(['id', 'niveau'])->get();
         if (!$derniereAnneeScolaire) {
             return to_route('dashboard.index');
         }
@@ -52,11 +52,11 @@ class ParcourController extends Controller
     }
     public function create()
     {
-        $departement = departement::select(['id', 'name'])->get();
-        $classe = classes::select(['id', 'niveau'])->get();
+        $departement = Departement::select(['id', 'name'])->get();
+        $classe = Classes::select(['id', 'niveau'])->get();
         $parcours = Parcour::with(['anneesScolaire', 'departement', 'etudiant', 'classes'])
             ->get();
-        $annees = anneesScolaire::select(['id', 'annee_scolaire'])->get();
+        $annees = AnneesScolaire::select(['id', 'annee_scolaire'])->get();
         return Inertia::render('dashboard/reincriptions/create', [
             'parcours' => $parcours,
             'departements' => $departement,
@@ -106,7 +106,7 @@ foreach ($validated['etudiants'] as $etudiantId) {
 
 
 
-    public function delete(parcour $parcours)
+    public function delete(Parcour $parcours)
     {
         $parcours->delete();
         return back()->with('success', 'Parcours supprimé avec success');

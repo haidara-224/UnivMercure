@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\etudiant;
+use App\Models\Etudiant;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,7 +19,7 @@ class VerifcationMatriculeController extends Controller
 
         ]);
         $matricule=$data['matricule'];
-        $etudiant=etudiant::where('matricule',$matricule)->first();
+        $etudiant=Etudiant::where('matricule',$matricule)->first();
         $Prof=Professeur::where('matricule',$matricule)->first();
         if(optional($etudiant)->user_id || optional($Prof)->user_id)
         {

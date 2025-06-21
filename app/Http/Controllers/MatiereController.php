@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\formEditMatiereRequest;
 use App\Http\Requests\MatiereFormRequest;
-use App\Models\departement;
-use App\Models\matiere;
+use App\Models\Departement;
+use App\Models\Matiere;
 use Illuminate\Http\Request;
 
 class MatiereController extends Controller
 {
     public function index()
     {
-        $matieres = matiere::with('departements')->orderByDesc('created_at')->get();
-        $departement=departement::select('id','name')->get();
+        $matieres = Matiere::with('departements')->orderByDesc('created_at')->get();
+        $departement=Departement::select('id','name')->get();
         return inertia('dashboard/matieres/index', [
             'matiere' => $matieres,
             'departement' => $departement,
@@ -40,7 +40,7 @@ class MatiereController extends Controller
 
 
 
-    public function update(formEditMatiereRequest $request, matiere $matiere)
+    public function update(formEditMatiereRequest $request, Matiere $matiere)
     {
         $validated = $request->validated();
         if (!$validated) {
@@ -59,7 +59,7 @@ class MatiereController extends Controller
 
 
 
-    public function destroy(matiere $matiere)
+    public function destroy(Matiere $matiere)
     {
         $matiere->departements()->detach();
         $matiere->delete();

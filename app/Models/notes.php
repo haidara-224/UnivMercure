@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class notes extends Model
+class Notes extends Model
 {
     protected $fillable = [
         'note1',
@@ -24,25 +24,25 @@ class notes extends Model
 
     public function etudiant()
     {
-        return $this->belongsTo(etudiant::class);
+        return $this->belongsTo(Etudiant::class);
     }
 
     public function matiere()
     {
-        return $this->belongsTo(matiere::class);
+        return $this->belongsTo(Matiere::class);
     }
 
     public function classes()
     {
-        return $this->belongsTo(classes::class);
+        return $this->belongsTo(Classes::class);
     }
 
     public function departement()
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function anneesScolaire()
     {
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TutoCreateRequestValidated;
-use App\Models\classes;
-use App\Models\departement;
+use App\Models\Classes;
+use App\Models\Departement;
 use App\Models\Professeur;
-use App\Models\tuto;
+use App\Models\Tuto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,11 +15,11 @@ class TutoController extends Controller
 {
     public function cours()
     {
-        $departement = departement::select(['id', 'name'])->get();
-        $niveau = classes::select(['id', 'niveau'])->get();
+        $departement = Departement::select(['id', 'name'])->get();
+        $niveau = Classes::select(['id', 'niveau'])->get();
         $userAuth = Auth::id();
         $profId = Professeur::where('user_id', $userAuth)->value('id');
-        $tuto = tuto::with('classes', 'departement', 'professeur')
+        $tuto = Tuto::with('classes', 'departement', 'professeur')
             ->orderByDesc('created_at')
             ->where('professeur_id', $profId)->get();
 
@@ -29,7 +29,7 @@ class TutoController extends Controller
             'tutos' => $tuto
         ]);
     }
-    public function show(tuto $tuto)
+    public function show(Tuto $tuto)
     {
         $userAuth = Auth::id();
         $profId = Professeur::where('user_id', $userAuth)->value('id');
@@ -70,7 +70,7 @@ class TutoController extends Controller
         $userAuth = Auth::id();
         $profId = Professeur::where('user_id', $userAuth)->value('id');
 
-        tuto::create([
+        Tuto::create([
             'titre' => $data['titre'],
             'contenue' => $data['contenue'],
             'fichier' => $data['fichier'] ?? null,
@@ -119,7 +119,7 @@ class TutoController extends Controller
         return to_route('prof.cours')->with('success', 'Tutoriel modifié avec succès.');
     }
 
-    public function destroy(tuto $tuto)
+    public function destroy(Tuto $tuto)
     {
         $tuto->delete();
         return to_route('prof.cours')->with('success', 'Tutoriel supprimé avec succès.');

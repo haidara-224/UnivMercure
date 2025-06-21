@@ -7,25 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class etudiant extends Model
+class Etudiant extends Model
 {
     use HasFactory;
     protected $fillable = ['matricule', 'name', 'prenom', 'telephone', 'photo', 'sexe', 'user_id'];
     public function departement(): BelongsTo
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function parcours(): HasMany
     {
-        return $this->hasMany(parcour::class);
+        return $this->hasMany(Parcour::class);
     }
     public function examensstudents()
     {
-        $this->belongsToMany(examensstudents::class);
+        $this->belongsToMany(Examensstudents::class);
     }
     public function demandes()
     {
-        return $this->hasMany(demandedocuments::class, 'etudiant_id');
+        return $this->hasMany(Demandedocuments::class, 'etudiant_id');
     }
     public function user()
     {
@@ -33,7 +33,7 @@ class etudiant extends Model
     }
     public function traitementdocuments()
     {
-        return $this->hasMany(traitementdocuments::class, 'etudiant_id');
+        return $this->hasMany(Traitementdocuments::class, 'etudiant_id');
     }
     public function repartitions()
     {

@@ -4,24 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class examensstudents extends Model
+class Examensstudents extends Model
 {
     protected $fillable=['titre','sujet_explication','fichier','professeur_id','etudiant_id','date_debut','date_fin','annees_scolaire_id'];
 
     public function etudiants()
     {
-        return $this->belongsToMany(etudiant::class);
+        return $this->belongsToMany(Etudiant::class);
     }
     public function professeur()
     {
-        return $this->belongsTo(professeur::class);
+        return $this->belongsTo(Professeur::class);
     }
     public function anneesScolaire()
     {
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
     public function examensstudentsresponses()
     {
-        return $this->hasMany(examensstudentsresponses::class);
+        return $this->hasMany(Examensstudentsresponses::class);
     }
 }

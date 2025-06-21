@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\claculateNoteRequest;
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\emploie;
-use App\Models\notes;
-use App\Models\parcour;
-use App\Models\Professeur;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Notes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Laravel\Prompts\Note;
+
 use Illuminate\Support\Collection;
 
 class NotesController extends Controller
@@ -34,7 +31,7 @@ class NotesController extends Controller
         ]);
 
 
-        $existingNote = notes::where('etudiant_id', $validated['etudiant'])
+        $existingNote = Notes::where('etudiant_id', $validated['etudiant'])
             ->where('matiere_id', $validated['matiere'])
             ->where('annees_scolaire_id', $validated['annees_scolaire'])
             ->where('classes_id', $validated['classe'])
@@ -54,7 +51,7 @@ class NotesController extends Controller
             return redirect()->back()->with('success', 'Note mise à jour avec succès');
         } else {
 
-            notes::create([
+            Notes::create([
                 'etudiant_id' => $validated['etudiant'],
                 'note1' => $validated['note1'],
                 'note2' => $validated['note2'],
@@ -72,7 +69,7 @@ class NotesController extends Controller
     }
     public function generationPdf()
     {
-        $note = notes::with('etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire')
+        $note = Notes::with('etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire')
             ->latest()
             ->first();
 
@@ -84,11 +81,11 @@ class NotesController extends Controller
 
     public function notesAdmin()
     {
-        $departements = departement::select(['id', 'name'])->get();
-        $niveaux = classes::select(['id', 'niveau'])->get();
-        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->get();
+        $departements = Departement::select(['id', 'name'])->get();
+        $niveaux = Classes::select(['id', 'niveau'])->get();
+        $anneesScolaire = AnneesScolaire::select(['id', 'annee_scolaire'])->get();
 
-        $notes = notes::with(['etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire'])
+        $notes = Notes::with(['etudiant', 'matiere', 'departement', 'classes', 'anneesScolaire'])
             ->join('annees_scolaires', 'notes.annees_scolaire_id', '=', 'annees_scolaires.id')
             ->orderByDesc('annees_scolaires.isActive')
             ->select('notes.*')

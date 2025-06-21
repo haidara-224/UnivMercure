@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class exam extends Model
+class Exam extends Model
 {
     protected $fillable=['module','matiere_id','annees_scolaire_id','date_examen','heure_debut','heure_fin'];
     public function repartitions()
@@ -13,9 +13,9 @@ class exam extends Model
         return $this->hasMany(ExamsEtudiantsSalle::class);
     }
     public function matiere(){
-        return $this->belongsTo(matiere::class);
+        return $this->belongsTo(Matiere::class);
     }
      public function anneesScolaire(){
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
 }

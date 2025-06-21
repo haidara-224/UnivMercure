@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\demandedocuments;
-use App\Models\etudiant;
+use App\Models\Demandedocuments;
+use App\Models\Etudiant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -30,9 +30,9 @@ class TraitementEmail extends Mailable
      */
     public function envelope(): Envelope
     {
-        $demande = demandedocuments::find($this->demandedocuments_id);
+        $demande = Demandedocuments::find($this->demandedocuments_id);
         $etudinant_id = $demande->etudiant_id;
-        $etudiant = etudiant::find($etudinant_id);
+        $etudiant = Etudiant::find($etudinant_id);
         return new Envelope(
             from: 'univmercure224@gmail.com',
             subject: 'votre document a été traité',
@@ -47,7 +47,7 @@ class TraitementEmail extends Mailable
         return new Content(
             view: 'emails.traitement',
             with: [
-                'demande' => demandedocuments::find($this->demandedocuments_id),
+                'demande' => Demandedocuments::find($this->demandedocuments_id),
             ],
         );
     }

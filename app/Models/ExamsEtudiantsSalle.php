@@ -9,7 +9,7 @@ class ExamsEtudiantsSalle extends Model
     protected $fillable = ['exam_id', 'salle_id', 'etudiant_id'];
 
     public function exam() {
-        return $this->belongsTo(exam::class);
+        return $this->belongsTo(Exam::class);
     }
 
     public function salle() {

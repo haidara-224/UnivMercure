@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Models\demandedocuments;
-use App\Models\etudiant;
+use App\Models\Demandedocuments;
+use App\Models\Etudiant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -29,8 +29,8 @@ class DemandeNotification extends Notification implements ShouldQueue
     }
     public function toMail(object $notifiable): MailMessage
     {
-        $etudiant = etudiant::find($this->etudiantId);
-        $demande = demandedocuments::find($this->demandeId);
+        $etudiant = Etudiant::find($this->etudiantId);
+        $demande = Demandedocuments::find($this->demandeId);
 
         return (new MailMessage)
             ->greeting('Bonjour!')
@@ -41,8 +41,8 @@ class DemandeNotification extends Notification implements ShouldQueue
 
     public function toArray(object $notifiable): array
     {
-        $etudiant = etudiant::find($this->etudiantId);
-        $demande = demandedocuments::find($this->demandeId);
+        $etudiant = Etudiant::find($this->etudiantId);
+        $demande = Demandedocuments::find($this->demandeId);
 
         return [
             'etudiant_id' => $etudiant->id,
@@ -57,7 +57,7 @@ class DemandeNotification extends Notification implements ShouldQueue
 
   protected function getMessage()
 {
-    $demande = demandedocuments::find($this->demandeId);
+    $demande = Demandedocuments::find($this->demandeId);
     $statut = mb_strtolower(trim($demande->statut));
 
     return match ($statut) {

@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\anneesScolaireController;
+use App\Http\Controllers\AnneesScolaireController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\DasboardForumController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardEtudiantController;
 use App\Http\Controllers\DashboardProfesseurController;
 use App\Http\Controllers\DemandedocumentsController;
 use App\Http\Controllers\DepartementController;
-use App\Http\Controllers\documentalisteController;
+use App\Http\Controllers\DocumentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ExamController;
@@ -35,12 +36,12 @@ route::post('/verification-matricule',[VerifcationMatriculeController::class,'ve
 Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     /**Annees Scolaire Route */
-    Route::get('/annees-scolaire', [anneesScolaireController::class, 'index'])->name('ann_scolaire.index');
-    Route::put('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'update'])->name('ann_scolaire.update');
-    Route::delete('/annees-scolaire/{anneesScolaire}', [anneesScolaireController::class, 'destroy'])->name('ann_scolaire.destroy');
-    Route::post('/annees-scolaire', [anneesScolaireController::class, 'create'])->name('ann_scolaire.create');
-    Route::get('/annees-scolaire/active', [anneesScolaireController::class, 'active'])->name('ann_scolaire.active');
-    Route::patch('/annees-scolaire/active/{anneesScolaire}', [anneesScolaireController::class, 'activeannees'])->name('ann_scolaire.active');
+    Route::get('/annees-scolaire', [AnneesScolaireController::class, 'index'])->name('ann_scolaire.index');
+    Route::put('/annees-scolaire/{anneesScolaire}', [AnneesScolaireController::class, 'update'])->name('ann_scolaire.update');
+    Route::delete('/annees-scolaire/{anneesScolaire}', [AnneesScolaireController::class, 'destroy'])->name('ann_scolaire.destroy');
+    Route::post('/annees-scolaire', [AnneesScolaireController::class, 'create'])->name('ann_scolaire.create');
+    Route::get('/annees-scolaire/active', [AnneesScolaireController::class, 'active'])->name('ann_scolaire.active');
+    Route::patch('/annees-scolaire/active/{anneesScolaire}', [AnneesScolaireController::class, 'activeannees'])->name('ann_scolaire.active');
     /**Faculties Route */
     Route::put('/faculty/{faculty}', [FacultyController::class, 'update'])->name('faculty.update');
     Route::post('/faculty', [FacultyController::class, 'create'])->name('faculty.create');
@@ -112,6 +113,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
 
     //Route Parcours
     Route::get('/parcours',[ParcourController::class,'index'])->name('parcours.index');
+    //Route Forum
+    Route::get('/forum',[DasboardForumController::class,'index'])->name('forum.index');
 
 });
 Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
@@ -149,8 +152,8 @@ Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('
     Route::get('/examens/reponse/student/show/{examensstudents}/{etudiant}',[ExamensStudentsresponsesController::class,'show'])->name('examens.responses.student.show');
 });
 Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
-    Route::get('/', [documentalisteController::class, 'index'])->name('index');
-    Route::post('/{id}', [documentalisteController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::get('/', [DocumentalisteController::class, 'index'])->name('index');
+    Route::post('/{id}', [DocumentalisteController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 
     Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');

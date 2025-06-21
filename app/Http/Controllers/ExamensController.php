@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\responsesstudentRequestValidated;
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\emploie;
-use App\Models\examensclasse;
-use App\Models\examensclasseresponse;
-use App\Models\examensstudents;
-use App\Models\examensstudentsresponses;
-use App\Models\parcour;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Emploie;
+use App\Models\Examensclasse;
+use App\Models\Examensclasseresponse;
+use App\Models\Examensstudents;
+use App\Models\Examensstudentsresponses;
+use App\Models\Parcour;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +24,9 @@ class ExamensController extends Controller
     {
         $prof = Professeur::where('user_id', Auth::id())->firstOrFail();
 
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
+        $derniereAnneeScolaire =  AnneesScolaire::where('isActive', true)->first();
 
-        $infosProf = emploie::where('professeur_id', $prof->id)
+        $infosProf = Emploie::where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->select('departement_id', 'classes_id')
             ->distinct()
@@ -36,21 +36,21 @@ class ExamensController extends Controller
         $dptforProf = $infosProf->pluck('departement_id');
         $clsForProf = $infosProf->pluck('classes_id');
 
-        $departements = departement::whereIn('id', $infosProf->pluck('departement_id')->unique())
+        $departements = Departement::whereIn('id', $infosProf->pluck('departement_id')->unique())
             ->select('id', 'name')
             ->get();
 
 
-        $niveaux = classes::whereIn('id', $infosProf->pluck('classes_id')->unique())
+        $niveaux = Classes::whereIn('id', $infosProf->pluck('classes_id')->unique())
             ->select('id', 'niveau')
             ->get();
-        $examensclasse = examensclasse::with('anneesScolaire', 'departement', 'classes')
+        $examensclasse = Examensclasse::with('anneesScolaire', 'departement', 'classes')
             ->orderByDesc('created_at')
             ->where('professeur_id', $prof->id)->get();
-        $examensEtudiant = examensstudents::with('etudiants')
+        $examensEtudiant = Examensstudents::with('etudiants')
             ->orderByDesc('created_at')
             ->where('professeur_id', $prof->id)->get();
-        $parcours = parcour::with(['classes', 'departement', 'etudiant'])
+        $parcours = Parcour::with(['classes', 'departement', 'etudiant'])
             ->whereIn('departement_id', $dptforProf)
             ->whereIn('classes_id', $clsForProf)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
@@ -62,15 +62,15 @@ class ExamensController extends Controller
             'Niveau' => $niveaux,
             'examens' => $examensclasse,
             'examensEtd' => $examensEtudiant,
-            'dptProf' => departement::whereIn('id', $dptforProf)->get(),
-            'clsProf' => classes::whereIn('id', $clsForProf)->get(),
+            'dptProf' => Departement::whereIn('id', $dptforProf)->get(),
+            'clsProf' => Classes::whereIn('id', $clsForProf)->get(),
         ]);
     }
     public function store(Request $request)
     {
         $type = $request->input('type');
 
-        $derniereAnneeScolaire = anneesScolaire::latest('annee_scolaire')->firstOrFail();
+        $derniereAnneeScolaire = AnneesScolaire::latest('annee_scolaire')->firstOrFail();
         $profId = Professeur::where('user_id', Auth::id())->value('id');
 
         if ($type === 'classe') {
@@ -88,7 +88,7 @@ class ExamensController extends Controller
                 $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
             }
 
-            examensclasse::create([
+            Examensclasse::create([
                 'titre' => $data['titre'],
                 'sujet_explication' => $data['sujet_explication'] ?? null,
                 'fichier' => $data['fichier'] ?? null,
@@ -133,7 +133,7 @@ class ExamensController extends Controller
         return back()->with('success', 'Examen créé avec succès.');
     }
 
-    public function createForClasseUpdate(Request $request, examensclasse $examen)
+    public function createForClasseUpdate(Request $request, Examensclasse $examen)
     {
         $data = $request->validate([
             'titre' => ['required', 'string', 'max:50'],
@@ -144,7 +144,7 @@ class ExamensController extends Controller
             'departement' => ['required', 'exists:departements,id'],
             'niveaux' => ['required', 'exists:classes,id'],
         ]);
-        $derniereAnneeScolaire = anneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
+        $derniereAnneeScolaire = AnneesScolaire::orderByDesc('annee_scolaire')->firstOrFail();
         if ($request->hasFile('fichier')) {
             $data['fichier'] = $request->file('fichier')->store('examens/fichiers', 'public');
         }
@@ -167,9 +167,9 @@ class ExamensController extends Controller
     public function delete($type, $id)
     {
         if ($type === 'classe') {
-            $examen = examensclasse::findOrFail($id);
+            $examen = Examensclasse::findOrFail($id);
         } elseif ($type === 'etudiant') {
-            $examen = examensstudents::findOrFail($id);
+            $examen = Examensstudents::findOrFail($id);
         } else {
             abort(404);
         }
@@ -184,7 +184,7 @@ class ExamensController extends Controller
 
         $etudiant = Auth::user()->etudiant;
 
-        $examensEtudiant = examensstudents::with('etudiants', 'professeur', 'anneesScolaire')
+        $examensEtudiant = Examensstudents::with('etudiants', 'professeur', 'anneesScolaire')
             ->whereHas('etudiants', function ($query) use ($etudiant) {
                 $query->where('etudiants.id', $etudiant->id);
             })
@@ -196,7 +196,7 @@ class ExamensController extends Controller
         $departementIds = $parcours->pluck('departement_id')->unique();
 
 
-        $examensClasse = examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
+        $examensClasse = Examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
             ->whereIn('classes_id', $classesIds)
             ->whereIn('departement_id', $departementIds)
             ->orderByDesc('created_at')
@@ -207,7 +207,7 @@ class ExamensController extends Controller
             'examens' => $examensClasse,
         ]);
     }
-    public function createResponseStudent(examensstudents $examen)
+    public function createResponseStudent(Examensstudents $examen)
     {
         $etudiant = Auth::user()->etudiant;
 
@@ -220,7 +220,7 @@ class ExamensController extends Controller
             'response' => $examen->examensstudentsresponses->where('etudiant_id', $etudiant->id)->first(),
         ]);
     }
-    public function storeResponseStudent(Request $request, examensstudents $examen)
+    public function storeResponseStudent(Request $request, Examensstudents $examen)
     {
         $request->validate([
             'response' => ['nullable', 'string',],
@@ -234,7 +234,7 @@ class ExamensController extends Controller
             $fichierPath = $request->file('fichier')->store('response/fichiers', 'public');
         }
 
-        $reponseExistante = examensstudentsresponses::where('examensstudents_id', $examen->id)
+        $reponseExistante = Examensstudentsresponses::where('examensstudents_id', $examen->id)
             ->where('etudiant_id', $etudiantId)
             ->first();
 
@@ -251,7 +251,7 @@ class ExamensController extends Controller
             return back()->with('success', 'Réponse mise à jour avec succès.');
         }
 
-        examensstudentsresponses::create(array_merge($data, [
+        Examensstudentsresponses::create(array_merge($data, [
             'examensstudents_id' => $examen->id,
             'etudiant_id' => $etudiantId,
         ]));
@@ -259,7 +259,7 @@ class ExamensController extends Controller
         return back()->with('success', 'Réponse soumise avec succès.');
     }
 
-    public function createResponseStudentclass(examensclasse $examen)
+    public function createResponseStudentclass(Examensclasse $examen)
     {
         $etudiant = Auth::user()->etudiant;
 
@@ -271,7 +271,7 @@ class ExamensController extends Controller
 
         ]);
     }
-     public function storeResponseStudentclass(Request $request, examensclasse $examen)
+     public function storeResponseStudentclass(Request $request, Examensclasse $examen)
     {
         $request->validate([
             'response' => ['nullable', 'string',],
@@ -285,7 +285,7 @@ class ExamensController extends Controller
             $fichierPath = $request->file('fichier')->store('response/fichiers', 'public');
         }
 
-        $reponseExistante = examensclasseresponse::where('examensclasse_id', $examen->id)
+        $reponseExistante = Examensclasseresponse::where('examensclasse_id', $examen->id)
             ->where('etudiant_id', $etudiantId)
             ->first();
 
@@ -302,7 +302,7 @@ class ExamensController extends Controller
             return back()->with('success', 'Réponse mise à jour avec succès.');
         }
 
-        examensclasseresponse::create(array_merge($data, [
+        Examensclasseresponse::create(array_merge($data, [
             'examensclasse_id' => $examen->id,
             'etudiant_id' => $etudiantId,
         ]));

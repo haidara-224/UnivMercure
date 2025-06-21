@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\examensclasse;
-use App\Models\examensclasseresponse;
+use App\Models\Examensclasse;
+use App\Models\Examensclasseresponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ExamensreponsesController extends Controller
 {
-    public function index(examensclasse $examen){
+    public function index(Examensclasse $examen){
     $examen->load([
         'examensclassresponses',
         'examensclassresponses.etudiant',
@@ -24,7 +24,7 @@ class ExamensreponsesController extends Controller
     ]);
 
 }
-   public function show(examensclasseresponse $examensclasseresponse){
+   public function show(Examensclasseresponse $examensclasseresponse){
         $examensclasseresponse->load([
             'etudiant',
             'examensclasse.departement',

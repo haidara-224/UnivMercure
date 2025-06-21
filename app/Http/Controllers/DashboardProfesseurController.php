@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\emploie;
-use App\Models\matiere;
-use App\Models\notes;
-use App\Models\parcour;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Emploie;
+use App\Models\Notes;
+use App\Models\Parcour;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,8 +34,8 @@ class DashboardProfesseurController extends Controller
         if (!$prof) {
             return to_route('home');
         }
-        $derniereAnneeScolaire = anneesScolaire::where('isActive', true)->first();
-        $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
+        $derniereAnneeScolaire = AnneesScolaire::where('isActive', true)->first();
+        $emplois = Emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->where('professeur_id', $prof->id)
             ->get();
@@ -88,7 +87,7 @@ class DashboardProfesseurController extends Controller
             return to_route('home');
         }
 
-        $classeDepartement = emploie::with(['matiere', 'salle', 'classes', 'departement', 'anneesScolaire'])
+        $classeDepartement = Emploie::with(['matiere', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('professeur_id', $prof->id)
             ->join('annees_scolaires', 'emploies.annees_scolaire_id', '=', 'annees_scolaires.id')
             ->orderByDesc('annees_scolaires.annee_scolaire')
@@ -108,9 +107,9 @@ class DashboardProfesseurController extends Controller
             return to_route('home');
         }
 
-        $derniereAnneeScolaire = anneesScolaire::where('isActive', true)->first();
+        $derniereAnneeScolaire = AnneesScolaire::where('isActive', true)->first();
 
-        $infosProf = emploie::where('professeur_id', $prof->id)
+        $infosProf = Emploie::where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->select('departement_id', 'classes_id', 'matiere_id')
             ->distinct()
@@ -119,7 +118,7 @@ class DashboardProfesseurController extends Controller
         $departements = $infosProf->pluck('departement_id');
         $classes = $infosProf->pluck('classes_id');
         $matieres = $infosProf->pluck('matiere_id')->unique();
-        $notes = notes::with('etudiant')
+        $notes = Notes::with('etudiant')
             ->whereIn('departement_id', $departements)
             ->whereIn('classes_id', $classes)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
@@ -133,7 +132,7 @@ class DashboardProfesseurController extends Controller
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
 
-        $enseignements = emploie::with('matiere')
+        $enseignements = Emploie::with('matiere')
             ->where('professeur_id', $prof->id)
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->select('departement_id', 'classes_id', 'matiere_id')
@@ -143,8 +142,8 @@ class DashboardProfesseurController extends Controller
 
         return Inertia::render('prof/notes', [
             'parcours' => $parcours,
-            'departements' => departement::whereIn('id', $departements)->get(),
-            'classes' => classes::whereIn('id', $classes)->get(),
+            'departements' => Departement::whereIn('id', $departements)->get(),
+            'classes' => Classes::whereIn('id', $classes)->get(),
             'enseignements' => $enseignements,
             'annees_scolaire' => $derniereAnneeScolaire,
             'notes' => $notes->groupBy('etudiant_id'),

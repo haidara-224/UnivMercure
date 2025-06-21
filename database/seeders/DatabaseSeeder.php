@@ -6,8 +6,10 @@ use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
-
+use App\Models\forum;
+use App\Models\ForumRoleUser;
 use App\Models\parcour;
+use App\Models\postforum;
 use App\Models\Professeur;
 use App\Models\salle;
 use App\Models\User;
@@ -23,12 +25,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $this->call(facultySeeder::class);
+        /*
+           $this->call(facultySeeder::class);
         $this->call(RoleSeeder::class);
         Professeur::factory(50)->create();
         departement::factory(8)->create();
         anneesScolaire::factory(10)->create();
-       // classes::factory(30)->create();
+       classes::factory(30)->create();
        $this->call(NiveauSeeder::class);
         etudiant::factory(800)->create();
         parcour::factory(100)->create();
@@ -43,5 +46,13 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->assignRole('super admin');
         $user2->assignRole('super admin');
+         $this->call(CategoryForumSeeder::class);
+        forum::factory(100)->create();
+        postforum::factory(400)->create();
+         *
+         */
+
+        ForumRoleUser::factory()->create(100);
+
     }
 }

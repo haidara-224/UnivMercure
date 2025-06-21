@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\demandeDocumentRequest;
-use App\Models\demandedocuments;
-use App\Models\etudiant;
+use App\Models\Demandedocuments;
+use App\Models\Etudiant;
 use App\Models\User;
 use App\Notifications\DemandeNotification;
 use Illuminate\Http\Request;
@@ -20,13 +20,13 @@ class DemandedocumentsController extends Controller
 
         $users = User::role(['documentaliste', 'super admin', 'admin'])->get();
 
-        $etudiant = etudiant::where('user_id', $userId)->first();
+        $etudiant = Etudiant::where('user_id', $userId)->first();
 
         if (!$etudiant) {
             return redirect()->back()->withErrors('Étudiant non trouvé.');
         }
 
-        $demandeDocument = new demandedocuments();
+        $demandeDocument = new Demandedocuments();
         $demandeDocument->etudiant_id = $etudiant->id;
         $demandeDocument->type_document = $documentRequest['type_document'];
         $demandeDocument->comment = $documentRequest['comment'];
@@ -43,7 +43,7 @@ class DemandedocumentsController extends Controller
     }
     public function destroy($id)
     {
-        $document = demandedocuments::findOrFail($id);
+        $document = Demandedocuments::findOrFail($id);
         $document->delete();
 
         return redirect()->back()->with('success', 'Demande de document supprimée avec succès.');

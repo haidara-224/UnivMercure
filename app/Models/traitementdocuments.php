@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class traitementdocuments extends Model
+class Traitementdocuments extends Model
 {
     protected $fillable = [
         'demandedocuments_id',
@@ -12,7 +12,7 @@ class traitementdocuments extends Model
     ];
     public function demande()
 {
-    return $this->belongsTo(demandedocuments::class, 'demandedocuments_id');
+    return $this->belongsTo(Demandedocuments::class, 'demandedocuments_id');
 }
 
 }

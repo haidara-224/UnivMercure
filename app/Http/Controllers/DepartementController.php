@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\departementAddRequestValidated;
 use App\Http\Requests\DepartementRequestValidated;
 use App\Http\Requests\facultyRequestValidated;
-use App\Models\departement;
-use App\Models\faculty;
+use App\Models\Departement;
+use App\Models\Faculty;
 use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,9 +18,9 @@ class DepartementController extends Controller
      */
     public function index()
     {
-        $departement=departement::with(['professeur','faculty'])->get();
+        $departement=Departement::with(['professeur','faculty'])->get();
         $chefDep=Professeur::orderByDesc('created_at')->get();
-        $faculty=faculty::orderByDesc('created_at')->get();
+        $faculty=Faculty::orderByDesc('created_at')->get();
 
         return Inertia::render('dashboard/departement/index',[
             'departement'=>$departement,
@@ -36,7 +36,7 @@ class DepartementController extends Controller
     public function create(departementAddRequestValidated $request)
     {
         $data = $request->validated();
-        departement::create([
+        Departement::create([
             'name' => $data['name'],
             'professeur_id' => $data['chef'],
             'faculty_id' => $data['faculty'],
@@ -46,7 +46,7 @@ class DepartementController extends Controller
     }
 
 
-    public function update(DepartementRequestValidated $request, departement $departement)
+    public function update(DepartementRequestValidated $request, Departement $departement)
     {
         $data = $request->validated();
         $departement->update([
@@ -60,7 +60,7 @@ class DepartementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(departement $departement)
+    public function destroy(Departement $departement)
     {
         $departement->delete();
         return redirect()->back()->with('success','departement supprimé avec success');

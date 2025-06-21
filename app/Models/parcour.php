@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class parcour extends Model
+class Parcour extends Model
 {
     use HasFactory;
     protected $fillable=['etudiant_id','classes_id','departement_id','annees_scolaire_id'];
     public function classes()
     {
-        return $this->belongsTo(classes::class);
+        return $this->belongsTo(Classes::class);
     }
     public function anneesScolaire(){
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
     public function departement()
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function etudiant()
     {
-        return $this->belongsTo(etudiant::class);
+        return $this->belongsTo(Etudiant::class);
     }
 }

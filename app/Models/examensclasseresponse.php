@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class examensclasseresponse extends Model
+class Examensclasseresponse extends Model
 {
     protected $fillable = [
         'examensclasse_id',
@@ -17,7 +17,7 @@ class examensclasseresponse extends Model
 
     public function examensclasse()
     {
-        return $this->belongsTo(examensclasse::class);
+        return $this->belongsTo(Examensclasse::class);
     }
 
     public function etudiant()

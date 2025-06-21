@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\TraitementEmail;
-use App\Models\demandedocuments;
-use App\Models\traitementdocuments;
+use App\Models\Demandedocuments;
+use App\Models\Traitementdocuments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +19,7 @@ class TraitementdocumentsController extends Controller
     ]);
 
 
-    $traitement = traitementdocuments::where('demandedocuments_id', $request->demandedocument_id)->first();
+    $traitement = Traitementdocuments::where('demandedocuments_id', $request->demandedocument_id)->first();
 
 
     if ($traitement && $traitement->document && Storage::disk('public')->exists($traitement->document)) {
@@ -27,7 +27,7 @@ class TraitementdocumentsController extends Controller
     }
 
     if (!$traitement) {
-        $traitement = new traitementdocuments();
+        $traitement = new Traitementdocuments();
         $traitement->demandedocuments_id = $request->demandedocument_id;
     }
 
@@ -41,7 +41,7 @@ class TraitementdocumentsController extends Controller
     $traitement->save();
 
 
-    $demande = demandedocuments::find($request->demandedocument_id);
+    $demande = Demandedocuments::find($request->demandedocument_id);
     if ($demande) {
         $demande->statut = 'traité';
         $demande->save();

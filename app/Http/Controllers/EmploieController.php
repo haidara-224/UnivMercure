@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\emploie;
-use App\Models\matiere;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Emploie;
+use App\Models\Matiere;
 use App\Models\Professeur;
-use App\Models\salle;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -29,12 +29,12 @@ class EmploieController extends Controller
 
     public function index()
     {
-       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
-        $departement = departement::select('id', 'name')->get();
-        $salle = salle::select('id', 'salle')->get();
-        $classes = classes::select('id', 'niveau')->get();
+       $derniereAnneeScolaire = AnneesScolaire::where('isActive',true)->first();
+        $departement = Departement::select('id', 'name')->get();
+        $salle = Salle::select('id', 'salle')->get();
+        $classes = Classes::select('id', 'niveau')->get();
 
-        $emplois = emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
+        $emplois = Emploie::with(['matiere', 'professeur', 'salle', 'classes', 'departement', 'anneesScolaire'])
             ->where('annees_scolaire_id', $derniereAnneeScolaire->id)
             ->get();
 
@@ -75,12 +75,12 @@ class EmploieController extends Controller
     public function create(Request $request)
     {
 
-        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
-        $classes = classes::select(['id', 'niveau'])->get();
-        $departement = departement::select(['id', 'name'])->get();
+        $anneesScolaire = AnneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $classes = Classes::select(['id', 'niveau'])->get();
+        $departement = Departement::select(['id', 'name'])->get();
         $professeur = Professeur::select(['id', 'name', 'prenom', 'matricule'])->get();
-        $salle = salle::select(['id', 'salle', 'capacite'])->get();
-        $matiere = matiere::select(['id', 'nom'])->get();
+        $salle = Salle::select(['id', 'salle', 'capacite'])->get();
+        $matiere = Matiere::select(['id', 'nom'])->get();
 
 
 
@@ -123,14 +123,14 @@ class EmploieController extends Controller
 
         return redirect()->back()->with('success', "Emploi du temps ajouté avec succès");
     }
-    public function edit(emploie $emploi)
+    public function edit(Emploie $emploi)
     {
-        $anneesScolaire = anneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
-        $classes = classes::select(['id', 'niveau'])->get();
-        $departement = departement::select(['id', 'name'])->get();
+        $anneesScolaire = AnneesScolaire::select(['id', 'annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $classes = Classes::select(['id', 'niveau'])->get();
+        $departement = Departement::select(['id', 'name'])->get();
         $professeur = Professeur::select(['id', 'name', 'prenom', 'matricule'])->get();
-        $salle = salle::select(['id', 'salle', 'capacite'])->get();
-        $matiere = matiere::select(['id', 'nom'])->get();
+        $salle = Salle::select(['id', 'salle', 'capacite'])->get();
+        $matiere = Matiere::select(['id', 'nom'])->get();
 
         return Inertia::render('dashboard/emploie-du-temps/edit', [
             'emploi' => $emploi,
@@ -142,7 +142,7 @@ class EmploieController extends Controller
             'matiere' => $matiere
         ]);
     }
-    public function update(emploie $emploi)
+    public function update(Emploie $emploi)
     {
         $data = request()->validate([
             'annee_scolaire' => 'required|exists:annees_scolaires,id',
@@ -173,7 +173,7 @@ class EmploieController extends Controller
 
         return redirect()->back()->with('success', "Emploi du temps modifié avec succès");
     }
-    public function destroy(emploie $emploi)
+    public function destroy(Emploie $emploi)
     {
         $emploi->delete();
 

@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound, BookOpenCheck, BookCheck, Proportions, Star, Heater, BookCopy, PartyPopperIcon } from 'lucide-react';
+import { LayoutGrid, Webhook, WalletMinimal, School, User, UsersRound, BookOpenCheck, BookCheck, Proportions, Star, Heater, BookCopy, PartyPopperIcon, Antenna } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -61,7 +61,11 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard/emploie-du-temps',
         icon: BookOpenCheck,
     },
-
+{
+        title: 'Forum',
+        url: '/dashboard/forum',
+        icon: Antenna,
+    },
     {
         title: 'Examens',
         url: '/dashboard/examens',
@@ -87,6 +91,7 @@ const mainNavItems: NavItem[] = [
         url: '/dashboard/users',
         icon: UsersRound,
     },
+
 
 ];
 /*

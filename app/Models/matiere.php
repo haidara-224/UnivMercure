@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class matiere extends Model
+class Matiere extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -15,7 +15,7 @@ class matiere extends Model
 
     public function departements()
     {
-        return $this->belongsToMany(departement::class);
+        return $this->belongsToMany(Departement::class);
     }
 
 

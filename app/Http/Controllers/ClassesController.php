@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\niveauAddRequest;
-use App\Models\classes;
-use App\Models\departement;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +14,7 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        $niveaux=classes::orderByDesc('created_at')->get();
+        $niveaux=Classes::orderByDesc('created_at')->get();
 
         return Inertia::render('dashboard/niveau/index',[
             'niveau'=>$niveaux,
@@ -31,7 +30,7 @@ class ClassesController extends Controller
     {
         $data = $request->validated();
 
-        $niveaux=new classes();
+        $niveaux=new Classes();
 
         $niveaux->create([
             'niveau' => $data['niveau'],
@@ -45,7 +44,7 @@ class ClassesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(classes $classes)
+    public function edit(Classes $classes)
     {
         //
     }
@@ -53,7 +52,7 @@ class ClassesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, classes $classes)
+    public function update(Request $request, Classes $classes)
     {
         //
     }
@@ -61,7 +60,7 @@ class ClassesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(classes $classes)
+    public function destroy(Classes $classes)
     {
         $classes->delete();
         return redirect()->back()->with('success','Niveau Supprimé avec success');

@@ -12,7 +12,7 @@ class SalleController extends Controller
 {
     public function index(Request $request)
     {
-        $salles = salle::OrderBy('created_at', 'desc')->get();
+        $salles = Salle::OrderBy('created_at', 'desc')->get();
 
         return Inertia('dashboard/salles/index', [
             'salles' => $salles,
@@ -26,7 +26,7 @@ class SalleController extends Controller
         return redirect()->back()->with('success', 'Salle ajoutée avec succès');
     }
 
-    public function update(SalleCreateFormEditRequest $request, salle $salle)
+    public function update(SalleCreateFormEditRequest $request, Salle $salle)
     {
         $salle->salle=$request->salles;
         $salle->capacite=$request->capacite;
@@ -34,7 +34,7 @@ class SalleController extends Controller
         return redirect()->back()->with('success', 'Salle modifiée avec succès');
     }
 
-    public function destroy(salle $salle)
+    public function destroy(Salle $salle)
     {
         $salle->delete();
         return redirect()->back()->with('success', 'Salle supprimée avec succès');

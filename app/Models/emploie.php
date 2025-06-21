@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class emploie extends Model
+class Emploie extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -25,15 +25,15 @@ class emploie extends Model
     ];
     public function classes()
     {
-        return $this->belongsTo(classes::class);
+        return $this->belongsTo(Classes::class);
     }
     public function departement()
     {
-        return $this->belongsTo(departement::class);
+        return $this->belongsTo(Departement::class);
     }
     public function matiere()
     {
-        return $this->belongsTo(matiere::class);
+        return $this->belongsTo(Matiere::class);
     }
     public function Professeur()
     {
@@ -41,10 +41,10 @@ class emploie extends Model
     }
     public function salle()
     {
-        return $this->belongsTo(salle::class);
+        return $this->belongsTo(Salle::class);
     }
     public function anneesScolaire()
     {
-        return $this->belongsTo(anneesScolaire::class);
+        return $this->belongsTo(AnneesScolaire::class);
     }
 }

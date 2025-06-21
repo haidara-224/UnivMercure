@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\demandedocuments;
+use App\Models\Demandedocuments;
 use Illuminate\Http\Request;
 
-class documentalisteController extends Controller
+class DocumentalisteController extends Controller
 {
     public function index(Request $request)
     {
-        $documents = demandedocuments::with(['etudiant','classes','departement','anneesScolaire'])
+        $documents = Demandedocuments::with(['etudiant','classes','departement','anneesScolaire'])
             ->orderBy('created_at', 'desc')
             ->get();
         $notifications = $request->user()->notifications

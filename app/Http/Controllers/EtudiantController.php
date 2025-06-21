@@ -3,11 +3,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\studentFormAddRequest;
 use App\Http\Requests\studentFormUpdateRequest;
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\etudiant;
-use App\Models\parcour;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Etudiant;
+use App\Models\Parcour;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +22,7 @@ class EtudiantController extends Controller
      */
     public function index()
     {
-       $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
+       $derniereAnneeScolaire = AnneesScolaire::where('isActive',true)->first();
 
 
         if (!$derniereAnneeScolaire) {
@@ -65,9 +65,9 @@ class EtudiantController extends Controller
      */
     public function create()
     {
-        $niveau=classes::select(['id','niveau'])->get();
-        $annesscolaire=anneesScolaire::select(['id','annee_scolaire'])->orderByDesc('annee_scolaire')->get();
-        $departement=departement::select(['id','name'])->get();
+        $niveau=Classes::select(['id','niveau'])->get();
+        $annesscolaire=AnneesScolaire::select(['id','annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $departement=Departement::select(['id','name'])->get();
         return Inertia::render('dashboard/etudiants/new',[
             'niveau'=>$niveau,
             'annees'=>$annesscolaire,
@@ -90,7 +90,7 @@ class EtudiantController extends Controller
         try {
             DB::beginTransaction();
 
-            $create_student = etudiant::create([
+            $create_student = Etudiant::create([
                 'matricule' => $data['matricule'],
                 'name' => $data['nom'],
                 'prenom' => $data['prenom'],
@@ -99,7 +99,7 @@ class EtudiantController extends Controller
                 'photo' => $data['photo'] ?? null,
             ]);
 
-            parcour::create([
+            Parcour::create([
                 'etudiant_id' => $create_student->id,
                 'annees_scolaire_id' => $data['annees_scolaire'],
                 'classes_id' => $data['niveau'],
@@ -129,11 +129,11 @@ class EtudiantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(parcour $parcours)
+    public function edit(Parcour $parcours)
     {
-        $niveau=classes::select(['id','niveau'])->get();
-        $annesscolaire=anneesScolaire::select(['id','annee_scolaire'])->orderByDesc('annee_scolaire')->get();
-        $departement=departement::select(['id','name'])->get();
+        $niveau=Classes::select(['id','niveau'])->get();
+        $annesscolaire=AnneesScolaire::select(['id','annee_scolaire'])->orderByDesc('annee_scolaire')->get();
+        $departement=Departement::select(['id','name'])->get();
         $parcour = Parcour::with(['classes', 'anneesScolaire', 'departement', 'etudiant'])->findOrFail($parcours->id);
 
         return Inertia::render('dashboard/etudiants/edit',[
@@ -149,7 +149,7 @@ class EtudiantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(studentFormUpdateRequest $request, parcour $parcours)
+    public function update(studentFormUpdateRequest $request, Parcour $parcours)
     {
         $data = $request->validated();
 
@@ -195,7 +195,7 @@ class EtudiantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(parcour $parcours)
+    public function destroy(Parcour $parcours)
     {
         $parcours->delete();
         return redirect()->back()->with("success", "Étudiant mis Supprimer avec succès");

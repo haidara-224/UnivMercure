@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\facultyAddRequestValidated;
 use App\Http\Requests\facultyRequestValidated;
-use App\Models\faculty;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +15,7 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        $faculty=faculty::orderByDesc('created_at')->get();
+        $faculty=Faculty::orderByDesc('created_at')->get();
         return Inertia::render('dashboard/faculty/index',[
             'faculty'=>fn()=>$faculty
         ]);
@@ -26,7 +26,7 @@ class FacultyController extends Controller
      */
     public function create(facultyAddRequestValidated $request)
     {
-        $faculty=new faculty();
+        $faculty=new Faculty();
         $faculty->create($request->validated());
         return redirect()->back()->with('success','Faculté créer avec success');
     }

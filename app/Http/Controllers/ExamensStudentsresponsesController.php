@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\etudiant;
-use App\Models\examensstudents;
-use App\Models\examensstudentsresponses;
+use App\Models\Etudiant;
+use App\Models\Examensstudents;
+use App\Models\Examensstudentsresponses;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ExamensStudentsresponsesController extends Controller
 {
-   public function index(examensstudents $examensstudents)
+   public function index(Examensstudents $examensstudents)
 {
 
     $examensstudents->load([
@@ -49,9 +49,9 @@ class ExamensStudentsresponsesController extends Controller
         ],
     ]);
 }
-public function show(examensstudents $examensstudents,etudiant $etudiant)
+public function show(Examensstudents $examensstudents,Etudiant $etudiant)
 {
-    $examensstudentsresponses = examensstudentsresponses::where('examensstudents_id', $examensstudents->id)
+    $examensstudentsresponses = Examensstudentsresponses::where('examensstudents_id', $examensstudents->id)
         ->where('etudiant_id', $etudiant->id)
         ->firstOrFail();
 

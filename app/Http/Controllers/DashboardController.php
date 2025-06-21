@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\anneesScolaire;
-use App\Models\classes;
-use App\Models\departement;
-use App\Models\etudiant;
+use App\Models\AnneesScolaire;
+use App\Models\Classes;
+use App\Models\Departement;
+use App\Models\Etudiant;
 use App\Models\Professeur;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,11 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
-    private function nombreEtudiant()
-    {
-        $etudiant = etudiant::count();
-        return $etudiant;
-    }
+
     private function nombreProfesseur()
     {
         $professeur = Professeur::count();
@@ -26,18 +22,18 @@ class DashboardController extends Controller
     }
     private function nombreDepartement()
     {
-        $departement = departement::count();
+        $departement = Departement::count();
         return $departement;
     }
     private function nombreNiveau()
     {
-        $classes = classes::count();
+        $classes = Classes::count();
         return $classes;
     }
 
     public function index()
     {
-        $derniereAnneeScolaire = anneesScolaire::where('isActive',true)->first();
+        $derniereAnneeScolaire = AnneesScolaire::where('isActive',true)->first();
 
         // Vérifier si aucune année scolaire n'existe
         if (!$derniereAnneeScolaire) {
