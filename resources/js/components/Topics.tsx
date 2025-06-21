@@ -18,7 +18,7 @@ export default function Topics({ Sujet }: PropsSuject) {
 const { delete: destroy, } = useForm({});
     const totalPages = Math.ceil(Sujet.length / itemsPerPage);
 
-    // Fonction pour formater les dates
+
     function formatDate(dateInput: unknown): string {
         try {
             let date: Date;
@@ -48,7 +48,6 @@ const { delete: destroy, } = useForm({});
         }
     }
 
-    // Fonction pour formater les nombres (1k, 1M, 1md)
     function formatNumber(num: number): string {
         if (num >= 1000000000) {
             return (num / 1000000000).toFixed(1) + 'md';

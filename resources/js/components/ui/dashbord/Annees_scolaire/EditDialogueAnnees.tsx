@@ -67,7 +67,7 @@ const EditDialogueAnnees: React.FC<EditDialogueAnneesProps> = ({ open, onClose, 
             <DialogContent className="max-w-md w-full">
                 <DialogHeader>
                     <DialogTitle>Modifier l'année scolaire</DialogTitle>
-                    <DialogDescription>hello</DialogDescription>
+                    <DialogDescription>{anneeScolaire?.annee_scolaire}</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <div className="grid gap-4 py-4">

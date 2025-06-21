@@ -122,6 +122,8 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     //Route Category Forum
     Route::get('/forum/category',[CategoryforumController::class,'index'])->name('categoryForum.index');
     Route::delete('/forum/category/{categoryForum}',[CategoryforumController::class,'delete'])->name('categoryForum.delete');
+    Route::put('/forum/category/{categoryForum}',[CategoryforumController::class,'update'])->name('categoryForum.update');
+    Route::post('/forum/category',[CategoryforumController::class,'store'])->name('categoryForum.store');
 
 });
 Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
