@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnneesScolaireController;
+use App\Http\Controllers\CategoryforumController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DasboardForumController;
 use App\Http\Controllers\DashboardController;
@@ -115,6 +116,12 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::get('/parcours',[ParcourController::class,'index'])->name('parcours.index');
     //Route Forum
     Route::get('/forum',[DasboardForumController::class,'index'])->name('forum.index');
+    Route::delete('/forum/{forum}',[DasboardForumController::class,'delete'])->name('forum.delete');
+    Route::get('/forum/post/{forum}',[DasboardForumController::class,'show'])->name('forum.show');
+    Route::delete('/forum/post/{postforum}',[DasboardForumController::class,'deletePost'])->name('post.delete');
+    //Route Category Forum
+    Route::get('/forum/category',[CategoryforumController::class,'index'])->name('categoryForum.index');
+    Route::delete('/forum/category/{categoryForum}',[CategoryforumController::class,'delete'])->name('categoryForum.delete');
 
 });
 Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {

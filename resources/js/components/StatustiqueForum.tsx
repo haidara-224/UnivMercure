@@ -8,10 +8,10 @@ export default function StatistiqueForum({nbForum,nbPost,nbPostUser}:propsStatis
     sujet: nbForum,
     posts: nbPost,
     users: nbPostUser,
-    reports: 12,
+
   };
   return (
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {Object.entries(forumStats).map(([key, value]) => (
             <div key={key} className="bg-white overflow-hidden shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
@@ -22,7 +22,7 @@ export default function StatistiqueForum({nbForum,nbPost,nbPostUser}:propsStatis
                       {key === 'sujet' && <span>📌</span>}
                       {key === 'posts' && <span>💬</span>}
                       {key === 'users' && <span>👥</span>}
-                      {key === 'reports' && <span>⚠️</span>}
+
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">

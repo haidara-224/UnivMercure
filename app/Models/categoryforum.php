@@ -9,4 +9,8 @@ class Categoryforum extends Model
 {
     protected $fillable=['title','description','user_id'];
     use HasFactory;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

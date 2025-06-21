@@ -28,4 +28,24 @@ class DasboardForumController extends Controller
             'nbPostUser' => $nbPostUser
         ]);
     }
+    public function show(Forum $forum){
+
+       $forums=$forum->load([
+        'categoryforum', 'role', 'user', 'postforums.user'
+       ]);
+
+        return Inertia::render('dashboard/forum/post',[
+            'sujet'=>$forums
+        ]);
+    }
+    public function delete (Forum $forum)
+    {
+        $forum->delete();
+        return back()->with('success','Sujet Supprimer avec success');
+    }
+    public function deletePost(Postforum $postforum)
+    {
+        $postforum->delete();
+        return back()->with('success','Le post a été supprimé avec success');
+    }
 }
