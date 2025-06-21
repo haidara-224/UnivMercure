@@ -52,7 +52,8 @@ class DatabaseSeeder extends Seeder
          *
          */
 
-
+ forum::factory(100)->create();
+        postforum::factory(400)->create();
 
 
 

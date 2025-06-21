@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoryforum extends Model
 {
+    protected $fillable=['title','description','user_id'];
     use HasFactory;
 }

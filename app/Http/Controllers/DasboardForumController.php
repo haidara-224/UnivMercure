@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Forum;
+use App\Models\Postforum;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,6 +11,21 @@ class DasboardForumController extends Controller
 {
     public function index()
     {
-        return Inertia::render('dashboard/forum/index');
+        $forum = Forum::with(['categoryforum', 'role', 'user', 'postforums'])
+            ->orderBy('created_at', 'desc')->get();
+        $post = Postforum::with(['forum', 'role', 'user'])->orderBy('created_at', 'desc')->get();
+
+        $nbPost = count($post);
+        $nbForum = Forum::count();
+        $nbPostUser = $post->pluck('user.id')->unique()->count();
+
+
+
+        return Inertia::render('dashboard/forum/index', [
+            'sujet' => $forum,
+            'nbForum' => $nbForum,
+            'nbPost' => $nbPost,
+            'nbPostUser' => $nbPostUser
+        ]);
     }
 }
