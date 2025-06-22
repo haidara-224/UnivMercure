@@ -358,6 +358,7 @@ export interface CategorySuject {
     description?: string;
     user_id?: number;
     user?: User
+    emoji:string
     created_at: Date;
     updated_at: Date;
 }

@@ -1,47 +1,44 @@
 import TopicPreview from '@/components/LandingPage/Forum/TopicPreview';
 import NavBar from '@/components/LandingPage/NavBar';
-import { Topic } from '@/types';
-import { Head } from '@inertiajs/react';
+import { CategorySuject, Suject } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Search, MessageSquarePlus, ChevronDown, Cpu, HeartPulse, Scale, Megaphone, ClipboardList, Users } from 'lucide-react';
+import { Search, MessageSquarePlus, ChevronDown, List } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ForumPage() {
+interface PageProps {
+    [key: string]: unknown;
+}
 
+interface CustomPageProps extends PageProps {
+    category: CategorySuject[];
+    topics: Suject[];
+    nbPost: number;
+}
+
+export default function ForumPage() {
+    const { category, topics, nbPost } = usePage<CustomPageProps>().props;
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Données fictives
-    const categories = [
-        { id: 'informatique', name: 'Informatique', icon: <Cpu className="w-5 h-5" /> },
-        { id: 'medecine', name: 'Médecine', icon: <HeartPulse className="w-5 h-5" /> },
-        { id: 'droit', name: 'Droit', icon: <Scale className="w-5 h-5" /> },
-        { id: 'announcements', name: 'Annonces', icon: <Megaphone className="w-5 h-5" /> },
-        { id: 'exams', name: 'Examens', icon: <ClipboardList className="w-5 h-5" /> },
-        { id: 'student-life', name: 'Vie étudiante', icon: <Users className="w-5 h-5" /> },
-    ];
-
-    const topics: Topic[] = [
-        {
-            id: 1,
-            title: 'Projet de fin d\'études en IA',
-            author: 'Jean Dupont',
-            role: 'student',
-            category: 'informatique',
-            replies: 12,
-            likes: 8,
-            lastActivity: 'Il y a 2 heures',
-            content: 'Je cherche des conseils pour mon projet de fin d\'études sur l\'application de l\'IA en médecine...'
-        },
-        // Plus de sujets...
-    ];
-
     const filteredTopics = topics.filter(topic => {
-        const matchesCategory = !activeCategory || topic.category === activeCategory;
-        const matchesSearch = topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            topic.content.toLowerCase().includes(searchQuery.toLowerCase());
+        // Filtre par catégorie
+        const matchesCategory = !activeCategory ||
+                              (topic.categoryforum &&
+                               topic.categoryforum.id.toString() === activeCategory);
+
+        // Filtre par recherche
+        const matchesSearch = searchQuery === '' ||
+                            (topic.title &&
+                             topic.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
         return matchesCategory && matchesSearch;
     });
+
+    const handleShowAll = () => {
+        setActiveCategory(null);
+        setSearchQuery('');
+    };
 
     return (
         <>
@@ -67,14 +64,26 @@ export default function ForumPage() {
                                 />
                             </div>
 
-                            <motion.button
-                                className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg flex items-center"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <MessageSquarePlus className="w-5 h-5 mr-2" />
-                                Nouveau sujet
-                            </motion.button>
+                            <div className="flex gap-4">
+                                <motion.button
+                                    onClick={handleShowAll}
+                                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg flex items-center"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <List className="w-5 h-5 mr-2" />
+                                    Tout afficher
+                                </motion.button>
+
+                                <motion.button
+                                    className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg flex items-center"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <MessageSquarePlus className="w-5 h-5 mr-2" />
+                                    Nouveau sujet
+                                </motion.button>
+                            </div>
                         </div>
                     </section>
 
@@ -92,14 +101,23 @@ export default function ForumPage() {
                                 </h2>
 
                                 <ul className="space-y-2">
-                                    {categories.map(category => (
-                                        <li key={category.id}>
+                                    <li>
+                                        <button
+                                            onClick={handleShowAll}
+                                            className={`w-full text-left px-3 py-2 rounded flex items-center ${!activeCategory ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'}`}
+                                        >
+                                            <span className="mr-2">📋</span>
+                                            Toutes les catégories
+                                        </button>
+                                    </li>
+                                    {category.map(categori => (
+                                        <li key={categori.id}>
                                             <button
-                                                onClick={() => setActiveCategory(activeCategory === category.id ? null : category.id)}
-                                                className={`w-full text-left px-3 py-2 rounded flex items-center ${activeCategory === category.id ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'}`}
+                                                onClick={() => setActiveCategory(activeCategory === categori.id.toString() ? null : categori.id.toString())}
+                                                className={`w-full text-left px-3 py-2 rounded flex items-center ${activeCategory === categori.id.toString() ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'}`}
                                             >
-                                                <span className="mr-2">{category.icon}</span>
-                                                {category.name}
+                                                <span className="mr-2">{categori.emoji}</span>
+                                                {categori.title}
                                             </button>
                                         </li>
                                     ))}
@@ -116,7 +134,7 @@ export default function ForumPage() {
                             >
                                 <h1 className="text-2xl font-bold text-blue-900">
                                     {activeCategory
-                                        ? categories.find(c => c.id === activeCategory)?.name
+                                        ? category.find(c => c.id.toString() === activeCategory)?.title
                                         : 'Tous les sujets'}
                                 </h1>
                                 <p className="text-gray-600">
@@ -124,11 +142,10 @@ export default function ForumPage() {
                                 </p>
                             </motion.div>
 
-
                             {filteredTopics.length > 0 ? (
                                 <div className="space-y-4">
                                     {filteredTopics.map(topic => (
-                                        <TopicPreview key={topic.id} topic={topic} />
+                                        <TopicPreview key={topic.id} topic={topic} nbPost={nbPost}/>
                                     ))}
                                 </div>
                             ) : (
@@ -141,7 +158,9 @@ export default function ForumPage() {
                                     <p className="text-gray-500 mt-2">
                                         {searchQuery
                                             ? 'Essayez avec d\'autres termes de recherche'
-                                            : 'Soyez le premier à créer un sujet dans cette catégorie'}
+                                            : activeCategory
+                                                ? 'Soyez le premier à créer un sujet dans cette catégorie'
+                                                : 'Aucun sujet disponible pour le moment'}
                                     </p>
                                 </motion.div>
                             )}
@@ -150,8 +169,5 @@ export default function ForumPage() {
                 </main>
             </div>
         </>
-
     );
-};
-
-
+}

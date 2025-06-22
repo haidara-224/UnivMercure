@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('forums', function (Blueprint $table) {
-            $table->bigInteger('likes')->default(0);
+        Schema::table('categoryforums',function(Blueprint $table){
+            $table->string('emoji')->nullable()->after('user_id');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('forums', function (Blueprint $table) {
-            $table->dropColumn('likes');
+        Schema::table('categoryforums', function (Blueprint $table) {
+            $table->dropColumn('emoji');
         });
     }
 };

@@ -22,14 +22,16 @@ class CategoryforumController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => ['required', 'max:20','unique:categoryforums,title'],
-            'description' => ['nullable', 'string', 'max:50'],
+            'title' => ['required','unique:categoryforums,title'],
+            'description' => ['nullable', 'string',],
+            'emoji'=>['required'],
         ]);
 
         $category = new Categoryforum();
         $category->title = $data['title'];
         $category->description = $data['description'];
         $category->user_id = Auth::id();
+        $category->emoji=$data['emoji'];
         $category->save();
 
         return back()->with('success', 'Catégorie créée avec succès');
@@ -39,16 +41,18 @@ class CategoryforumController extends Controller
     $data = $request->validate([
         'title' => [
             'required',
-            'max:20',
+
             Rule::unique('categoryforums', 'title')->ignore($categoryForum->id),
         ],
-        'description' => ['nullable', 'string', 'max:50'],
+        'description' => ['nullable', 'string', ],
+         'emoji'=>['required'],
     ]);
 
     $categoryForum->update([
         'title' => $data['title'],
         'description' => $data['description'],
-        'user_id'=>Auth::id()
+        'user_id'=>Auth::id(),
+        'emoji'=>$data['emoji']
     ]);
 
     return back()->with('success', 'Catégorie modifiée avec succès');
