@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -12,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('postforums', function (Blueprint $table) {
-            $table->foreignIdFor(Role::class)->constrained()->cascadeOnDelete();
-            $table->text('content');
-
+        Schema::table('forums', function (Blueprint $table) {
+            $table->bigInteger('likes')->default(0);
         });
     }
 
@@ -24,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('postforums', function (Blueprint $table) {
-            //
+        Schema::table('forums', function (Blueprint $table) {
+            $table->dropColumn('likes');
         });
     }
 };

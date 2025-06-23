@@ -7,9 +7,11 @@ use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
 use App\Models\forum;
+use App\Models\Forumlikes;
 use App\Models\ForumRoleUser;
 use App\Models\parcour;
 use App\Models\postforum;
+use App\Models\Postforumlikes;
 use App\Models\Professeur;
 use App\Models\salle;
 use App\Models\User;
@@ -52,10 +54,9 @@ class DatabaseSeeder extends Seeder
          *
          */
 
- forum::factory(100)->create();
+        forum::factory(100)->create();
         postforum::factory(400)->create();
-
-
-
+        Forumlikes::factory(100)->create();
+        Postforumlikes::factory(400)->create();
     }
 }

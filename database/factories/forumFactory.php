@@ -21,7 +21,7 @@ class forumFactory extends Factory
             'user_id'=>$this->faker->numberBetween(1,20),
             'title'=>$this->faker->words(6,true),
             'role_id'=>8,
-            'likes'=>$this->faker->numberBetween(0,10000)
+
         ];
     }
 }

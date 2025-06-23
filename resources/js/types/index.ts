@@ -358,10 +358,31 @@ export interface CategorySuject {
     description?: string;
     user_id?: number;
     user?: User
-    emoji:string
+    emoji: string
     created_at: Date;
     updated_at: Date;
 }
+export interface ForumLikes {
+    id: number;
+    forum_id: number;
+    forum: Suject;
+    user_id: number;
+    user: User;
+    likes: number
+    created_at: Date;
+    updated_at: Date;
+}
+export interface PostLikes {
+    id: number;
+    postforum_id: number;
+    postforum: Postforums;
+    user_id: number;
+    user: User;
+    likes: number
+    created_at: Date;
+    updated_at: Date;
+}
+
 export interface Postforums {
     id: number;
     forum_id: number;
@@ -371,7 +392,9 @@ export interface Postforums {
     role_id: number;
     role: Roles;
     content: string;
-    likes: number
+  likes: PostLikes[],
+    total_likes:number
+
     created_at: Date;
     updated_at: Date;
 }
@@ -385,7 +408,8 @@ export interface Suject {
     role_id: number;
     role: Roles;
     postforums: Postforums[];
-    likes:number
+    likes: ForumLikes[],
+    total_likes: number
     created_at: Date;
     updated_at: Date;
 }

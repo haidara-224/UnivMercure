@@ -1,6 +1,6 @@
 import { Suject } from "@/types";
 import { Link, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import {  useState } from "react";
 
 interface PropsSuject {
     Sujet: Suject[];
@@ -122,7 +122,7 @@ return (
                                     </span>
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
-                                    {formatNumber(topic.likes)}
+                                    {formatNumber(topic.total_likes)}
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
                                     {formatNumber(topic.postforums.length)}

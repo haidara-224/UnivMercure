@@ -23,6 +23,7 @@ interface PageProps {
 
 interface CustomPageProps extends PageProps {
     sujet: Suject;
+    totalLikesForum:number
 }
 
 function formatNumber(num: number): string {
@@ -37,17 +38,20 @@ interface messageFlash {
     }
 }
 export default function Page({ flash }: messageFlash) {
-    const { sujet } = usePage<CustomPageProps>().props;
+    const { sujet,totalLikesForum } = usePage<CustomPageProps>().props;
     const [filter, setFilter] = useState<'all' | 'recent' | 'flagged'>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const { delete: destroy, } = useForm({});
- useEffect(() => {
+    useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
         }
+
     }, [flash]);
 
-
+    useEffect(() => {
+        console.log(sujet)
+    }, [])
     const filteredPosts = sujet.postforums.filter(post => {
 
 
@@ -60,14 +64,14 @@ export default function Page({ flash }: messageFlash) {
     });
 
     const handleDeletePost = (postId: number) => {
-       if (confirm('Êtes-vous sûr de vouloir supprimer ce sujet et toutes ses réponses ?')) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce sujet et toutes ses réponses ?')) {
 
 
-        destroy(route('dashboard.post.delete', postId), {
-            preserveScroll: true,
+            destroy(route('dashboard.post.delete', postId), {
+                preserveScroll: true,
 
-        });
-    }
+            });
+        }
     };
 
 
@@ -154,7 +158,7 @@ export default function Page({ flash }: messageFlash) {
                                         <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                         </svg>
-                                        {formatNumber(sujet.likes)} J'aime
+                                        {formatNumber(totalLikesForum)} J'aime
                                     </span>
                                 </div>
                             </div>
@@ -227,7 +231,7 @@ export default function Page({ flash }: messageFlash) {
                                                     <svg className="mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                                     </svg>
-                                                    {formatNumber(post.likes)} J'aime
+                                                    {formatNumber(post.total_likes)} J'aime
                                                 </span>
                                             </div>
                                         </div>

@@ -9,14 +9,21 @@ use Spatie\Permission\Models\Role;
 class Postforum extends Model
 {
     use HasFactory;
-    protected $fillable=['forum_id','user_id','role_id','content','likes'];
-      public function user(){
+    protected $fillable = ['forum_id', 'user_id', 'role_id', 'content',];
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
-    public function forum(){
+    public function forum()
+    {
         return $this->belongsTo(Forum::class);
+    }
+    public function likes()
+    {
+        return $this->hasMany(Postforumlikes::class);
     }
 }
