@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import {  useState } from "react";
 
+
 interface propsTopic {
     topic: Suject;
     nbPost: number;
@@ -85,15 +86,19 @@ const TopicPreview = ({ topic, nbPost }: propsTopic) => {
                             <Clock className="w-4 h-4" />
                             <span className="text-sm">{formatDate(topic.created_at)}</span>
                         </div>
+
                     </div>
                 </div>
 
                 <div className="flex space-x-4 text-sm">
                     {/* Nb de commentaires */}
+                    <Link href={`/forum/details/${topic.id}`}>
                     <div className="flex items-center space-x-1 bg-gray-50 px-3 py-1 rounded-full">
                         <MessageSquare className="w-4 h-4 text-gray-600" />
                         <span className="font-medium text-gray-700">{nbPost}</span>
                     </div>
+                    </Link>
+
 
                     {/* Bouton Like */}
                     <button

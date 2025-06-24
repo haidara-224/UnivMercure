@@ -7,6 +7,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import RoleBadge from "./BadgeRole";
 
 const Post = ({ post }: { post: Postforums }) => {
      const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +66,7 @@ const Post = ({ post }: { post: Postforums }) => {
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">
                         <h4 className="font-medium text-blue-900">{post.user.name}</h4>
-
+                        <RoleBadge role={post.role} />
                         <span className="text-sm text-gray-500">{formatDate(post.created_at)}</span>
                     </div>
 

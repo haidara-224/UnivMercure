@@ -23,6 +23,7 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParcourController;
+use App\Http\Controllers\PostforumController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\TraitementdocumentsController;
@@ -30,11 +31,11 @@ use App\Http\Controllers\TutoController;
 use App\Http\Controllers\VerifcationMatriculeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/',[HomeController::class,'index'])->name('home');
-route::get('/verification-matricule',[VerifcationMatriculeController::class,'verification'])->name('verifcation.verif');
-route::post('/verification-matricule',[VerifcationMatriculeController::class,'verificationStore'])->name('verifcation.store');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+route::get('/verification-matricule', [VerifcationMatriculeController::class, 'verification'])->name('verifcation.verif');
+route::post('/verification-matricule', [VerifcationMatriculeController::class, 'verificationStore'])->name('verifcation.store');
 
-Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:super admin|admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     /**Annees Scolaire Route */
     Route::get('/annees-scolaire', [AnneesScolaireController::class, 'index'])->name('ann_scolaire.index');
@@ -100,78 +101,78 @@ Route::middleware(['auth', 'verified','role:super admin|admin'])->prefix('dashbo
     Route::post('/users', [DashboardController::class, 'create'])->name('users.create');
     Route::put('/users', [DashboardController::class, 'AddOrRevoqueRole'])->name('users.roles');
     //Notes Routes
-    Route::get('/notes',[NotesController::class,'notesAdmin'])->name('note.admin');
+    Route::get('/notes', [NotesController::class, 'notesAdmin'])->name('note.admin');
     //Examen Routes
-    Route::get('/examens',[ExamController::class,'index'])->name('exam.index');
-    Route::get('/examens/create',[ExamController::class, 'create'])->name('exam.create');
-    Route::post('/examens/create',[ExamController::class, 'store'])->name('exam.store');
-    Route::delete('/examens/{examens}',[ExamController::class, 'delete'])->name('exam.delete');
+    Route::get('/examens', [ExamController::class, 'index'])->name('exam.index');
+    Route::get('/examens/create', [ExamController::class, 'create'])->name('exam.create');
+    Route::post('/examens/create', [ExamController::class, 'store'])->name('exam.store');
+    Route::delete('/examens/{examens}', [ExamController::class, 'delete'])->name('exam.delete');
     //Parcours Routes
-    Route::get('/reincriptions',[ParcourController::class,'reincriptions'])->name('parcours.reincriptions');
-    Route::delete('/reincriptions/{parcours}',[ParcourController::class,'delete'])->name('parcours.delete');
-    Route::get('/reinscriptions/create',[ParcourController::class,'create'])->name('parcours.create');
-    Route::post('/reinscriptions/create',[ParcourController::class,'store'])->name('parcours.store');
+    Route::get('/reincriptions', [ParcourController::class, 'reincriptions'])->name('parcours.reincriptions');
+    Route::delete('/reincriptions/{parcours}', [ParcourController::class, 'delete'])->name('parcours.delete');
+    Route::get('/reinscriptions/create', [ParcourController::class, 'create'])->name('parcours.create');
+    Route::post('/reinscriptions/create', [ParcourController::class, 'store'])->name('parcours.store');
 
     //Route Parcours
-    Route::get('/parcours',[ParcourController::class,'index'])->name('parcours.index');
+    Route::get('/parcours', [ParcourController::class, 'index'])->name('parcours.index');
     //Route Forum
-    Route::get('/forum',[DasboardForumController::class,'index'])->name('forum.index');
-    Route::delete('/forum/{forum}',[DasboardForumController::class,'delete'])->name('forum.delete');
-    Route::get('/forum/post/{forum}',[DasboardForumController::class,'show'])->name('forum.show');
-    Route::delete('/forum/post/{postforum}',[DasboardForumController::class,'deletePost'])->name('post.delete');
+    Route::get('/forum', [DasboardForumController::class, 'index'])->name('forum.index');
+    Route::delete('/forum/{forum}', [DasboardForumController::class, 'delete'])->name('forum.delete');
+    Route::get('/forum/post/{forum}', [DasboardForumController::class, 'show'])->name('forum.show');
+    Route::delete('/forum/post/{postforum}', [DasboardForumController::class, 'deletePost'])->name('post.delete');
     //Route Category Forum
-    Route::get('/forum/category',[CategoryforumController::class,'index'])->name('categoryForum.index');
-    Route::delete('/forum/category/{categoryForum}',[CategoryforumController::class,'delete'])->name('categoryForum.delete');
-    Route::put('/forum/category/{categoryForum}',[CategoryforumController::class,'update'])->name('categoryForum.update');
-    Route::post('/forum/category',[CategoryforumController::class,'store'])->name('categoryForum.store');
-
+    Route::get('/forum/category', [CategoryforumController::class, 'index'])->name('categoryForum.index');
+    Route::delete('/forum/category/{categoryForum}', [CategoryforumController::class, 'delete'])->name('categoryForum.delete');
+    Route::put('/forum/category/{categoryForum}', [CategoryforumController::class, 'update'])->name('categoryForum.update');
+    Route::post('/forum/category', [CategoryforumController::class, 'store'])->name('categoryForum.store');
 });
-Route::middleware(['auth', 'verified','role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
     Route::get('/', [DashboardEtudiantController::class, 'index'])->name('index');
-    Route::get('/notes',[DashboardEtudiantController::class, 'notes'])->name('notes');
-    Route::get('/documents',[DashboardEtudiantController::class, 'documents'])->name('documents');
-    Route::post('/documents',[DemandedocumentsController::class, 'demande'])->name('demande.document');
-    Route::delete('/documents/{document}',[DemandedocumentsController::class, 'destroy'])->name('demande.destroy');
-    Route::get('/examens',[ExamensController::class, 'examenStudent'])->name('examens.index');
-    Route::get('/examens/{examen}/response',[ExamensController::class, 'createResponseStudent'])->name('examens.create.response');
-    Route::post('/examens/{examen}/response',[ExamensController::class, 'storeResponseStudent'])->name('examens.store.response');
-    Route::get('/examens/class/{examen}/response',[ExamensController::class, 'createResponseStudentclass'])->name('examensclass.create.response');
-    Route::post('/examens/class/{examen}/response',[ExamensController::class, 'storeResponseStudentclass'])->name('examensclass.store.response');
-
+    Route::get('/notes', [DashboardEtudiantController::class, 'notes'])->name('notes');
+    Route::get('/documents', [DashboardEtudiantController::class, 'documents'])->name('documents');
+    Route::post('/documents', [DemandedocumentsController::class, 'demande'])->name('demande.document');
+    Route::delete('/documents/{document}', [DemandedocumentsController::class, 'destroy'])->name('demande.destroy');
+    Route::get('/examens', [ExamensController::class, 'examenStudent'])->name('examens.index');
+    Route::get('/examens/{examen}/response', [ExamensController::class, 'createResponseStudent'])->name('examens.create.response');
+    Route::post('/examens/{examen}/response', [ExamensController::class, 'storeResponseStudent'])->name('examens.store.response');
+    Route::get('/examens/class/{examen}/response', [ExamensController::class, 'createResponseStudentclass'])->name('examensclass.create.response');
+    Route::post('/examens/class/{examen}/response', [ExamensController::class, 'storeResponseStudentclass'])->name('examensclass.store.response');
 });
-Route::middleware(['auth', 'verified','role:personnel'])->prefix('prof')->name('prof.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:personnel'])->prefix('prof')->name('prof.')->group(function () {
     Route::get('/', [DashboardProfesseurController::class, 'index'])->name('index');
     Route::get('/classe-departement', [DashboardProfesseurController::class, 'classe_dpt'])->name('classe_dpt');
     Route::get('/notes', [DashboardProfesseurController::class, 'recupererEtudiantsDuProfesseur'])->name('notes');
     Route::post('/notes', [NotesController::class, 'calculeNotes'])->name('notes.store');
     //Route::post('/notes', [NotesController::class, 'generationPdf'])->name('notes.generatedPdf');
-    Route::get('/cours',[TutoController::class,'cours'])->name('cours');
-    Route::get('/cours/{tuto}',[TutoController::class,'show'])->name('cours.show');
-    Route::post('/cours',[TutoController::class,'create'])->name('cours.create');
-    Route::delete('/cours/{tuto}',[TutoController::class,'destroy'])->name('cours.delete');
-    Route::put('/cours/{tuto}',[TutoController::class,'update'])->name('cours.update');
-        /**Route Examens */
-    Route::get('/examens',[ExamensController::class,'index'])->name('examens.index');
-    Route::post('/examens',[ExamensController::class,'store'])->name('examens.create.classe');
+    Route::get('/cours', [TutoController::class, 'cours'])->name('cours');
+    Route::get('/cours/{tuto}', [TutoController::class, 'show'])->name('cours.show');
+    Route::post('/cours', [TutoController::class, 'create'])->name('cours.create');
+    Route::delete('/cours/{tuto}', [TutoController::class, 'destroy'])->name('cours.delete');
+    Route::put('/cours/{tuto}', [TutoController::class, 'update'])->name('cours.update');
+    /**Route Examens */
+    Route::get('/examens', [ExamensController::class, 'index'])->name('examens.index');
+    Route::post('/examens', [ExamensController::class, 'store'])->name('examens.create.classe');
     Route::delete('/examens/{type}/{id}', [ExamensController::class, 'delete'])->name('examens.delete');
-    Route::put('/examens/{examen}',[ExamensController::class,'createForClasseUpdate'])->name('examens.update.classe');
-    Route::get('/examens/reponse/class/{examen}',[ExamensreponsesController::class,'index'])->name('examens.responses.index');
-    Route::get('/examens/reponse/class/student/{examensclasseresponse}',[ExamensreponsesController::class,'show'])->name('examens.responses.show');
-    Route::get('/examens/reponse/student/{examensstudents}',[ExamensStudentsresponsesController::class,'index'])->name('examens.responses.student.index');
-    Route::get('/examens/reponse/student/show/{examensstudents}/{etudiant}',[ExamensStudentsresponsesController::class,'show'])->name('examens.responses.student.show');
+    Route::put('/examens/{examen}', [ExamensController::class, 'createForClasseUpdate'])->name('examens.update.classe');
+    Route::get('/examens/reponse/class/{examen}', [ExamensreponsesController::class, 'index'])->name('examens.responses.index');
+    Route::get('/examens/reponse/class/student/{examensclasseresponse}', [ExamensreponsesController::class, 'show'])->name('examens.responses.show');
+    Route::get('/examens/reponse/student/{examensstudents}', [ExamensStudentsresponsesController::class, 'index'])->name('examens.responses.student.index');
+    Route::get('/examens/reponse/student/show/{examensstudents}/{etudiant}', [ExamensStudentsresponsesController::class, 'show'])->name('examens.responses.student.show');
 });
-Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:documentaliste'])->prefix('documentaliste')->name('documentaliste.')->group(function () {
     Route::get('/', [DocumentalisteController::class, 'index'])->name('index');
     Route::post('/{id}', [DocumentalisteController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 
-    Route::post('/',[TraitementdocumentsController::class, 'store'])->name('documents.store');
-
+    Route::post('/', [TraitementdocumentsController::class, 'store'])->name('documents.store');
 });
-Route::get('/forum',[ForumController::class,'index'])->name('forum');
-Route::put('/forum/{forum}',[ForumController::class,'updateLike'])->name('forum.update.like')->middleware('auth');
-Route::put('/forum/details/{postforum}',[ForumController::class,'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
-Route::get('/forum/details/{forum}',[ForumController::class,'show'])->name('forum');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+    Route::put('/forum/{forum}', [ForumController::class, 'updateLike'])->name('forum.update.like')->middleware('auth');
+    Route::put('/forum/details/{postforum}', [PostforumController::class, 'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
+    Route::get('/forum/details/{forum}', [PostforumController::class, 'index'])->name('forum.details');
+    Route::post('/forum/details/{forum}', [PostforumController::class, 'create'])->name('forum.post.create');
+});
 
 require __DIR__ . '/settings.php';
 

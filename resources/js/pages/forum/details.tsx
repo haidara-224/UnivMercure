@@ -11,6 +11,7 @@ import { fr } from 'date-fns/locale';
 import WelcomeLayout from "@/layouts/WelcomeLayout";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import RoleBadge from "@/components/LandingPage/Forum/BadgeRole";
 
 
 interface PageProps {
@@ -69,8 +70,10 @@ export default function TopicDetailPage({ flash }: PageProps) {
 
                                     <div className="flex items-center space-x-3 mt-2 text-sm text-gray-500">
                                         <span>Par {post.user.name}</span>
+
                                         <span>•</span>
                                         <span>{formatDate(post.created_at)}</span>
+                                        <RoleBadge role={post.role}/>
                                     </div>
 
                                     <div className="mt-4 text-gray-700">
@@ -108,7 +111,7 @@ export default function TopicDetailPage({ flash }: PageProps) {
                                 ))}
                             </div>
                         </motion.section>
-                        <ReplyForm />
+                        <ReplyForm forum={post}/>
                     </div>
                 </main>
             </div>

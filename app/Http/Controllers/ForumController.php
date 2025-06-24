@@ -27,7 +27,9 @@ class ForumController extends Controller
             'role',
             'user',
             'postforums',
+            'postforums.role',
             'likes',
+            'role',
             'likedByAuth' => function ($query) use ($authId) {
                 $query->where('user_id', $authId)->where('likes', 1);
             }
@@ -64,34 +66,7 @@ class ForumController extends Controller
             ]
         );
     }
-    public function show(Forum $forum)
-    {
-        $authId = Auth::id();
 
-        $forum->load([
-            'postforums.user',
-            'user',
-            'likes',
-            'likedByAuth' => fn($query) => $query->where('user_id', $authId)->where('likes', 1),
-            'postforums.likedByAuth'=>fn($query) => $query->where('user_id', $authId)->where('likes', 1),
-            'postforums.likes',
-            'postforums' => function ($query) {
-                $query->withCount([
-                    'likes as total_likes' => function ($q) {
-                        $q->where('likes', 1);
-                    }
-                ]);
-            },
-        ]);
-
-        $forum->loadCount([
-            'likes as total_likes' => fn($query) => $query->where('likes', 1)
-        ]);
-
-        return Inertia::render('forum/details', [
-            'post' => $forum
-        ]);
-    }
 
     public function updateLike(Forum $forum)
     {
@@ -121,33 +96,5 @@ class ForumController extends Controller
             return back()->with('success', '👍 Vous avez liké ce sujet');
         }
     }
-    public function updateLikePost(Postforum $postforum)
-    {
-        $authId = Auth::id();
 
-        $PostforumsLikesUser = Postforumlikes::where('user_id', $authId)
-            ->where('postforum_id', $postforum->id)
-            ->first();
-
-        if ($PostforumsLikesUser) {
-
-            $newState = $PostforumsLikesUser->likes == 1 ? 0 : 1;
-            $PostforumsLikesUser->update(['likes' => $newState]);
-
-            return back()->with(
-                'success',
-                $newState === 1 ? '👍 Vous avez liké ce Post' : '👎 Vous avez retiré votre like'
-            );
-        } else {
-
-            Postforumlikes::create([
-                'user_id' => $authId,
-                'postforum_id' => $postforum->id,
-                'likes' => 1,
-            ]);
-
-            return back()->with('success', '👍 Vous avez liké ce Post');
-        }
-
-    }
 }

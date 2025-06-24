@@ -46,6 +46,7 @@ class ExamensController extends Controller
             ->get();
         $examensclasse = Examensclasse::with('anneesScolaire', 'departement', 'classes')
             ->orderByDesc('created_at')
+
             ->where('professeur_id', $prof->id)->get();
         $examensEtudiant = Examensstudents::with('etudiants')
             ->orderByDesc('created_at')
@@ -194,11 +195,13 @@ class ExamensController extends Controller
 
         $classesIds = $parcours->pluck('classes_id')->unique();
         $departementIds = $parcours->pluck('departement_id')->unique();
+        $anneesscolaire = $parcours->pluck('annees_scolaire_id');
 
 
         $examensClasse = Examensclasse::with(['classes', 'departement', 'professeur', 'anneesScolaire'])
             ->whereIn('classes_id', $classesIds)
             ->whereIn('departement_id', $departementIds)
+->whereIn('annees_scolaire_id', $anneesscolaire)
             ->orderByDesc('created_at')
             ->get();
 
