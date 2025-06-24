@@ -394,7 +394,16 @@ export interface Postforums {
     content: string;
     likes: PostLikes[],
     total_likes: number
-
+      liked_by_auth: {
+        id: number,
+        likes: number,
+        postforum_id: number,
+        postforums: Postforums,
+        user_id: number,
+        user: User,
+        created_at: Date;
+        updated_at: Date;
+    },
     created_at: Date;
     updated_at: Date;
 }

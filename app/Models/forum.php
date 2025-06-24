@@ -31,7 +31,7 @@ class Forum extends Model
     {
         return $this->hasMany(Forumlikes::class);
     }
-   // Forum.php
+
 public function likedByAuth()
 {
     return $this->hasOne(Forumlikes::class);

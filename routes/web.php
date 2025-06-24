@@ -170,6 +170,7 @@ Route::middleware(['auth', 'verified','role:documentaliste'])->prefix('documenta
 });
 Route::get('/forum',[ForumController::class,'index'])->name('forum');
 Route::put('/forum/{forum}',[ForumController::class,'updateLike'])->name('forum.update.like')->middleware('auth');
+Route::put('/forum/details/{postforum}',[ForumController::class,'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
 Route::get('/forum/details/{forum}',[ForumController::class,'show'])->name('forum');
 
 require __DIR__ . '/settings.php';

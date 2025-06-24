@@ -26,4 +26,8 @@ class Postforum extends Model
     {
         return $this->hasMany(Postforumlikes::class);
     }
+    public function likedByAuth()
+{
+    return $this->hasOne(Postforumlikes::class);
+}
 }
