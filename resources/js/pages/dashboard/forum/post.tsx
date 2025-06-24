@@ -49,9 +49,7 @@ export default function Page({ flash }: messageFlash) {
 
     }, [flash]);
 
-    useEffect(() => {
-        console.log(sujet)
-    }, [])
+
     const filteredPosts = sujet.postforums.filter(post => {
 
 

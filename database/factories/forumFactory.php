@@ -20,6 +20,7 @@ class forumFactory extends Factory
             'categoryforum_id'=>$this->faker->numberBetween(1,8),
             'user_id'=>$this->faker->numberBetween(1,20),
             'title'=>$this->faker->words(6,true),
+            'comment'=>$this->faker->sentences(3,true),
             'role_id'=>8,
 
         ];

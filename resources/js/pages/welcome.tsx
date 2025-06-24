@@ -11,11 +11,13 @@ import NewsEventCard from "@/components/LandingPage/Event";
 import { FAQSection } from "@/components/LandingPage/Faq";
 import ElementDecoratif from "@/components/LandingPage/ElementDecoratif";
 import Footers from "@/components/LandingPage/Footer";
+import WelcomeLayout from "@/layouts/WelcomeLayout";
 
 export default function Welcome() {
     return (
         <>
-            <Head title="Université Mercure International">
+<WelcomeLayout>
+  <Head title="Université Mercure International">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700" rel="stylesheet" />
                 <meta name="description" content="Université Mercure International de Conakry - Formations de qualité en commerce, gestion, informatique, droit, communication et plus encore." />
@@ -55,6 +57,8 @@ export default function Welcome() {
 
             </main>
             <Footers />
+</WelcomeLayout>
+
         </>
     );
 }

@@ -392,8 +392,8 @@ export interface Postforums {
     role_id: number;
     role: Roles;
     content: string;
-  likes: PostLikes[],
-    total_likes:number
+    likes: PostLikes[],
+    total_likes: number
 
     created_at: Date;
     updated_at: Date;
@@ -407,8 +407,19 @@ export interface Suject {
     categoryforum: CategorySuject;
     role_id: number;
     role: Roles;
+    comment:string
     postforums: Postforums[];
     likes: ForumLikes[],
+    liked_by_auth: {
+        id: number,
+        likes: number,
+        forum_id: number,
+        forums: Suject,
+        user_id: number,
+        user: User,
+        created_at: Date;
+        updated_at: Date;
+    },
     total_likes: number
     created_at: Date;
     updated_at: Date;

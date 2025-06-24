@@ -1,9 +1,18 @@
 import { motion } from "framer-motion";
 import { Flag, MessageSquare, ThumbsUp, User } from "lucide-react";
-import RoleBadge from "./BadgeRole";
-import { PostType } from "@/types";
 
-const Post = ({ post }: { post: PostType }) => {
+import { Postforums,  } from "@/types";
+
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
+const Post = ({ post }: { post: Postforums }) => {
+     const formatDate = (dateString: string | Date) => {
+            const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+            return formatDistanceToNow(date, {
+                addSuffix: true,
+                locale: fr
+            });
+        };
   return (
     <motion.article
       className="bg-white p-4 rounded-lg shadow mb-4"
@@ -18,9 +27,9 @@ const Post = ({ post }: { post: PostType }) => {
 
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h4 className="font-medium text-blue-900">{post.author}</h4>
-            <RoleBadge role={post.role} />
-            <span className="text-sm text-gray-500">{post.date}</span>
+            <h4 className="font-medium text-blue-900">{post.user.name}</h4>
+
+            <span className="text-sm text-gray-500">{formatDate(post.created_at)}</span>
           </div>
 
           <div className="mt-2 text-gray-700">
@@ -30,7 +39,7 @@ const Post = ({ post }: { post: PostType }) => {
           <div className="flex space-x-4 mt-3">
             <button className="flex items-center text-gray-500 hover:text-blue-600">
               <ThumbsUp className="w-4 h-4 mr-1" />
-              <span>J'aime ({post.likes})</span>
+              <span>J'aime ({post.total_likes})</span>
             </button>
             <button className="flex items-center text-gray-500 hover:text-blue-600">
               <MessageSquare className="w-4 h-4 mr-1" />
