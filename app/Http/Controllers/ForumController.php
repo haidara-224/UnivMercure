@@ -10,16 +10,13 @@ use App\Models\Postforumlikes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class ForumController extends Controller
 {
     public function index()
     {
         $category = Categoryforum::select(['id', 'title', 'description', 'emoji'])->get();
-
-
-
-
         $authId = Auth::id();
 
         $forums = Forum::with([
@@ -96,5 +93,22 @@ class ForumController extends Controller
             return back()->with('success', '👍 Vous avez liké ce sujet');
         }
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'titre' => ['required'],
+            'category' => ['required', 'exists:categoryforums,id'],
+            'content' => ['required'],
+        ]);
+        $role = Role::where('name', 'forum')->first();
+        $sujet = new Forum();
+        $sujet->title = $request['titre'];
+        $sujet->categoryforum_id = $request['category'];
+        $sujet->comment = $request['content'];
+        $sujet->user_id = Auth::id();
+        $sujet->role_id = $role->id;
+        $sujet->save();
+        return back()->with('success', '👍 Sujet creer avec success');
 
+    }
 }

@@ -29,10 +29,7 @@ const TopicPreview = ({ topic, nbPost }: propsTopic) => {
 
     const handleLike = async (id: number) => {
         if (isLoading) return;
-
         setIsLoading(true);
-
-        // Optimistic UI update
         const wasLiked = localLikeStatus.liked;
         const newCount = wasLiked ? localLikeStatus.count - 1 : localLikeStatus.count + 1;
 
@@ -91,16 +88,13 @@ const TopicPreview = ({ topic, nbPost }: propsTopic) => {
                 </div>
 
                 <div className="flex space-x-4 text-sm">
-                    {/* Nb de commentaires */}
+
                     <Link href={`/forum/details/${topic.id}`}>
                     <div className="flex items-center space-x-1 bg-gray-50 px-3 py-1 rounded-full">
                         <MessageSquare className="w-4 h-4 text-gray-600" />
                         <span className="font-medium text-gray-700">{nbPost}</span>
                     </div>
                     </Link>
-
-
-                    {/* Bouton Like */}
                     <button
                         onClick={() => handleLike(topic.id)}
                         disabled={isLoading}

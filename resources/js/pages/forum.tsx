@@ -1,3 +1,4 @@
+import { AddSubject } from '@/components/LandingPage/Forum/AddSubject';
 import TopicPreview from '@/components/LandingPage/Forum/TopicPreview';
 import NavBar from '@/components/LandingPage/NavBar';
 import WelcomeLayout from '@/layouts/WelcomeLayout';
@@ -26,18 +27,18 @@ export default function ForumPage({ flash }: PageProps) {
     const { category, topics, nbPost } = usePage<CustomPageProps>().props;
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [onpenDialogue,setOpenDialogue]=useState(false)
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success)
         }
     }, [flash]);
     const filteredTopics = topics.filter(topic => {
-        // Filtre par catégorie
+
         const matchesCategory = !activeCategory ||
             (topic.categoryforum &&
                 topic.categoryforum.id.toString() === activeCategory);
 
-        // Filtre par recherche
         const matchesSearch = searchQuery === '' ||
             (topic.title &&
                 topic.title.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -47,9 +48,12 @@ export default function ForumPage({ flash }: PageProps) {
 
     const handleShowAll = () => {
         setActiveCategory(null);
+
         setSearchQuery('');
     };
-
+    const onDialogue=()=>{
+        setOpenDialogue((prev)=>!prev)
+    }
     return (
         <>
             <WelcomeLayout>
@@ -59,9 +63,7 @@ export default function ForumPage({ flash }: PageProps) {
                 </Head>
                 <div className="min-h-screen bg-gray-50">
                     <NavBar />
-
                     <main className="container mx-auto px-4 py-8">
-                        {/* Section de recherche et création */}
                         <section className="mb-8">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div className="relative flex-1 max-w-2xl">
@@ -87,6 +89,7 @@ export default function ForumPage({ flash }: PageProps) {
                                     </motion.button>
 
                                     <motion.button
+                                    onClick={onDialogue}
                                         className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg flex items-center"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -159,7 +162,7 @@ export default function ForumPage({ flash }: PageProps) {
                                             <TopicPreview
                                                 key={topic.id}
                                                 topic={topic}
-                                                nbPost={nbPost[topic.id] || 0} // ← topic.id ou topic.forum_id selon ce que tu reçois
+                                                nbPost={nbPost[topic.id] || 0}
                                             />
                                         ))}
                                     </div>
@@ -181,6 +184,7 @@ export default function ForumPage({ flash }: PageProps) {
                                 )}
                             </div>
                         </div>
+                        <AddSubject openDialogue={onpenDialogue} onOpenChange={onDialogue} catgory={category}/>
                     </main>
                 </div>
             </WelcomeLayout>

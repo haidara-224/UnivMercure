@@ -168,6 +168,7 @@ Route::middleware(['auth', 'verified', 'role:documentaliste'])->prefix('document
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+    Route::post('/forum', [ForumController::class, 'store'])->name('subjects.store');
     Route::put('/forum/{forum}', [ForumController::class, 'updateLike'])->name('forum.update.like')->middleware('auth');
     Route::put('/forum/details/{postforum}', [PostforumController::class, 'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
     Route::get('/forum/details/{forum}', [PostforumController::class, 'index'])->name('forum.details');

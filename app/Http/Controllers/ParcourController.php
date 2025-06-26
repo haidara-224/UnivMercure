@@ -14,7 +14,7 @@ class ParcourController extends Controller
 {
     public function index()
     {
-          $AnneeScolaire = AnneesScolaire::select(['id','annee_scolaire'])->get();
+        $AnneeScolaire = AnneesScolaire::select(['id', 'annee_scolaire'])->get();
         $departement = Departement::select(['id', 'name'])->get();
         $classe = Classes::select(['id', 'niveau'])->get();
 
@@ -64,45 +64,44 @@ class ParcourController extends Controller
             'annees' => $annees
         ]);
     }
-  public function store(Request $request)
-{
-    $validated = $request->validate([
-        'etudiants' => 'required|array',
-        'etudiants.*' => 'exists:etudiants,id',
-        'classe' => 'required|exists:classes,id',
-        'departement' => 'required|exists:departements,id',
-        'annees_scolaire' => 'required|exists:annees_scolaires,id'
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'etudiants' => 'required|array',
+            'etudiants.*' => 'exists:etudiants,id',
+            'classe' => 'required|exists:classes,id',
+            'departement' => 'required|exists:departements,id',
+            'annees_scolaire' => 'required|exists:annees_scolaires,id'
+        ]);
 
-    $dejaInscrits = [];
+        $dejaInscrits = [];
+        $anneeId = intval($validated['annees_scolaire']);
 
-   $anneeId = intval($validated['annees_scolaire']);
+        foreach ($validated['etudiants'] as $etudiantId) {
+            $inscrit = Parcour::where('etudiant_id', $etudiantId)
+                ->where('annees_scolaire_id', $anneeId)
+                ->exists();
 
-foreach ($validated['etudiants'] as $etudiantId) {
-    $inscrit = Parcour::where('etudiant_id', $etudiantId)
-        ->where('annees_scolaire_id', $anneeId)
-        ->exists();
+            if ($inscrit) {
+                $dejaInscrits[] = $etudiantId;
+                continue;
+            }
 
-    if ($inscrit) {
-        $dejaInscrits[] = $etudiantId;
-        continue;
+            Parcour::create([
+                'etudiant_id' => $etudiantId,
+                'classes_id' => $validated['classe'],
+                'departement_id' => $validated['departement'],
+                'annees_scolaire_id' => $anneeId,
+            ]);
+        }
+
+        if (count($dejaInscrits)) {
+            return back()->with('error', 'Certains étudiants étaient déjà inscrits dans cette année scolaire. Les autres ont été enregistrés.');
+        }
+
+        return back()->with('success', 'Tous les étudiants ont été inscrits avec succès.');
     }
-     if (count($dejaInscrits)) {
-        return back()->with('error', 'Certains étudiants étaient déjà inscrits dans cette année scolaire. Les autres ont été enregistrés.');
-    }
-    Parcour::create([
-        'etudiant_id' => $etudiantId,
-        'classes_id' => $validated['classe'],
-        'departement_id' => $validated['departement'],
-        'annees_scolaire_id' => $anneeId,
-    ]);
-}
 
-
-
-
-    return back()->with('success', 'Étudiants inscrits avec succès.');
-}
 
 
 
