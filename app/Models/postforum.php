@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Permission\Models\Role;
 
 class Postforum extends Model
@@ -27,7 +28,11 @@ class Postforum extends Model
         return $this->hasMany(Postforumlikes::class);
     }
     public function likedByAuth()
-{
-    return $this->hasOne(Postforumlikes::class);
-}
+    {
+        return $this->hasOne(Postforumlikes::class);
+    }
+    public function replieposts(): HasMany
+    {
+        return $this->hasMany(Repliepost::class)->whereNull('parent_id');
+    }
 }

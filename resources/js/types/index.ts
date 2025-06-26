@@ -382,7 +382,20 @@ export interface PostLikes {
     created_at: Date;
     updated_at: Date;
 }
+export interface RepliesPost{
+    id:number,
+    postforum_id:number,
+    postforum:Postforums,
+    user_id:number,
+    user:User,
+    parent_id: number | null | undefined;
+    content:string
+    parent:RepliesPost,
+     replies ?:RepliesPost[]
+     created_at: Date;
+    updated_at: Date;
 
+}
 export interface Postforums {
     id: number;
     forum_id: number;
@@ -404,6 +417,7 @@ export interface Postforums {
         created_at: Date;
         updated_at: Date;
     },
+    replieposts:RepliesPost[]
     created_at: Date;
     updated_at: Date;
 }

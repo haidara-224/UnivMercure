@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Role;
 
 class PostforumController extends Controller
 {
- public function index(Forum $forum)
+public function index(Forum $forum)
 {
     $authId = Auth::id();
 
@@ -27,6 +27,13 @@ class PostforumController extends Controller
                 'role',
                 'likes',
                 'likedByAuth' => fn($q) => $q->where('user_id', $authId)->where('likes', 1),
+                'replieposts' => function ($q) {
+                    $q->with(['user',
+        'replies.user',
+        'replies.replies.user',
+        'replies.replies.replies.user',
+        'replies.replies.replies.replies.user',]);
+                },
             ])
             ->withCount([
                 'likes as total_likes' => fn($q) => $q->where('likes', 1),
@@ -39,10 +46,13 @@ class PostforumController extends Controller
         'likes as total_likes' => fn($query) => $query->where('likes', 1)
     ]);
 
+
     return Inertia::render('forum/details', [
-        'post' => $forum
+        'post' => $forum,
+
     ]);
 }
+
 
     public function create(Request $request,Forum $forum)
     {

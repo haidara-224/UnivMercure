@@ -25,6 +25,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParcourController;
 use App\Http\Controllers\PostforumController;
 use App\Http\Controllers\ProfesseurController;
+use App\Http\Controllers\RepliepostController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\TraitementdocumentsController;
 use App\Http\Controllers\TutoController;
@@ -172,7 +173,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/forum/{forum}', [ForumController::class, 'updateLike'])->name('forum.update.like')->middleware('auth');
     Route::put('/forum/details/{postforum}', [PostforumController::class, 'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
     Route::get('/forum/details/{forum}', [PostforumController::class, 'index'])->name('forum.details');
-    Route::post('/forum/details/{forum}', [PostforumController::class, 'create'])->name('forum.post.create');
+    Route::post('/forum/replies', [RepliepostController::class, 'store'])
+    ->name('forum.reply.create')
+    ->middleware('auth');
+
 });
 
 require __DIR__ . '/settings.php';
