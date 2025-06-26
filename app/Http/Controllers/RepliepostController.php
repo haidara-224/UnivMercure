@@ -25,4 +25,10 @@ class RepliepostController extends Controller
 
         return back()->with('success', 'Réponse envoyée avec succès.');
     }
+    public function destroy(Repliepost $replies)
+    {
+        $replies->delete();
+        return back()->with('success', '👍 Vous avez supprimé cette réponse');
+
+    }
 }

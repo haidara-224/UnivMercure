@@ -169,14 +169,17 @@ Route::middleware(['auth', 'verified', 'role:documentaliste'])->prefix('document
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum');
-    Route::post('/forum', [ForumController::class, 'store'])->name('subjects.store');
     Route::put('/forum/{forum}', [ForumController::class, 'updateLike'])->name('forum.update.like')->middleware('auth');
     Route::put('/forum/details/{postforum}', [PostforumController::class, 'updateLikePost'])->name('forum.updatePost.like')->middleware('auth');
     Route::get('/forum/details/{forum}', [PostforumController::class, 'index'])->name('forum.details');
-    Route::post('/forum/replies', [RepliepostController::class, 'store'])
+    Route::delete('/forum/details/{postforum}', [PostforumController::class, 'destroy'])->name('forum.details.delete');
+    Route::post('/forum/details/{forum}', [PostforumController::class, 'create'])->name('forum.post.create');
+     Route::post('/forum/replies', [RepliepostController::class, 'store'])
     ->name('forum.reply.create')
     ->middleware('auth');
-
+     Route::delete('/forum/replies/{replies}', [RepliepostController::class, 'destroy'])
+    ->name('forum.reply.delete')
+    ->middleware('auth');
 });
 
 require __DIR__ . '/settings.php';

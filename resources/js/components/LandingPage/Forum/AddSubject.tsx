@@ -158,14 +158,14 @@ function AddSubject({ openDialogue, onOpenChange, catgory }: ProposDialogue) {
                                         <Label className="block text-sm font-medium text-gray-700 mb-2">
                                             Contenu
                                         </Label>
-                                        <div className="flex-1 flex flex-col min-h-[300px]">
+                                        <div className="flex-1 flex flex-col min-h-[100px]">
                                             <ReactQuill
                                                 theme="snow"
                                                 value={data.content}
                                                 onChange={(value) => setData('content', value)}
                                                 modules={modules}
                                                 placeholder="Développez votre idée ici..."
-                                                className="flex-1 border border-gray-300 rounded-lg overflow-hidden h-auto"
+                                                className="flex-1 border border-gray-300 rounded-lg overflow-hidden"
                                             />
                                         </div>
                                         <InputError message={errors.content} className="mt-1 text-sm text-red-600" />

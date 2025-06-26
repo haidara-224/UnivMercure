@@ -12,66 +12,67 @@ use Spatie\Permission\Models\Role;
 
 class PostforumController extends Controller
 {
-public function index(Forum $forum)
-{
-    $authId = Auth::id();
-
-    $forum->load([
-        'user',
-        'role',
-        'likes',
-        'likedByAuth' => fn($query) => $query->where('user_id', $authId)->where('likes', 1),
-        'postforums' => function ($query) use ($authId) {
-            $query->with([
-                'user',
-                'role',
-                'likes',
-                'likedByAuth' => fn($q) => $q->where('user_id', $authId)->where('likes', 1),
-                'replieposts' => function ($q) {
-                    $q->with(['user',
-        'replies.user',
-        'replies.replies.user',
-        'replies.replies.replies.user',
-        'replies.replies.replies.replies.user',]);
-                },
-            ])
-            ->withCount([
-                'likes as total_likes' => fn($q) => $q->where('likes', 1),
-            ])
-            ->orderByDesc('created_at');
-        },
-    ]);
-
-    $forum->loadCount([
-        'likes as total_likes' => fn($query) => $query->where('likes', 1)
-    ]);
-
-
-    return Inertia::render('forum/details', [
-        'post' => $forum,
-
-    ]);
-}
-
-
-    public function create(Request $request,Forum $forum)
+    public function index(Forum $forum)
     {
-        $data=$request->validate([
-            'post'=>['required','string']
-        ]);
-           $user = Auth::user();
+        $authId = Auth::id();
 
-        $post=new Postforum();
-        $post->user_id=Auth::id();
-        $post->forum_id=$forum->id;
-        $post->content=$data['post'];
-       $post->role_id = $user->roles()->first()->id;
+        $forum->load([
+            'user',
+            'role',
+            'likes',
+            'likedByAuth' => fn($query) => $query->where('user_id', $authId)->where('likes', 1),
+            'postforums' => function ($query) use ($authId) {
+                $query->with([
+                    'user',
+                    'role',
+                    'likes',
+                    'likedByAuth' => fn($q) => $q->where('user_id', $authId)->where('likes', 1),
+                    'replieposts' => function ($q) {
+                        $q->with([
+                            'user',
+                            'replies.user',
+                            'replies.replies.user',
+                            'replies.replies.replies.user',
+                            'replies.replies.replies.replies.user',
+                        ]);
+                    },
+                ])
+                    ->withCount([
+                        'likes as total_likes' => fn($q) => $q->where('likes', 1),
+                    ])
+                    ->orderByDesc('created_at');
+            },
+        ]);
+
+        $forum->loadCount([
+            'likes as total_likes' => fn($query) => $query->where('likes', 1)
+        ]);
+
+
+        return Inertia::render('forum/details', [
+            'post' => $forum,
+
+        ]);
+    }
+
+
+    public function create(Request $request, Forum $forum)
+    {
+        $data = $request->validate([
+            'post' => ['required', 'string']
+        ]);
+        $user = Auth::user();
+
+        $post = new Postforum();
+        $post->user_id = Auth::id();
+        $post->forum_id = $forum->id;
+        $post->content = $data['post'];
+        $post->role_id = $user->roles()->first()->id;
 
         $post->save();
-        return back()->with('success','Post Creer avec success');
-
+        return back()->with('success', 'Post Creer avec success');
     }
-     public function updateLikePost(Postforum $postforum)
+    public function updateLikePost(Postforum $postforum)
     {
         $authId = Auth::id();
 
@@ -99,6 +100,11 @@ public function index(Forum $forum)
 
             return back()->with('success', '👍 Vous avez liké ce Post');
         }
+    }
+    public function destroy(Postforum $postforum)
+    {
+        $postforum->delete();
+         return back()->with('success', '👍 Vous avez supprimé ce post');
 
     }
 }

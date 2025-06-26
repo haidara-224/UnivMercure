@@ -6,9 +6,13 @@ import { fr } from 'date-fns/locale';
 import { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
 import RoleBadge from "./BadgeRole";
+import { Button } from "@/components/ui/button";
 
-const Post = ({ post }: { post: Postforums}) => {
+const Post = ({ post }: { post: Postforums }) => {
     const [isLoading, setIsLoading] = useState(false);
+
+    const [replyLoading, setReplyLoading] = useState(false);
+    const [nestedReplyLoading, setNestedReplyLoading] = useState<Record<number, boolean>>({});
     const { auth, } = usePage<SharedData>().props;
     const [localLikeStatus, setLocalLikeStatus] = useState({
         liked: !!post.liked_by_auth,
@@ -78,7 +82,7 @@ const Post = ({ post }: { post: Postforums}) => {
             router.delete(`/forum/replies/${replyId}`, {
                 preserveScroll: true,
                 onSuccess: () => {
-                    // Mise à jour optimiste
+
                     const deleteReply = (repliesList: RepliesPost[]): RepliesPost[] => {
                         return repliesList
                             .filter(reply => reply.id !== replyId)
@@ -94,7 +98,20 @@ const Post = ({ post }: { post: Postforums}) => {
     };
 
     const handleReplySubmit = (parentId: number, isNestedReply = false, replyToId?: number) => {
-        if (!replyContent.trim()) return;
+
+         if (!replyContent.trim()) {
+            alert("veillez renseigner le champs")
+            return
+        }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const loadingKey = isNestedReply && replyToId ? replyToId : 'main';
+        if ((isNestedReply && nestedReplyLoading[replyToId!]) || (!isNestedReply && replyLoading)) return;
+        if (isNestedReply && replyToId) {
+            setNestedReplyLoading(prev => ({ ...prev, [replyToId]: true }));
+        } else {
+            setReplyLoading(true);
+        }
+
 
         const payload = {
             content: replyContent,
@@ -147,6 +164,13 @@ const Post = ({ post }: { post: Postforums}) => {
                     setReplies(updateReplies(replies));
                 } else {
                     setReplies([...replies, newReply]);
+                }
+            },
+            onFinish: () => {
+                if (isNestedReply && replyToId) {
+                    setNestedReplyLoading(prev => ({ ...prev, [replyToId]: false }));
+                } else {
+                    setReplyLoading(false);
                 }
             }
         });
@@ -251,18 +275,32 @@ const Post = ({ post }: { post: Postforums}) => {
                                     />
                                     <div className="flex justify-end space-x-2 mt-1">
                                         <button
+                                        disabled={nestedReplyLoading[reply.id]}
                                             onClick={() => toggleNestedReplyForm(reply.id)}
                                             className="px-3 py-1 text-sm bg-gray-100 rounded"
                                         >
                                             Annuler
                                         </button>
-                                        <button
+                                        <Button
                                             type="submit"
+                                            disabled={nestedReplyLoading[reply.id] || !reply.content.trim()}
+
                                             onClick={() => handleReplySubmit(post.id, true, reply.id)}
                                             className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
                                         >
-                                            Envoyer
-                                        </button>
+                                            {nestedReplyLoading[reply.id] ? (
+                                                <span className="flex items-center">
+                                                    <motion.div
+                                                        className="w-3 h-3 mr-1"
+                                                        animate={{ rotate: 360 }}
+                                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                                    >
+                                                        <div className="w-2 h-2 border-2 border-white border-t-transparent rounded-full" />
+                                                    </motion.div>
+                                                    Envoi...
+                                                </span>
+                                            ) : 'Envoyer'}
+                                        </Button>
                                     </div>
                                 </motion.div>
                             )}
@@ -322,9 +360,8 @@ const Post = ({ post }: { post: Postforums}) => {
                         <button
                             onClick={() => handleLike(post.id)}
                             disabled={isLoading}
-                            className={`flex items-center space-x-1 px-3 py-1 rounded-full transition-all duration-150 ${
-                                localLikeStatus.liked ? 'bg-blue-50' : 'bg-gray-50'
-                            } ${isLoading ? 'opacity-75' : 'hover:bg-gray-100'}`}
+                            className={`flex items-center space-x-1 px-3 py-1 rounded-full transition-all duration-150 ${localLikeStatus.liked ? 'bg-blue-50' : 'bg-gray-50'
+                                } ${isLoading ? 'opacity-75' : 'hover:bg-gray-100'}`}
                         >
                             {isLoading ? (
                                 <motion.div
@@ -336,25 +373,24 @@ const Post = ({ post }: { post: Postforums}) => {
                                 </motion.div>
                             ) : (
                                 <ThumbsUp
-                                    className={`w-4 h-4 ${
-                                        localLikeStatus.liked ? 'fill-blue-600 text-blue-600' : 'text-gray-600'
-                                    }`}
+                                    className={`w-4 h-4 ${localLikeStatus.liked ? 'fill-blue-600 text-blue-600' : 'text-gray-600'
+                                        }`}
                                 />
                             )}
                             <span
-                                className={`font-medium ${
-                                    localLikeStatus.liked ? 'text-blue-600' : 'text-gray-700'
-                                }`}
+                                className={`font-medium ${localLikeStatus.liked ? 'text-blue-600' : 'text-gray-700'
+                                    }`}
                             >
                                 {localLikeStatus.count}
                             </span>
                         </button>
                         <button
                             onClick={() => setShowReplyForm(!showReplyForm)}
+                            disabled={isLoading}
                             className="flex items-center text-gray-500 hover:text-blue-600"
                         >
                             <MessageSquare className="w-4 h-4 mr-1" />
-                            <span>Répondre</span>
+                            <span>{isLoading ? "En cours d'envoie.." : 'Répondre'}</span>
                         </button>
                         <button className="flex items-center text-gray-500 hover:text-red-600">
                             <Flag className="w-4 h-4 mr-1" />
@@ -380,10 +416,11 @@ const Post = ({ post }: { post: Postforums}) => {
                                 </button>
                                 <button
                                     type="submit"
+                                    disabled={isLoading}
                                     onClick={() => handleReplySubmit(post.id)}
                                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                                 >
-                                    Envoyer
+                                    {isLoading ? "En cours d'envoie.." : 'Répondre'}
                                 </button>
                             </div>
                         </div>
