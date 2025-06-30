@@ -41,32 +41,32 @@ class DasboardForumController extends Controller
             'nbPostUser' => $nbPostUser
         ]);
     }
-   public function show(Forum $forum)
-{
-    $forum = $forum->load([
-        'categoryforum',
-        'role',
-        'user',
-        'likes',
-        'postforums.user',
-        'postforums.likes',
-        'postforums' => function ($query) {
-            $query->withCount([
-                'likes as total_likes' => function ($q) {
-                    $q->where('likes', 1);
-                }
-            ]);
-        },
-    ]);
+    public function show(Forum $forum)
+    {
+        $forum = $forum->load([
+            'categoryforum',
+            'role',
+            'user',
+            'likes',
+            'postforums.user',
+            'postforums.likes',
+            'postforums' => function ($query) {
+                $query->withCount([
+                    'likes as total_likes' => function ($q) {
+                        $q->where('likes', 1);
+                    }
+                ]);
+            },
+        ]);
 
-    // ✅ Total des likes du forum (likes = 1)
-    $totalForumLikes = $forum->likes->where('likes', 1)->count();
+        // ✅ Total des likes du forum (likes = 1)
+        $totalForumLikes = $forum->likes->where('likes', 1)->count();
 
-    return Inertia::render('dashboard/forum/post', [
-        'sujet' => $forum,
-        'totalLikesForum' => $totalForumLikes,
-    ]);
-}
+        return Inertia::render('dashboard/forum/post', [
+            'sujet' => $forum,
+            'totalLikesForum' => $totalForumLikes,
+        ]);
+    }
 
     public function delete(Forum $forum)
     {

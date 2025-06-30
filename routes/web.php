@@ -170,6 +170,15 @@ Route::middleware(['auth', 'verified', 'role:documentaliste'])->prefix('document
 });
 Route::middleware(['auth', 'verified', 'role:BDE'])->prefix('bde')->name('bde.')->group(function () {
  Route::get('/', [BdedashboardController::class, 'index'])->name('index');
+ Route::get('/forums', [BdedashboardController::class, 'forums'])->name('forums');
+    Route::delete('/forums/{forum}', [BdedashboardController::class, 'deleteForum'])->name('forum.delete');
+    Route::get('/forums/post/{forum}', [BdedashboardController::class, 'showForum'])->name('forum.show');
+    Route::delete('/forums/post/{postforum}', [BdedashboardController::class, 'deletePost'])->name('post.delete');
+
+    Route::get('/forum/category', [BdedashboardController::class, 'category'])->name('categoryForum.index');
+    Route::delete('/forum/category/{categoryForum}', [BdedashboardController::class, 'deleteCategory'])->name('categoryForum.delete');
+    Route::put('/forum/category/{categoryForum}', [BdedashboardController::class, 'updateCategory'])->name('categoryForum.update');
+    Route::post('/forum/category', [BdedashboardController::class, 'storeCategory'])->name('categoryForum.store');
 
 });
 Route::middleware(['auth'])->group(function () {
