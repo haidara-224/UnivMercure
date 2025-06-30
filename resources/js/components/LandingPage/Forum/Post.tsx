@@ -71,7 +71,7 @@ const Post = ({ post }: { post: Postforums }) => {
             router.delete(`/forum/details/${post.id}`, {
                 preserveScroll: true,
                 onSuccess: () => {
-                    // Gérer la suppression dans l'UI si nécessaire
+
                 }
             });
         }

@@ -28,7 +28,7 @@ const NavBar = () => {
                     <nav className="hidden md:flex space-x-6 items-center">
                         <Link href="/forum" className="hover:text-amber-300 transition">Accueil Forum</Link>
                         <Link href="/categories" className="hover:text-amber-300 transition">Catégories</Link>
-                        <Link href="/nouveau-sujet" className="hover:text-amber-300 transition">Créer un sujet</Link>
+
                     </nav>
 
                     <button
@@ -40,7 +40,7 @@ const NavBar = () => {
                 </div>
             </div>
 
-            {/* Menu mobile */}
+
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
@@ -53,7 +53,7 @@ const NavBar = () => {
                         <div className="container mx-auto px-6 py-3 flex flex-col space-y-3">
                             <Link href="/forum" className="py-2 hover:text-amber-300 transition">Accueil Forum</Link>
                             <Link href="/categories" className="py-2 hover:text-amber-300 transition">Catégories</Link>
-                            <Link href="/nouveau-sujet" className="py-2 hover:text-amber-300 transition">Créer un sujet</Link>
+
                         </div>
                     </motion.div>
                 )}

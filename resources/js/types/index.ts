@@ -400,6 +400,7 @@ export interface Postforums {
     id: number;
     forum_id: number;
     forums: Suject;
+    forum: Suject;
     user_id: number;
     user: User;
     role_id: number;
@@ -431,6 +432,8 @@ export interface Suject {
     role_id: number;
     role: Roles;
     comment:string
+    total_postforums: number;
+
     postforums: Postforums[];
     likes: ForumLikes[],
     liked_by_auth: {

@@ -134,6 +134,20 @@ export function Headers() {
                                         }
 
                                     </motion.div>
+                                      <motion.div whileHover={{ scale: 1.05 }}>
+                                        {
+                                            authUsers?.map((r) => (
+                                                r.name == 'BDE' && <Link key={r.id}
+                                                    href={route('bde.index')}
+                                                    className="inline-block rounded-md bg-amber-500 px-5 py-1.5 text-sm font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                >
+                                                    BDE
+                                                </Link>
+                                            ))
+
+                                        }
+
+                                    </motion.div>
                                     <motion.div whileHover={{ scale: 1.05 }}>
                                         {
                                             authUsers?.map((r) => (
@@ -284,6 +298,21 @@ export function Headers() {
                                                             className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
                                                         >
                                                             Mon Espace
+                                                        </Link>
+                                                    ))
+
+                                                }
+
+                                            </motion.div>
+                                              <motion.div whileHover={{ scale: 1.05 }}>
+                                                {
+                                                    authUsers?.map((r) => (
+                                                        r.name == 'BDE' && <Link key={r.id}
+
+                                                            href={route('bde.index')}
+                                                            className="inline-block w-full text-center rounded-md bg-amber-500 px-5 py-3 text-lg font-medium leading-normal text-white hover:bg-amber-600 transition"
+                                                        >
+                                                            BDE
                                                         </Link>
                                                     ))
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnneesScolaireController;
+use App\Http\Controllers\BdedashboardController;
 use App\Http\Controllers\CategoryforumController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\DasboardForumController;
@@ -166,6 +167,10 @@ Route::middleware(['auth', 'verified', 'role:documentaliste'])->prefix('document
 
 
     Route::post('/', [TraitementdocumentsController::class, 'store'])->name('documents.store');
+});
+Route::middleware(['auth', 'verified', 'role:BDE'])->prefix('bde')->name('bde.')->group(function () {
+ Route::get('/', [BdedashboardController::class, 'index'])->name('index');
+
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum');
