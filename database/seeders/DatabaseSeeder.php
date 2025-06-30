@@ -6,9 +6,12 @@ use App\Models\anneesScolaire;
 use App\Models\classes;
 use App\Models\departement;
 use App\Models\etudiant;
+use App\Models\Evenement;
+use App\Models\EvenementImage;
 use App\Models\forum;
 use App\Models\Forumlikes;
 use App\Models\ForumRoleUser;
+use App\Models\Image;
 use App\Models\parcour;
 use App\Models\postforum;
 use App\Models\Postforumlikes;
@@ -51,12 +54,16 @@ class DatabaseSeeder extends Seeder
          $this->call(CategoryForumSeeder::class);
         forum::factory(100)->create();
         postforum::factory(400)->create();
-         *
-         */
-
-        forum::factory(100)->create();
+           forum::factory(100)->create();
         postforum::factory(400)->create();
         Forumlikes::factory(100)->create();
         Postforumlikes::factory(400)->create();
+         *
+         */
+        Evenement::factory(100)->create();
+        Image::factory(100)->create();
+        EvenementImage::factory(100)->create();
+
+
     }
 }

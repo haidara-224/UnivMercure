@@ -13,6 +13,7 @@ use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DocumentalisteController;
 use App\Http\Controllers\EmploieController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamensController;
 use App\Http\Controllers\ExamensreponsesController;
@@ -179,6 +180,8 @@ Route::middleware(['auth', 'verified', 'role:BDE'])->prefix('bde')->name('bde.')
     Route::delete('/forum/category/{categoryForum}', [BdedashboardController::class, 'deleteCategory'])->name('categoryForum.delete');
     Route::put('/forum/category/{categoryForum}', [BdedashboardController::class, 'updateCategory'])->name('categoryForum.update');
     Route::post('/forum/category', [BdedashboardController::class, 'storeCategory'])->name('categoryForum.store');
+
+    Route::get('/evenements',[EvenementController::class,'index'])->name('evenements.index');
 
 });
 Route::middleware(['auth'])->group(function () {

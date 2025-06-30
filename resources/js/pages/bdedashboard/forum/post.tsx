@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Forum',
+        title: 'Forum BDE',
         href: '/bde/forums/',
     },
     {

@@ -9,8 +9,8 @@ import { useEffect } from 'react';
 import { toast } from 'sonner';
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Forum',
-        href: '/dashboard/forum',
+        title: 'Forum BDE',
+        href: '/bde/forums',
     },
 ];
 interface PageProps {

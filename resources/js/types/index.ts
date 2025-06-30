@@ -451,5 +451,25 @@ export interface Suject {
     updated_at: Date;
 }
 
-
-
+export interface Evenements {
+    id: number;
+    title: string;
+    description: string;
+    start_date: Date;
+    end_date: Date;
+    badge:string,
+    images:Image[]
+}
+export interface EvenementImage {
+    id: number;
+    evenement_id: number;
+    image: Image;
+    evenement: Evenements;
+    created_at: Date;
+    updated_at: Date;
+}
+export interface Image{
+    url:string,
+    created_at: Date;
+    updated_at: Date;
+}
