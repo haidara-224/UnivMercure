@@ -182,6 +182,11 @@ Route::middleware(['auth', 'verified', 'role:BDE'])->prefix('bde')->name('bde.')
     Route::post('/forum/category', [BdedashboardController::class, 'storeCategory'])->name('categoryForum.store');
 
     Route::get('/evenements',[EvenementController::class,'index'])->name('evenements.index');
+    Route::get('/evenements/create',[EvenementController::class,'create'])->name('evenements.create');
+    Route::post('/evenements/create',[EvenementController::class,'store'])->name('evenements.store');
+    Route::delete('/evenements/{evenement}',[EvenementController::class,'destroy'])->name('evenements.delete');
+    Route::get('/evenements/{evenement}/edit',[EvenementController::class,'edit'])->name('evenements.edit');
+    Route::put('/evenements/{evenement}',[EvenementController::class,'update'])->name('evenements.update');
 
 });
 Route::middleware(['auth'])->group(function () {
