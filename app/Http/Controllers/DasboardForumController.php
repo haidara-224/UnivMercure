@@ -38,7 +38,8 @@ class DasboardForumController extends Controller
             'sujet' => $forums,
             'nbForum' => $nbForum,
             'nbPost' => $nbPost,
-            'nbPostUser' => $nbPostUser
+            'nbPostUser' => $nbPostUser,
+
         ]);
     }
     public function show(Forum $forum)

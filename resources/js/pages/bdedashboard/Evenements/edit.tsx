@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Calendar, X, Check, ChevronDown, ArrowBigLeft } from 'lucide-react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
+import { Evenements } from '@/types';
 
 const badgeOptions = [
     'À venir', 'en cours', 'terminé', 'Important', 'Annulé', 'Reporté',
@@ -23,8 +24,16 @@ interface MessageFlash {
         success: string;
     };
 }
-const CreateEvent = ({ flash }: MessageFlash) => {
-    const { data, setData, post, processing, errors, reset } = useForm<FormData>({
+interface PageProps {
+    [key: string]: unknown;
+}
+
+interface CustomPageProps extends PageProps {
+    evenement: Evenements;
+}
+const EditEvent = ({ flash }: MessageFlash) => {
+        const { evenement } = usePage<CustomPageProps>().props;
+    const { data, setData,  processing, errors, reset } = useForm<FormData>({
         title: '',
         description: '',
         start_date: '',
@@ -44,6 +53,31 @@ const CreateEvent = ({ flash }: MessageFlash) => {
             });
         }
     }, [flash]);
+    useEffect(() => {
+        if (evenement) {
+            setData({
+                title: evenement.title,
+                description: evenement.description,
+                start_date: evenement.start_date,
+                end_date: evenement.end_date,
+                badge: evenement.badge,
+                images: []
+            } as unknown as FormData);
+         if (evenement.images && Array.isArray(evenement.images)) {
+    setPreviewImages(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        evenement.images.map((img: any) => ({
+            file: undefined as unknown as File,
+            preview: typeof img === 'string'
+                ? (img.startsWith('http') ? img : `/storage/${img}`)
+                : (typeof img.url === 'string'
+                    ? (img.url.startsWith('http') ? img.url : `/storage/${img.url}`)
+                    : '')
+        }))
+    );
+}
+        }
+    }, [evenement,setData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -104,16 +138,29 @@ const CreateEvent = ({ flash }: MessageFlash) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route('bde.evenements.store'), {
+        router.post(route("bde.evenements.update", evenement.id), {
+            _method: "put",
+            title: data.title,
+            description: data.description,
+            start_date: data.start_date,
+            end_date: data.end_date,
+            badge: data.badge,
+            images: data.images,
+
+
+        }, {
             onSuccess: () => {
-                reset();
+                 reset();
                 setPreviewImages([]);
                 setTimeout(() => {
-                    router.get(route('bde.evenements.index'));
+                    router.get(route('bde.evenements.index'),);
                 }, 3000);
+
             },
             forceFormData: true
-        },);
+
+        });
+
 
     };
 
@@ -305,4 +352,4 @@ const CreateEvent = ({ flash }: MessageFlash) => {
     );
 };
 
-export default CreateEvent;
+export default EditEvent;

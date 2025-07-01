@@ -14,7 +14,7 @@ import {
 import { Evenements } from "@/types";
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from "@inertiajs/react";
+import { Link, useForm } from "@inertiajs/react";
 
 interface EvenementProps {
     evenements: Evenements[];
@@ -25,6 +25,7 @@ export default function Evenement({ evenements }: EvenementProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedBadge, setSelectedBadge] = useState<string>('Tous');
     const [currentPage, setCurrentPage] = useState(1);
+    const { delete: destroy,  } = useForm({});
     const itemsPerPage = 6;
 
     const container = {
@@ -140,7 +141,14 @@ export default function Evenement({ evenements }: EvenementProps) {
             </div>
         );
     };
+    const handleDelete = (id: number) => {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet événement ?")) {
+            destroy(route('bde.evenements.delete', id), {
+                preserveScroll: true,
 
+            });
+         }
+    }
     return (
         <div className="container mx-auto px-4 py-8">
 
@@ -268,11 +276,13 @@ export default function Evenement({ evenements }: EvenementProps) {
                                         </div>
                                     </CardContent>
                                     <CardFooter className="flex justify-end gap-2 border-t border-gray-100 dark:border-gray-800">
-                                        <Button variant="outline" size="sm" className="gap-2">
-                                            <Edit className="h-4 w-4" />
-                                            Modifier
-                                        </Button>
-                                        <Button variant="destructive" size="sm" className="gap-2">
+                                      <Link href={`/bde/evenements/${event.id}/edit`} className="cursor-pointer">
+                                            <Button variant="outline" size="sm" className="gap-2">
+                                                <Edit className="h-4 w-4 text-gray-600" />
+                                                Modifier
+                                            </Button>
+                                        </Link>
+                                        <Button variant="destructive" size="sm" className="gap-2" onClick={() => {handleDelete(event.id)}}>
                                             <Trash2 className="h-4 w-4 text-white" />
                                             Supprimer
                                         </Button>

@@ -35,6 +35,8 @@ use App\Http\Controllers\VerifcationMatriculeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/activity', [HomeController::class, 'activity'])->name('activity');
+Route::get('/activity/{evenement}', [HomeController::class, 'activityShow'])->name('activity.show');
 route::get('/verification-matricule', [VerifcationMatriculeController::class, 'verification'])->name('verifcation.verif');
 route::post('/verification-matricule', [VerifcationMatriculeController::class, 'verificationStore'])->name('verifcation.store');
 

@@ -8,7 +8,9 @@ import UserButton from "./UserButton";
 
 export function Headers() {
     const { url } = usePage();
-  const { auth, authUsers } = usePage<SharedData>().props;
+    const { auth, authUsers } = usePage<SharedData>().props;
+
+
     const { post } = useForm({});
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,20 +39,23 @@ export function Headers() {
     return (
         <>
             <motion.header
-                className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-2' : 'bg-transparent py-4'}`}
+                className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-sm shadow-lg py-2'
+                        : 'bg-blue-900/80 backdrop-blur-sm py-4'
+                    }`}
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
             >
                 <div className="container mx-auto px-6">
                     <div className="flex items-center justify-between">
-
+                        {/* Logo animé */}
                         <motion.div
                             className="flex items-center space-x-2"
                             whileHover={{ scale: 1.05 }}
                         >
                             <motion.div
-                                className={`p-1 rounded-full ${scrolled ? '' : 'bg-white'}`}
+                                className={`text-xl font-bold ${scrolled ? 'text-gray-900' : 'text-white'
+                                    }`}
                                 animate={{
                                     rotate: [0, 10, -10, 0],
                                 }}
@@ -72,12 +77,12 @@ export function Headers() {
                         </motion.div>
 
 
-
+                        {/* Navigation desktop */}
                         <nav className="hidden md:flex space-x-8 items-center">
                             {[
                                 { path: "/", label: "Accueil" },
                                 { path: "/formations", label: "Formations" },
-                               { path: "/activity", label: "Événements" },
+                                { path: "/activity", label: "Événements" },
                                 { path: "/forum", label: "Forum" },
                                 { path: "/campus", label: "Campus" },
                                 { path: "/contact", label: "Contact" },
@@ -86,12 +91,12 @@ export function Headers() {
                                     <Link
                                         href={item.path}
                                         className={`font-medium ${isActive(item.path)
-                                                ? scrolled
-                                                    ? 'text-amber-500'
-                                                    : 'text-amber-300'
-                                                : scrolled
-                                                    ? 'text-gray-600 hover:text-amber-500'
-                                                    : 'text-gray-200 hover:text-amber-300'
+                                            ? scrolled
+                                                ? 'text-amber-500'
+                                                : 'text-amber-300'
+                                            : scrolled
+                                                ? 'text-gray-600 hover:text-amber-500'
+                                                : 'text-gray-200 hover:text-amber-300'
                                             } transition`}
                                     >
                                         {item.label}
@@ -100,6 +105,8 @@ export function Headers() {
                             ))
                             }
 
+
+                            {/* Boutons de connexion */}
                             {auth.user ? (
                                 <>
                                     <motion.div whileHover={{ scale: 1.05 }}>
@@ -130,7 +137,7 @@ export function Headers() {
                                         }
 
                                     </motion.div>
-                                      <motion.div whileHover={{ scale: 1.05 }}>
+                                    <motion.div whileHover={{ scale: 1.05 }}>
                                         {
                                             authUsers?.map((r) => (
                                                 r.name == 'BDE' && <Link key={r.id}
@@ -204,6 +211,7 @@ export function Headers() {
                             )}
                         </nav>
 
+                        {/* Bouton menu mobile */}
                         <button
                             className="md:hidden focus:outline-none"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -245,11 +253,10 @@ export function Headers() {
                                     >
                                         <Link
                                             href={item.path}
-                                            className={`text-2xl font-medium ${
-                                                isActive(item.path)
+                                            className={`text-2xl font-medium ${isActive(item.path)
                                                     ? 'text-amber-300'
                                                     : 'text-gray-300 hover:text-amber-300'
-                                            } transition`}
+                                                } transition`}
                                             onClick={() => setMobileMenuOpen(false)}
                                         >
                                             {item.label}
@@ -257,7 +264,7 @@ export function Headers() {
                                     </motion.div>
                                 ))}
                                 {auth.user && (
-                                     <motion.div whileHover={{ scale: 1.05 }}>
+                                    <motion.div whileHover={{ scale: 1.05 }}>
                                         <UserButton />
 
                                     </motion.div>
@@ -299,7 +306,7 @@ export function Headers() {
                                                 }
 
                                             </motion.div>
-                                              <motion.div whileHover={{ scale: 1.05 }}>
+                                            <motion.div whileHover={{ scale: 1.05 }}>
                                                 {
                                                     authUsers?.map((r) => (
                                                         r.name == 'BDE' && <Link key={r.id}

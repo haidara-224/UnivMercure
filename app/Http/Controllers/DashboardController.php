@@ -6,6 +6,8 @@ use App\Models\AnneesScolaire;
 use App\Models\Classes;
 use App\Models\Departement;
 use App\Models\Etudiant;
+use App\Models\Forum;
+use App\Models\Postforum;
 use App\Models\Professeur;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -79,7 +81,32 @@ class DashboardController extends Controller
         ]);
 
         $departement = Departement::with(['professeur', 'faculty'])->get();
+  $forums = Forum::with([
+            'categoryforum',
+            'role',
+            'user',
+            'likes',
+            'postforums' => function ($query) {
+                $query->with(['user', 'role', 'likes'])
+                    ->withCount([
+                        'likes as total_likes' => fn($q) => $q->where('likes', 1),
+                    ])
+                    ->orderByDesc('created_at');
+            },
+        ])
+            ->withCount([
+                'categoryforum as total_categoryforums',
+                'user as total_users',
+                'postforums as total_postforums',
+                'likes as total_likes'
+            ])
+            ->orderByDesc('created_at')
+            ->get();
 
+        $post = Postforum::with(['forum', 'role', 'user', 'likes'])
+            ->withCount(['likes as total_likes'])
+            ->orderByDesc('created_at')
+            ->get();
         return Inertia::render('dashboard', [
             'etudiantsCount'           => $nbEtudiant,
             'maleCount'                => $maleCount,
@@ -89,7 +116,9 @@ class DashboardController extends Controller
             'niveauCount'              => $nbniveau,
             'etudiantsParDepartement'  => $etudiantsParDepartement,
             'departements'             => $departement,
-            'last_annees_scolaire'     => $derniereAnneeScolaire
+            'last_annees_scolaire'     => $derniereAnneeScolaire,
+            'forum'=> $forums,
+            'post' => $post,
         ]);
     }
     public function users()

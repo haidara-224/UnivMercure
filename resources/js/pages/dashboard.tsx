@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { AnnessScolaire, type BreadcrumbItem } from '@/types';
+import { AnnessScolaire,Postforums, Suject, type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { GraduationCap, HousePlus, UserSearch, UsersRound } from 'lucide-react';
 
@@ -15,6 +15,7 @@ import { ChartDonut } from '@/components/ui/dashbord/chartCount';
 import EtudiantsParDepartement from '@/components/ui/dashbord/etudiantwithdepartementCount';
 import DepartementDataTable from '@/components/ui/dashbord/DepartementDataTable';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import DashboardForum from '@/components/ui/dashbord/Forum/dashboardForum';
 interface DepartementData {
     id: number;
     name: string;
@@ -29,10 +30,12 @@ interface NombreEtudiant extends PageProps {
     niveauCount: number;
     etudiantsParDepartement: DepartementData[];
     last_annees_scolaire:AnnessScolaire
+     forum: Suject[];
+    post: Postforums[];
 }
 
 export default function Dashboard() {
-    const { etudiantsCount, maleCount, femaleCount, professeursCount, DepartementCount, niveauCount, etudiantsParDepartement,last_annees_scolaire } =
+    const { etudiantsCount, maleCount, femaleCount, professeursCount, DepartementCount, niveauCount, etudiantsParDepartement,last_annees_scolaire,forum,post } =
         usePage<NombreEtudiant>().props;
     const stats = [
         { title: "Étudiants", count: etudiantsCount, icon: <UserSearch size={40} />, color: "bg-cyan-700" },
@@ -64,6 +67,7 @@ export default function Dashboard() {
                     <ChartDonut maleCount={maleCount} femaleCount={femaleCount} />
                     <EtudiantsParDepartement data={etudiantsParDepartement}/>
                 </div>
+                 <DashboardForum forums={forum} posts={post} />
 
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl">
                     <DepartementDataTable />

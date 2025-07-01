@@ -1,130 +1,155 @@
-import { CalendarDays,  School, Award, BookOpen, ChevronRight } from "lucide-react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { CalendarDays, ChevronRight, ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Evenements, } from "@/types";
+import Autoplay from 'embla-carousel-autoplay';
+import { Link } from '@inertiajs/react';
 
-const NewsEventCard = () => {
-  const events = [
-    {
-      id: 1,
-      title: "Journée Portes Ouvertes 2024",
-      date: "15 Mars 2024",
-      type: "evenement",
-      description: "Découvrez notre campus, rencontrez nos enseignants et étudiants, et obtenez toutes les informations sur nos formations.",
-      icon: <School className="h-5 w-5" />,
-      badge: "Nouveau"
-    },
-    {
-      id: 2,
-      title: "Concours d'Entrée en Médecine",
-      date: "22 Avril 2024",
-      type: "concours",
-      description: "Inscriptions ouvertes pour le concours d'entrée en première année de médecine. Date limite : 10 Avril.",
-      icon: <Award className="h-5 w-5" />,
-      badge: "Important"
-    },
-    {
-      id: 3,
-      title: "Soutenance de Thèses",
-      date: "5 Mai 2024",
-      type: "academique",
-      description: "Assistez aux soutenances publiques de nos doctorants en Sciences Politiques et Relations Internationales.",
-      icon: <BookOpen className="h-5 w-5" />,
-      badge: null
-    },
-    {
-      id: 4,
-      title: "Forum des Métiers",
-      date: "18 Mai 2024",
-      type: "evenement",
-      description: "Rencontrez des professionnels et découvrez les opportunités de carrière après vos études à Mercure International.",
-      icon: <School className="h-5 w-5" />,
-      badge: "À venir"
-    }
-  ]
-
-  const getTypeColor = (type: string) => {
-    switch(type) {
-      case "evenement": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-      case "concours": return "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200"
-      case "academique": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-    }
-  }
-
-  return (
-    <section className="py-16 bg-white dark:bg-gray-950">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-            Actualités & Événements
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Restez informé des dernières nouvelles et événements de notre université
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {events.map((event) => (
-            <motion.div
-              key={event.id}
-              whileHover={{ y: -5 }}
-              className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg ${getTypeColor(event.type)}`}>
-                    {event.icon}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                        <CalendarDays className="h-4 w-4 mr-1" />
-                        {event.date}
-                      </span>
-                      {event.badge && (
-                        <Badge variant="outline" className="ml-2">
-                          {event.badge}
-                        </Badge>
-                      )}
-                    </div>
-                    <h3 className="font-semibold text-lg mt-2 text-gray-900 dark:text-white">
-                      {event.title}
-                    </h3>
-                  </div>
-                </div>
-                <p className="mt-4 text-gray-600 dark:text-gray-300">
-                  {event.description}
-                </p>
-                <Button variant="outline" className="mt-6 w-full">
-                  En savoir plus
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <Button variant="ghost" className="text-amber-600 dark:text-amber-400">
-            Voir toutes les actualités
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
-        </motion.div>
-      </div>
-    </section>
-  )
+interface EventProp {
+    events: Evenements[];
 }
 
-export default NewsEventCard
+const NewsEventCard = ({ events }: EventProp) => {
+    return (
+        <section className="py-16 bg-white dark:bg-gray-950">
+            <div className="container mx-auto px-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-12"
+                >
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                        Actualités & Événements
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        Restez informé des dernières nouvelles et événements de notre université
+                    </p>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {events.map((event) => (
+                        <EventCard key={event.id} event={event} />
+                    ))}
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    viewport={{ once: true }}
+                    className="text-center mt-12"
+                >
+                    <Link href='activity'>
+                    <Button variant="ghost" className="text-amber-600 dark:text-amber-400">
+                        Voir toutes les actualités
+                        <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                    </Link>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+const EventCard = ({ event }: { event: Evenements }) => {
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: true }, [
+        Autoplay({ delay: 5000, stopOnInteraction: false })
+    ]);
+
+    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+    const hasImages = event.images?.length > 0;
+
+    return (
+        <motion.div
+            whileHover={{ y: -5 }}
+            className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-white dark:bg-gray-900"
+        >
+            <div className="relative h-56">
+                {hasImages ? (
+                    <>
+                        <div className="embla h-full" ref={emblaRef}>
+                            <div className="embla__container h-full flex">
+                                {event.images.map((image, index) => (
+                                    <div className="embla__slide flex-[0_0_100%] min-w-0" key={index}>
+                                        <img
+                                            src={image.url.startsWith('http') ? image.url : `/storage/${image.url}`}
+                                            alt={`${event.title} - Image ${index + 1}`}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                (e.target as HTMLImageElement).src = '/placeholder-event.jpg';
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {event.images.length > 1 && (
+                            <>
+                                <button
+                                    onClick={scrollPrev}
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 rounded-full p-2 shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all"
+                                    aria-label="Image précédente"
+                                >
+                                    <ChevronLeft className="h-5 w-5 text-gray-800 dark:text-white" />
+                                </button>
+                                <button
+                                    onClick={scrollNext}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 rounded-full p-2 shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all"
+                                    aria-label="Image suivante"
+                                >
+                                    <ChevronRight className="h-5 w-5 text-gray-800 dark:text-white" />
+                                </button>
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                        <span className="text-gray-400">Aucune image</span>
+                    </div>
+                )}
+            </div>
+
+
+            <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                    <CalendarDays className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {new Date(event.start_date).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        })}
+                    </span>
+                    {event.badge && (
+                        <Badge variant="secondary" className="ml-auto">
+                            {event.badge}
+                        </Badge>
+                    )}
+                </div>
+
+                <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-2 line-clamp-2">
+                    {event.title}
+                </h3>
+
+                <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                    {event.description}
+                </p>
+                    <Link href={`/activity/${event.id}`}>
+                    <Button variant="outline" className="w-full">
+                        En savoir plus
+                    </Button>
+                    </Link>
+            </div>
+        </motion.div>
+    );
+};
+
+export default NewsEventCard;

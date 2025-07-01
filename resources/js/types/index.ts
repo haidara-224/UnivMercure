@@ -469,6 +469,7 @@ export interface EvenementImage {
     updated_at: Date;
 }
 export interface Image{
+    startsWith(arg0: string): unknown;
     url:string,
     created_at: Date;
     updated_at: Date;

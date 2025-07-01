@@ -55,7 +55,7 @@ public function store(Request $request)
         }
     });
 
-    return redirect()->route('bde.evenements.index')->with('success', 'Événement créé avec succès.');
+    return back()->with('success', 'Événement créé avec succès.');
 }
 
     public function edit(Evenement $evenement)
@@ -74,8 +74,8 @@ public function store(Request $request)
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
         'badge' => 'required|string|max:255',
-        'images' => 'array',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'images' => 'required|array',
+        'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
     DB::transaction(function () use ($request, $evenement) {
@@ -101,12 +101,11 @@ public function store(Request $request)
 
     public function destroy(Evenement $evenement)
     {
-        // Supprimer les images associées
+
         $evenement->images()->each(function ($image) {
             Storage::disk('public')->delete($image->url);
             $image->delete();
         });
-        // Supprimer l'événement
         $evenement->delete();
         return redirect()->route('bde.evenements.index')->with('success', 'Événement supprimé avec succès.');
     }

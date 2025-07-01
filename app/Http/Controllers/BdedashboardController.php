@@ -76,9 +76,8 @@ class BdedashboardController extends Controller
             'nbPost' => $nbPost,
             'nbPostUser' => $nbPostUser
         ]);
-
     }
-      public function showForum(Forum $forum)
+    public function showForum(Forum $forum)
     {
         $forum = $forum->load([
             'categoryforum',
@@ -116,7 +115,7 @@ class BdedashboardController extends Controller
         return back()->with('success', 'Le post a été supprimé avec success');
     }
 
-     public function category()
+    public function category()
     {
         $category = Categoryforum::with(['user'])->get();
 
@@ -127,41 +126,41 @@ class BdedashboardController extends Controller
     public function storeCategory(Request $request)
     {
         $data = $request->validate([
-            'title' => ['required','unique:categoryforums,title'],
+            'title' => ['required', 'unique:categoryforums,title'],
             'description' => ['nullable', 'string',],
-            'emoji'=>['required'],
+            'emoji' => ['required'],
         ]);
 
         $category = new Categoryforum();
         $category->title = $data['title'];
         $category->description = $data['description'];
         $category->user_id = Auth::id();
-        $category->emoji=$data['emoji'];
+        $category->emoji = $data['emoji'];
         $category->save();
 
         return back()->with('success', 'Catégorie créée avec succès');
     }
     public function updateCategory(Categoryforum $categoryForum, Request $request)
-{
-    $data = $request->validate([
-        'title' => [
-            'required',
+    {
+        $data = $request->validate([
+            'title' => [
+                'required',
 
-            Rule::unique('categoryforums', 'title')->ignore($categoryForum->id),
-        ],
-        'description' => ['nullable', 'string', ],
-         'emoji'=>['required'],
-    ]);
+                Rule::unique('categoryforums', 'title')->ignore($categoryForum->id),
+            ],
+            'description' => ['nullable', 'string',],
+            'emoji' => ['required'],
+        ]);
 
-    $categoryForum->update([
-        'title' => $data['title'],
-        'description' => $data['description'],
-        'user_id'=>Auth::id(),
-        'emoji'=>$data['emoji']
-    ]);
+        $categoryForum->update([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'user_id' => Auth::id(),
+            'emoji' => $data['emoji']
+        ]);
 
-    return back()->with('success', 'Catégorie modifiée avec succès');
-}
+        return back()->with('success', 'Catégorie modifiée avec succès');
+    }
 
     public function deleteCategory(Categoryforum $categoryForum)
     {
