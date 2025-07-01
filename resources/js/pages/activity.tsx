@@ -137,10 +137,10 @@ export default function Evenement({ evenements }: EvenementProps) {
 
     return (
         <>
-            <Head title="Université Mercure International - Evenement">
+            <Head title="Evenement - Université Mercure International">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700" rel="stylesheet" />
-                <meta name="description" content="Université Mercure International de Conakry - Formations de qualité en commerce, gestion, informatique, droit, communication et plus encore." />
+                <meta name="description" content="Découvrez les événements de l'Université Mercure International, une institution dédiée à l'excellence académique et à l'innovation." />
             </Head>
             <Headers />
             <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pt-30 pb-12">
@@ -287,13 +287,11 @@ export default function Evenement({ evenements }: EvenementProps) {
                                             </CardContent>
 
                                             <CardFooter className="px-4 pb-4 pt-2">
-                                                <Link href={`/activity/${event.id}`}>
                                                 <Button className="w-full h-10 text-sm" asChild>
-
+                                                    <Link href={`/activity/${event.id}`}>
                                                         Voir les détails
-
+                                                    </Link>
                                                 </Button>
-                                                 </Link>
                                             </CardFooter>
                                         </Card>
                                     </motion.div>

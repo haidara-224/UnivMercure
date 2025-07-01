@@ -52,5 +52,9 @@ class HomeController extends Controller
             'evenement' => $evenement
         ]);
     }
+    public function contact()
+    {
+        return Inertia::render('contact');
+    }
 
 }

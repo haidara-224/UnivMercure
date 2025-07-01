@@ -16,7 +16,7 @@ export default function Footers() {
                                 <img
                                     src="/mercure.jpeg"
                                     alt="Mercure"
-                                    className="w-12 h-12 object-cover" // object-cover au lieu de object-contain
+                                    className="w-12 h-12 object-cover"
                                 />
                             </div>
                             <span className="text-xl font-bold">Université Mercure International</span>

@@ -34,10 +34,11 @@ export default function ActivityShow() {
     return (
         <>
 
-            <Head title="Université Mercure International">
+            <Head title="Événements - Université Mercure International" >
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700" rel="stylesheet" />
-                <meta name="description" content="Université Mercure International de Conakry - Formations de qualité en commerce, gestion, informatique, droit, communication et plus encore." />
+
+                <meta name="description" content="Découvrez les événements passionnants de l'Université Mercure International." />
             </Head>
             <div className="min-h-screen bg-gray-50">
 

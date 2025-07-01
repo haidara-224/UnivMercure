@@ -26,6 +26,7 @@ const NavBar = () => {
                     </div>
 
                     <nav className="hidden md:flex space-x-6 items-center">
+                        <Link href="/" className="hover:text-amber-300 transition">Home</Link>
                         <Link href="/forum" className="hover:text-amber-300 transition">Accueil Forum</Link>
                         <Link href="/categories" className="hover:text-amber-300 transition">Catégories</Link>
 
