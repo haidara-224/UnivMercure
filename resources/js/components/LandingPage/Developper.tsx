@@ -43,7 +43,7 @@ export function DeveloperCredit() {
             <Mail className="h-5 w-5" />
           </a>
           <a
-            href="tel:+224626301985"
+            href="tel:+224625421335"
             aria-label="Appeler Haidara Sidy Mohamed"
             className="hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
           >
