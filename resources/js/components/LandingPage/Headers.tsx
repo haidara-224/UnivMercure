@@ -76,10 +76,11 @@ export function Headers() {
                         <nav className="hidden md:flex space-x-8 items-center">
                             {[
                                 { path: "/", label: "Accueil" },
-                                { path: "/formations", label: "Formations" },
+
                                { path: "/activity", label: "Événements" },
                                 { path: "/forum", label: "Forum" },
                                 { path: "/campus", label: "Campus" },
+                                { path: "/cours-video", label: "Cours" },
                                 { path: "/contact", label: "Contact" },
                             ].map((item) => (
                                 <motion.div key={item.path} whileHover={{ scale: 1.1 }}>
@@ -231,10 +232,11 @@ export function Headers() {
 
                                 {[
                                     { path: "/", label: "Accueil" },
-                                    { path: "/formations", label: "Formations" },
+
                                     { path: "/activity", label: "Événements" },
                                     { path: "/forum", label: "Forum" },
                                     { path: "/campus", label: "Campus" },
+                                     { path: "/cours-video", label: "Cours" },
                                     { path: "/contact", label: "Contact" },
                                 ].map((item, index) => (
                                     <motion.div

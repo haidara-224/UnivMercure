@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
+use App\Models\Departement;
 use App\Models\Evenement;
+use App\Models\Tuto;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,6 +58,23 @@ class HomeController extends Controller
     public function contact()
     {
         return Inertia::render('contact');
+    }
+    public function coursVideo()
+    {
+        $departement=Departement::select(['id', 'name'])
+            ->orderBy('name', 'asc')
+            ->get();
+        $niveau=Classes::select(['id', 'niveau'])
+            ->orderBy('niveau', 'asc')
+            ->get();
+        $cours=Tuto::with(['professeur','departement','classes'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return Inertia::render('coursVideo', [
+            'cours' => $cours,
+            'departement' => $departement,
+            'niveau' => $niveau
+        ]);
     }
 
 }
