@@ -40,7 +40,7 @@ export function Headers() {
         <>
             <motion.header
                 className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-sm shadow-lg py-2'
-                        : 'bg-blue-900/80 backdrop-blur-sm py-4'
+                    : 'bg-blue-900/80 backdrop-blur-sm py-4'
                     }`}
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
@@ -48,7 +48,7 @@ export function Headers() {
             >
                 <div className="container mx-auto px-6">
                     <div className="flex items-center justify-between">
-                        {/* Logo animé */}
+
                         <motion.div
                             className="flex items-center space-x-2"
                             whileHover={{ scale: 1.05 }}
@@ -76,8 +76,6 @@ export function Headers() {
                             </span>
                         </motion.div>
 
-
-                        {/* Navigation desktop */}
                         <nav className="hidden md:flex space-x-8 items-center">
                             {[
                                 { path: "/", label: "Accueil" },
@@ -106,8 +104,6 @@ export function Headers() {
                             ))
                             }
 
-
-                            {/* Boutons de connexion */}
                             {auth.user ? (
                                 <>
                                     <motion.div whileHover={{ scale: 1.05 }}>
@@ -182,6 +178,7 @@ export function Headers() {
                                         }
 
                                     </motion.div>
+
                                     <motion.div whileHover={{ scale: 1.05 }}>
                                         <UserButton />
 
@@ -212,7 +209,7 @@ export function Headers() {
                             )}
                         </nav>
 
-                        {/* Bouton menu mobile */}
+
                         <button
                             className="md:hidden focus:outline-none"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -256,8 +253,8 @@ export function Headers() {
                                         <Link
                                             href={item.path}
                                             className={`text-2xl font-medium ${isActive(item.path)
-                                                    ? 'text-amber-300'
-                                                    : 'text-gray-300 hover:text-amber-300'
+                                                ? 'text-amber-300'
+                                                : 'text-gray-300 hover:text-amber-300'
                                                 } transition`}
                                             onClick={() => setMobileMenuOpen(false)}
                                         >

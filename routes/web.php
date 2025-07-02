@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/activity', [HomeController::class, 'activity'])->name('activity');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [HomeController::class, 'contactStore'])->name('contact.store');
 Route::middleware(['auth'])->group(function () {
    Route::get('/cours-video', [HomeController::class, 'coursVideo'])->name('cours.video');
 Route::get('/cours-video/{tuto}', [HomeController::class, 'coursVideoShow'])->name('cours.video.show');

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMail;
 use App\Models\Classes;
+use App\Models\Contact;
 use App\Models\Departement;
 use App\Models\Evenement;
 use App\Models\Tuto;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -58,6 +61,19 @@ class HomeController extends Controller
     public function contact()
     {
         return Inertia::render('contact');
+    }
+    public function contactStore(Request $request)
+    {
+        $request->validate([
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
+        $data= $request->only(['prenom', 'nom', 'email', 'message']);
+        Contact::create($data);
+        Mail::to($request->email)->send(new ContactMail(new Contact($data)));
+        return redirect()->back()->with('success', 'Message Envoyé successfully!');
     }
     public function coursVideo()
     {
