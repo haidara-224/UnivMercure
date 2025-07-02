@@ -1,6 +1,6 @@
 import { Headers } from "@/components/LandingPage/headersl";
 import { Departement, Niveaux, Tutos } from "@/types";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import { FileText, Download, User, Clock, BookOpen, Search,  PlayCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -147,6 +147,12 @@ export default function CoursVideo() {
                                                 {cours.departement.name}
                                             </span>
                                         )}
+                                        {cours.classes && (
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {cours.classes.niveau}
+                                            </span>
+                                        )}
+
                                     </div>
 
                                     <div className="text-gray-600 text-sm mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: cours.contenue }} />
@@ -161,7 +167,9 @@ export default function CoursVideo() {
                                             <span>{new Date(cours.created_at).toLocaleDateString()}</span>
                                         </div>
                                     </div>
-
+                                    <Link href={`/cours-video/${cours.id}`}>
+                                        voir plus
+                                    </Link>
 
                                     <div className="flex gap-2">
                                         {hasVideo && (

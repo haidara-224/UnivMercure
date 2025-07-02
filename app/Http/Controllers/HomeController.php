@@ -76,5 +76,13 @@ class HomeController extends Controller
             'niveau' => $niveau
         ]);
     }
+    public function coursVideoShow(Tuto $tuto)
+    {
+        $tuto->load(['professeur', 'departement', 'classes']);
+
+        return Inertia::render('coursVideoShow', [
+            'tuto' => $tuto
+        ]);
+    }
 
 }

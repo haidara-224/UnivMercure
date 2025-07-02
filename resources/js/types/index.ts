@@ -312,7 +312,7 @@ export interface Exam {
     created_at: string;
     updated_at: string;
 
-    // 👇 ajout des relations
+
     repartitions?: ExamsEtudiantsSalle[];
     matiere?: Matiere;
     annees_scolaire?: AnnessScolaire;
@@ -325,7 +325,7 @@ export interface ExamsEtudiantsSalle {
     created_at: string;
     updated_at: string;
 
-    // 👇 relations reçues du backend
+
     exam?: Exam;
     etudiant?: Etudiants;
     salle?: Salle;
